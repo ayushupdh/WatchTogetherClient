@@ -11,7 +11,7 @@ const AuthStyles = StyleSheet.create({
 		fontSize: 30,
 		padding: 50,
 		marginTop: 50,
-		marginBottom: 50,
+		marginBottom: 150,
 		alignSelf: 'center',
 		fontWeight: 'bold'
 	},
@@ -56,11 +56,8 @@ const AuthStyles = StyleSheet.create({
 		marginLeft: 10,
 		fontWeight: 'bold'
 	},
-	text: {
-		fontSize: 20,
-		position: 'absolute',
-		top: '300',
-		alignSelf: 'center'
+	tempText: {
+		fontSize: 20
 	},
 	errorText: {
 		paddingLeft: 50,

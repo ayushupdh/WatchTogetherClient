@@ -3,6 +3,11 @@ import React, { createRef, useRef, useState } from 'react';
 
 import {AuthStyles as Styles} from '../styles';
 import { CustomButton } from '../dumbComponents/CustomButton';
+import { AuthNavProps } from './AuthTypes';
+import { server } from '../../api/server';
+import { SIGN_IN, SIGN_UP } from '../../redux/types/Authtypes';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {signinUser} from '../../api/server'
 
 type UserData={
@@ -13,13 +18,43 @@ type UserData={
 }
 
 
-const Signup = ({navigation}:any) => {
+// TO DO: 
+// create more refs to jump after name -> username -> email ->password
+// Check for same password
+// 
+
+const Signup = ({navigation}:AuthNavProps<'Signup'>) => {
 	const [userData, setUserData] = useState<UserData>({
 		username:'',
 		password:'',
 		email:'',
 		name:''
 	})
+	const dispatch =  useDispatch();
+
+	const signup =async()=>{
+		try {
+			const res = await server.post('/users/signup', userData);
+			console.log(res.data);
+			const userToken = res.data.token;
+			await AsyncStorage.setItem('userToken', userToken);
+            dispatch({
+                        type:SIGN_UP,
+                        payload:{
+                                user:{
+                                        username: res.data.user.name
+                                    }
+                                } 
+                    })
+			console.log('Action', res.data.user);
+		} catch (e) {
+			setError('Singup Failed');
+			return null;
+		}
+	}
+
+
+
 	const [ error, setError] = useState('');
 	const passwordRef: any = useRef();
 
@@ -27,7 +62,9 @@ const Signup = ({navigation}:any) => {
 		if(userData.username==='' || userData.password==="" || userData.email==="" || userData.name===""  ){
 			setError("All the fields are required for signing up!");
 		}
+		signup();
 	}
+
 
 	return (
 		<View>
