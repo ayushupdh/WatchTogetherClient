@@ -3,7 +3,7 @@ const initialState = {
     user:null
 }
 
-export default (state = initialState, {type, payload})=>{
+export default (user = initialState, {type, payload})=>{
     switch (type) {
         case LOAD_USER:
           return {
@@ -22,6 +22,6 @@ export default (state = initialState, {type, payload})=>{
             user: null,
           };
         default:
-          return state;
+          return user;
       }
 }

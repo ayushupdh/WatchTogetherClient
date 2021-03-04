@@ -9,6 +9,12 @@ export type LoginDataType={
     username:string;
     password:string;
 }
+
+export type UserType={
+    username:string;
+}
+
+
 export type SignUpDataType={
     email:string;
     password:string;
