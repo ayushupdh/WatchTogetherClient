@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { createRef, MutableRefObject, useRef, useState } from "react";
 import { Switch, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
@@ -43,7 +43,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
     }
     login();
   };
-
+  const passwordRef: any = createRef<TextInput>();
   return (
     <KeyboardDismiss>
       <Text style={Styles.title}> Watch Together</Text>
@@ -57,17 +57,20 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
           onFocus={() => setError("")}
           value={userData.username}
           returnKeyType="next"
-          // onSubmitEditing={() => {
-          //   setFocus(true);
-          // }}
+          onSubmitEditing={() => {
+            passwordRef.current?.focus();
+          }}
           textContentType="username"
         />
         <PasswordBox
-          placeholder="password"
-          onChangeText={(text) => {
+          ref={passwordRef}
+          placeholder="Password"
+          onChangeText={(text: string) => {
             setUserData({ ...userData, password: text });
+            setError("");
           }}
           value={userData.password}
+          blurOnSubmit={false}
         />
       </View>
       {error === "" ? null : <Text style={Styles.errorText}>{error}</Text>}

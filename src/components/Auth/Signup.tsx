@@ -99,28 +99,40 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       <Text style={Styles.title}> Watch Together</Text>
       <View style={Styles.textInputView}>
         <TextInput
-          style={Styles.inputBox}
+          style={
+            error.name === ""
+              ? Styles.inputBox
+              : [Styles.inputBox, Styles.errorBox]
+          }
           placeholder="Name"
-          onChangeText={(text) => setUserData({ ...userData, name: text })}
+          onChangeText={(text) => {
+            setError(emptyError);
+            setUserData({ ...userData, name: text });
+          }}
           value={userData.name}
           returnKeyType="next"
           onSubmitEditing={() => usernameRef.current?.focus()}
           textContentType="username"
-          onFocus={() => setError(emptyError)}
         />
         {error.name === "" ? null : (
           <Text style={Styles.errorText}>{error.name}</Text>
         )}
         <TextInput
           ref={usernameRef}
-          style={Styles.inputBox}
+          style={
+            error.username === ""
+              ? Styles.inputBox
+              : [Styles.inputBox, Styles.errorBox]
+          }
           placeholder="Username"
-          onChangeText={(text) => setUserData({ ...userData, username: text })}
+          onChangeText={(text) => {
+            setError(emptyError);
+            setUserData({ ...userData, username: text });
+          }}
           value={userData.username}
           returnKeyType="next"
           onSubmitEditing={() => emailRef.current?.focus()}
           textContentType="username"
-          onFocus={() => setError(emptyError)}
         />
         {error.username === "" ? null : (
           <Text style={Styles.errorText}>{error.username}</Text>
@@ -128,14 +140,20 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
 
         <TextInput
           ref={emailRef}
-          style={Styles.inputBox}
+          style={
+            error.email === ""
+              ? Styles.inputBox
+              : [Styles.inputBox, Styles.errorBox]
+          }
           placeholder="Email"
-          onChangeText={(text) => setUserData({ ...userData, email: text })}
+          onChangeText={(text) => {
+            setError(emptyError);
+            setUserData({ ...userData, email: text });
+          }}
           value={userData.email}
           returnKeyType="next"
           onSubmitEditing={() => passwordRef.current?.focus()}
           textContentType="username"
-          onFocus={() => setError(emptyError)}
         />
         {error.email === "" ? null : (
           <Text style={Styles.errorText}>{error.email}</Text>
@@ -143,14 +161,24 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
 
         <TextInput
           ref={passwordRef}
+          style={
+            error.password === ""
+              ? Styles.inputBox
+              : [Styles.inputBox, Styles.errorBox]
+          }
           placeholder="Password"
-          style={Styles.inputBox}
-          onChangeText={(text) => setUserData({ ...userData, password: text })}
+          onChangeText={(text) => {
+            setError(emptyError);
+            setUserData({ ...userData, password: text });
+          }}
           value={userData.password}
           returnKeyType="next"
           textContentType="password"
           secureTextEntry
-          onFocus={() => setError(emptyError)}
+          onSubmitEditing={() => {
+            secondPasswordRef.current?.focus();
+          }}
+          blurOnSubmit={false}
         />
         {error.password === "" ? null : (
           <Text style={Styles.errorText}>{error.password}</Text>
@@ -159,13 +187,16 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
         <TextInput
           ref={secondPasswordRef}
           placeholder="Re enter Password"
-          style={Styles.inputBox}
+          style={
+            error.secondPassword === ""
+              ? Styles.inputBox
+              : [Styles.inputBox, Styles.errorBox]
+          }
           onChangeText={(text) => setPassword(text)}
           value={passwordVerify}
           returnKeyType="done"
           textContentType="password"
           secureTextEntry
-          onFocus={() => setError(emptyError)}
         />
         {error.secondPassword === "" ? null : (
           <Text style={Styles.errorText}>{error.secondPassword}</Text>

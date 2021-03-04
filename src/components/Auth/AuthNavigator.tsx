@@ -25,13 +25,14 @@ const AuthNavigator = (props: AuthNavigatorProps) => {
       const config = {
         headers: {
           "Content-type": "application/json",
+          Authorization: "",
         },
       };
       const token = await AsyncStorage.getItem("userToken");
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
+      if (!token) {
+        return;
       }
-
+      config.headers["Authorization"] = `Bearer ${token}`;
       const response = await server.get("/users/me", config);
       dispatch({
         type: LOAD_USER,
@@ -42,6 +43,10 @@ const AuthNavigator = (props: AuthNavigatorProps) => {
         },
       });
     } catch (error) {
+      // If the user is unauthorised first time, remove the authtoken to reduce api calls
+      if (error.response && error.response.status === 401) {
+        await AsyncStorage.removeItem("userToken");
+      }
       console.log("Error loading user");
     }
   };

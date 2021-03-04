@@ -13,7 +13,7 @@ export const KeyboardDismiss = ({ children }: any) => {
   const ViewContainer = Platform.OS === "ios" ? SafeAreaView : View;
 
   return (
-    <ViewContainer style={{ flex: 1 }}>
+    <ViewContainer style={{ flex: 1, backgroundColor: "#E2EAF4" }}>
       <TouchableWithoutFeedback
         // style={Styles.container}
         onPress={() => Keyboard.dismiss()}
