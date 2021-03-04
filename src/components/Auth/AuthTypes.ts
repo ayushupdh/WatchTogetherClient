@@ -6,7 +6,7 @@ export type AuthParamList= {
     Signup:undefined;
 }
 export type LoginDataType={
-    email:string;
+    username:string;
     password:string;
 }
 export type SignUpDataType={
