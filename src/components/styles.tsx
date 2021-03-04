@@ -24,7 +24,7 @@ const AuthStyles = StyleSheet.create({
     borderRadius: 50,
     borderColor: "#000",
     backgroundColor: "#fff",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 5, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
     marginBottom: 20,
@@ -59,8 +59,17 @@ const AuthStyles = StyleSheet.create({
     fontSize: 20,
   },
   errorText: {
-    marginLeft: -120,
+    marginLeft: 10,
     color: "red",
+    paddingBottom: 10,
+    marginTop: 10,
+  },
+  mainErrorText: {
+    // alignSelf: "auto",
+    color: "red",
+    fontSize: 18,
+    // paddingBottom: 0,
+    marginTop: 10,
   },
 });
 export { AuthStyles };

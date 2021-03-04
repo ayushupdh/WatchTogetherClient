@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useRef, useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import React, { MutableRefObject, useRef, useState } from "react";
+import { Switch, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
 import { SIGN_IN } from "../../redux/types/Authtypes";
@@ -8,13 +8,14 @@ import { CustomButton } from "../dumbComponents/CustomButton";
 import { KeyboardDismiss } from "../dumbComponents/KeyboardDismiss";
 import { AuthStyles as Styles } from "../styles";
 import { AuthNavProps, LoginDataType } from "./AuthTypes";
-
+import { PasswordBox } from "../dumbComponents/PasswordBox";
 const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
   const [userData, setUserData] = useState<LoginDataType>({
     username: "",
     password: "",
   });
   const [error, setError] = useState("");
+
   const dispatch = useDispatch();
 
   const login = async () => {
@@ -42,7 +43,6 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
     }
     login();
   };
-  const passwordRef: any = useRef();
 
   return (
     <KeyboardDismiss>
@@ -57,21 +57,17 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
           onFocus={() => setError("")}
           value={userData.username}
           returnKeyType="next"
-          onSubmitEditing={() => passwordRef.current?.focus()}
+          // onSubmitEditing={() => {
+          //   setFocus(true);
+          // }}
           textContentType="username"
         />
-        <TextInput
-          ref={passwordRef}
-          placeholder="Password"
-          style={Styles.inputBox}
+        <PasswordBox
+          placeholder="password"
           onChangeText={(text) => {
             setUserData({ ...userData, password: text });
-            setError("");
           }}
           value={userData.password}
-          returnKeyType="done"
-          textContentType="password"
-          secureTextEntry
         />
       </View>
       {error === "" ? null : <Text style={Styles.errorText}>{error}</Text>}
