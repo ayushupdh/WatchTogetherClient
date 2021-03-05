@@ -15,8 +15,9 @@ export const KeyboardDismiss = ({ children }: any) => {
   return (
     <ViewContainer style={{ flex: 1, backgroundColor: "#E2EAF4" }}>
       <TouchableWithoutFeedback
-        // style={Styles.container}
-        onPress={() => Keyboard.dismiss()}
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
       >
         <KeyboardAvoidingView
           style={Styles.container}

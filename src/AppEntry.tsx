@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
@@ -9,7 +9,6 @@ import HomeScreen from "./components/HomeScreen";
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
   const user = useSelector((state: { user: UserType }) => state.user);
-  console.log(user);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const loadUser = async () => {
@@ -21,8 +20,6 @@ export const AppEntry = () => {
         },
       };
       const token = await AsyncStorage.getItem("userToken");
-      console.log("token");
-      console.log(token);
       if (!token) {
         return;
       }
@@ -36,13 +33,11 @@ export const AppEntry = () => {
           },
         },
       });
-      console.log("");
     } catch (error) {
       // If the user is unauthorised first time, remove the authtoken to reduce api calls
       if (error.response && error.response.status === 401) {
         await AsyncStorage.removeItem("userToken");
       }
-      console.log("Error loading user");
     }
   };
 
@@ -50,12 +45,10 @@ export const AppEntry = () => {
     (async () => {
       setLoading(true);
       await loadUser();
-      console.log("User in useeffect");
-      console.log(user);
     })();
     setLoading(false);
   }, []);
-  console.log(user);
+
   if (loading) {
     return <ActivityIndicator />;
   } else {

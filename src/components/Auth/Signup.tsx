@@ -48,7 +48,6 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   const signup = async () => {
     try {
       const res = await server.post("/users/signup", userData);
-      console.log(res.data);
       const userToken = res.data.token;
       await AsyncStorage.setItem("userToken", userToken);
       dispatch({
@@ -59,10 +58,8 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           },
         },
       });
-      console.log("Action", res.data.user);
     } catch (e) {
       setError({ ...error, main: e.response.data.error });
-      console.log();
       return null;
     }
   };

@@ -15,7 +15,6 @@ export const loginuser =(loginInfo)=> async (dispatch, getState)=>{
                                     }
                                 } 
                     })
-			console.log('Action', res.data.user);
 		} catch (e) {
 			return null;
 		}
