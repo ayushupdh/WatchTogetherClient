@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
+import BottomNavTabs from "./components/BottomNav/BottomNavigator";
+import HomeViewTabs from "./components/BottomNav/BottomNavigator";
 import HomeScreen from "./components/HomeScreen";
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
@@ -52,10 +54,6 @@ export const AppEntry = () => {
   if (loading) {
     return <ActivityIndicator />;
   } else {
-    if (user !== null && user) {
-      return <HomeScreen user={user} />;
-    } else {
-      return <AuthNavigator />;
-    }
+    return user !== null && user ? <BottomNavTabs /> : <AuthNavigator />;
   }
 };

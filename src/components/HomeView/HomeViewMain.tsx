@@ -1,11 +1,12 @@
+import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useContext } from "react";
-import { View, Text, Button } from "react-native";
+import { Button, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
-import { SIGN_OUT } from "../redux/types/Authtypes";
-import { Center } from "./dumbComponents/Center";
+import { SIGN_OUT } from "../../redux/types/Authtypes";
+import { Center } from "../dumbComponents/Center";
 
-export default function HomeScreen() {
+type HomeMainProps = {};
+export const HomeViewMain = (props: HomeMainProps) => {
   const dispatch = useDispatch();
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem("userToken");
@@ -15,9 +16,7 @@ export default function HomeScreen() {
   };
   return (
     <Center>
-      <Text style={{ fontSize: 20 }}>
-        Hi User ! You will be able to swipe in a minute!
-      </Text>
+      <Text style={{ fontSize: 20 }}>Home View</Text>
       <View style={{ marginTop: 200 }}>
         <Button
           onPress={onLogoutPress}
@@ -28,4 +27,4 @@ export default function HomeScreen() {
       </View>
     </Center>
   );
-}
+};

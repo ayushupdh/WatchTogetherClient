@@ -39,7 +39,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         },
       });
     } catch (e) {
-      if (e.message) {
+      if (e && e.message) {
         return setError(e.message);
       }
       setError("Invalid username or password");

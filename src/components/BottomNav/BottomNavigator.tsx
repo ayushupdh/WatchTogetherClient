@@ -1,0 +1,63 @@
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HomeScreen from "../HomeScreen";
+import { BottomNavParamList, BottomNavProps } from "./BottomNavTypes";
+import { AccountMain } from "../AccountsView/AccountMain";
+import { NavigationContainer } from "@react-navigation/native";
+import { GroupsMain } from "../GroupsView/GroupsMain";
+import { LikesMain } from "../LikesView/LikesMain";
+import GroupsNavigator from "../GroupsView/GroupsNavigator";
+import HomeViewNavigator from "../HomeView/HomeNavigation";
+const Tab = createBottomTabNavigator<BottomNavParamList>();
+
+// ctrl
+const BottomNavTabs = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName="HomeScreen"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === "HomeScreen") {
+              return (
+                <Ionicons name={"home-outline"} size={size} color={color} />
+              );
+            } else if (route.name === "AccountScreen") {
+              return (
+                <Ionicons
+                  name={"person-circle-outline"}
+                  size={size}
+                  color={color}
+                />
+              );
+            } else if (route.name === "GroupsScreen") {
+              return (
+                <Ionicons name={"people-outline"} size={size} color={color} />
+              );
+            } else if (route.name === "LikesScreen") {
+              return (
+                <Ionicons name={"heart-outline"} size={size} color={color} />
+              );
+            }
+
+            // You can return any component that you like here!
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: "tomato",
+          inactiveTintColor: "gray",
+        }}
+      >
+        <Tab.Screen name="LikesScreen" component={LikesMain} />
+        <Tab.Screen name="GroupsScreen" component={GroupsNavigator} />
+        <Tab.Screen name="HomeScreen" component={HomeViewNavigator} />
+        <Tab.Screen name="AccountScreen" component={AccountMain} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+export default BottomNavTabs;
