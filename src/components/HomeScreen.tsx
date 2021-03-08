@@ -18,7 +18,7 @@ export default function HomeScreen({ user }: { user: UserType | null }) {
   };
   return (
     <Center>
-      <Text style={Styles.tempText}>
+      <Text style={{ fontSize: 20 }}>
         Hi{" "}
         {user && user.username && user.username !== ""
           ? user?.username

@@ -15,34 +15,23 @@ type UserData = {
   password: string;
   username: string;
 };
-type ErrorData = {
-  name: string;
-  email: string;
-  password: string;
-  username: string;
-  secondPassword: string;
-  main: string;
-};
 
-// TO DO:
-
+//! TO DO: Build a modal that pops up for error messages
+//! Figure out a better way to handle these many state(handle password hide)
 const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
+  // States for user, password hide/show, error
   const [userData, setUserData] = useState<UserData>({
     username: "",
     password: "",
     email: "",
     name: "",
   });
-  const [passwordVerify, setPassword] = useState<string>("");
-  const emptyError = {
-    username: "",
-    password: "",
-    email: "",
-    name: "",
-    secondPassword: "",
-    main: "",
-  };
-  const [error, setError] = useState<ErrorData>(emptyError);
+
+  const [passwordVerify, setPassword] = useState({ password: "", hide: true });
+  const [hidePassword, setHidePassword] = useState(true);
+  const [error, setError] = useState<string>("");
+
+  // Reducers dispatch
   const dispatch = useDispatch();
 
   const signup = async () => {
@@ -59,34 +48,23 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
         },
       });
     } catch (e) {
-      setError({ ...error, main: e.response.data.error });
-      return null;
+      if (e.response && e.response.data.error) {
+        return setError(e.response.data.error);
+      }
+      return setError(e.message);
     }
   };
 
+  // Refs for next button on keyboard
   const usernameRef: any = useRef();
   const emailRef: any = useRef();
   const passwordRef: any = useRef();
   const secondPasswordRef: any = useRef();
 
   const onSignUp = () => {
-    setError(emptyError);
-    if (userData.name === "") {
-      return setError({ ...error, name: "Name is required to sign up" });
-    } else if (userData.username === "") {
-      return setError({
-        ...error,
-        username: "Username is required to sign up",
-      });
-    } else if (userData.email === "") {
-      return setError({ ...error, email: "Email is required to sign up" });
-    } else if (userData.password === "") {
-      return setError({
-        ...error,
-        password: "Password is required to sign up",
-      });
-    } else if (userData.password !== passwordVerify) {
-      return setError({ ...error, secondPassword: "Passwords do not match" });
+    setError("");
+    if (userData.password !== passwordVerify.password) {
+      return setError("Passwords do not match");
     }
     signup();
   };
@@ -96,14 +74,10 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       <Text style={Styles.title}> Watch Together</Text>
       <View style={Styles.textInputView}>
         <TextInput
-          style={
-            error.name === ""
-              ? Styles.inputBox
-              : [Styles.inputBox, Styles.errorBox]
-          }
+          style={Styles.inputBox}
           placeholder="Name"
           onChangeText={(text) => {
-            setError(emptyError);
+            setError("");
             setUserData({ ...userData, name: text });
           }}
           value={userData.name}
@@ -111,19 +85,12 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           onSubmitEditing={() => usernameRef.current?.focus()}
           textContentType="username"
         />
-        {error.name === "" ? null : (
-          <Text style={Styles.errorText}>{error.name}</Text>
-        )}
         <TextInput
           ref={usernameRef}
-          style={
-            error.username === ""
-              ? Styles.inputBox
-              : [Styles.inputBox, Styles.errorBox]
-          }
+          style={Styles.inputBox}
           placeholder="Username"
           onChangeText={(text) => {
-            setError(emptyError);
+            setError("");
             setUserData({ ...userData, username: text });
           }}
           value={userData.username}
@@ -131,20 +98,13 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           onSubmitEditing={() => emailRef.current?.focus()}
           textContentType="username"
         />
-        {error.username === "" ? null : (
-          <Text style={Styles.errorText}>{error.username}</Text>
-        )}
 
         <TextInput
           ref={emailRef}
-          style={
-            error.email === ""
-              ? Styles.inputBox
-              : [Styles.inputBox, Styles.errorBox]
-          }
+          style={Styles.inputBox}
           placeholder="Email"
           onChangeText={(text) => {
-            setError(emptyError);
+            setError("");
             setUserData({ ...userData, email: text });
           }}
           value={userData.email}
@@ -152,68 +112,84 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           onSubmitEditing={() => passwordRef.current?.focus()}
           textContentType="username"
         />
-        {error.email === "" ? null : (
-          <Text style={Styles.errorText}>{error.email}</Text>
-        )}
 
         <TextInput
           ref={passwordRef}
-          style={
-            error.password === ""
-              ? Styles.inputBox
-              : [Styles.inputBox, Styles.errorBox]
-          }
+          style={Styles.inputBox}
           placeholder="Password"
           onChangeText={(text) => {
-            setError(emptyError);
+            setError("");
             setUserData({ ...userData, password: text });
           }}
           value={userData.password}
           returnKeyType="next"
           textContentType="password"
-          secureTextEntry
+          secureTextEntry={hidePassword}
           onSubmitEditing={() => {
             secondPasswordRef.current?.focus();
           }}
           blurOnSubmit={false}
         />
-        {error.password === "" ? null : (
-          <Text style={Styles.errorText}>{error.password}</Text>
+        {userData.password !== "" && (
+          <Text
+            style={Styles.passwordReveal}
+            onPress={() => setHidePassword(!hidePassword)}
+          >
+            {hidePassword ? "Show Password" : "Reveal Password"}
+          </Text>
         )}
-
         <TextInput
           ref={secondPasswordRef}
           placeholder="Re enter Password"
-          style={
-            error.secondPassword === ""
-              ? Styles.inputBox
-              : [Styles.inputBox, Styles.errorBox]
-          }
-          onChangeText={(text) => setPassword(text)}
-          value={passwordVerify}
+          style={Styles.inputBox}
+          onChangeText={(text) => {
+            setError("");
+            setPassword({ ...passwordVerify, password: text });
+          }}
+          value={passwordVerify.password}
           returnKeyType="done"
           textContentType="password"
-          secureTextEntry
+          secureTextEntry={passwordVerify.hide}
         />
-        {error.secondPassword === "" ? null : (
-          <Text style={Styles.errorText}>{error.secondPassword}</Text>
+        {passwordVerify.password !== "" && (
+          <Text
+            style={Styles.passwordReveal}
+            onPress={() =>
+              setPassword({ ...passwordVerify, hide: !passwordVerify.hide })
+            }
+          >
+            {passwordVerify.hide ? "Show Password" : "Reveal Password"}
+          </Text>
         )}
       </View>
-      {error.main === "" ? null : (
-        <Text style={Styles.mainErrorText}>{error.main}</Text>
-      )}
+      {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
       <CustomButton
         onPressHandler={onSignUp}
         text={"Signup"}
-        style={Styles.button}
+        style={
+          userData.username === "" ||
+          userData.password === "" ||
+          userData.email === "" ||
+          userData.name === "" ||
+          passwordVerify.password === ""
+            ? Styles.disabledButton
+            : Styles.button
+        }
+        disabled={
+          userData.username === "" ||
+          userData.password === "" ||
+          userData.email === "" ||
+          userData.name === "" ||
+          passwordVerify.password === ""
+        }
       />
-      <View style={Styles.altTextContainer}>
-        <Text style={Styles.altText}>I have an account!</Text>
+      <View style={Styles.bottomTextContainer}>
+        <Text style={Styles.bottomPlainText}>I have an account!</Text>
         <Text
           onPress={() => {
             navigation.navigate("Signin");
           }}
-          style={Styles.altTextBlue}
+          style={Styles.bottomPlainTextBlue}
         >
           Sign In
         </Text>

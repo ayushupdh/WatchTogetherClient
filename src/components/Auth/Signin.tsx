@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { createRef, MutableRefObject, useRef, useState } from "react";
+import React, { createRef, useState } from "react";
 import { Switch, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
@@ -8,16 +8,23 @@ import { CustomButton } from "../dumbComponents/CustomButton";
 import { KeyboardDismiss } from "../dumbComponents/KeyboardDismiss";
 import { AuthStyles as Styles } from "../styles";
 import { AuthNavProps, LoginDataType } from "./AuthTypes";
-import { PasswordBox } from "../dumbComponents/PasswordBox";
+
 const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
+  // States for users, errors and passwordView
+
   const [userData, setUserData] = useState<LoginDataType>({
     username: "",
     password: "",
   });
-  const [error, setError] = useState("");
 
+  const [error, setError] = useState("");
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
+
+  // Reducer dispatch
   const dispatch = useDispatch();
 
+  // Login Action
+  // !Maybe add more custom login error texts
   const login = async () => {
     try {
       const res = await server.post("/users/login", userData);
@@ -32,18 +39,20 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         },
       });
     } catch (e) {
+      if (e.message) {
+        return setError(e.message);
+      }
       setError("Invalid username or password");
     }
   };
-  // const {signin} =useContext(AuthContext);
+  // For future if ever need to add more checks before login
   const onSigninPress = async () => {
-    if (userData.username === "" || userData.password === "") {
-      setError("Missing username or password");
-      return;
-    }
-    login();
+    await login();
   };
+
+  // Password refs for next on
   const passwordRef: any = createRef<TextInput>();
+
   return (
     <KeyboardDismiss>
       <Text style={Styles.title}> Watch Together</Text>
@@ -55,41 +64,57 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
             setUserData({ ...userData, username: text });
           }}
           onFocus={() => setError("")}
-          value={userData.username}
           returnKeyType="next"
           onSubmitEditing={() => {
             passwordRef.current?.focus();
           }}
           textContentType="username"
         />
-        <PasswordBox
+        <TextInput
           ref={passwordRef}
           placeholder="Password"
           onChangeText={(text: string) => {
             setUserData({ ...userData, password: text });
             setError("");
           }}
-          value={userData.password}
           blurOnSubmit={false}
+          style={Styles.inputBox}
+          returnKeyType="done"
+          textContentType="password"
+          secureTextEntry={hidePassword}
+          defaultValue=""
         />
+        {userData.password !== "" && (
+          <Text
+            style={Styles.passwordReveal}
+            onPress={() => setHidePassword(!hidePassword)}
+          >
+            {hidePassword ? "Reveal Password" : "Show Password"}{" "}
+          </Text>
+        )}
       </View>
-      {error === "" ? null : <Text style={Styles.errorText}>{error}</Text>}
+      {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
 
       <CustomButton
         onPressHandler={onSigninPress}
         text={"Login"}
-        style={Styles.button}
+        style={
+          userData.username === "" || userData.password === ""
+            ? Styles.disabledButton
+            : Styles.button
+        }
+        disabled={userData.username === "" || userData.password === ""}
       />
 
-      <View style={Styles.altTextContainer}>
-        <Text style={Styles.altText}>I am a new user!</Text>
+      <View style={Styles.bottomTextContainer}>
+        <Text style={Styles.bottomPlainText}>I am a new user!</Text>
         <Text
           onPress={() => {
             navigation.navigate("Signup");
-            setUserData({ username: "", password: "" });
+            setUserData({ ...userData, username: "", password: "" });
             setError("");
           }}
-          style={Styles.altTextBlue}
+          style={Styles.bottomPlainTextBlue}
         >
           Sign me up
         </Text>
