@@ -35,6 +35,7 @@ export const AppEntry = () => {
           },
         },
       });
+      return true;
     } catch (error) {
       // If the user is unauthorised first time, remove the authtoken to reduce api calls
       if (error.response && error.response.status === 401) {
@@ -44,15 +45,15 @@ export const AppEntry = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      await loadUser();
-    })();
-    setLoading(false);
+    setLoading(true);
+
+    loadUser().then(() => setLoading(false));
+
+    // setLoading(false);
   }, []);
 
   if (loading) {
-    return <ActivityIndicator />;
+    return <ActivityIndicator style={{ flex: 1 }} />;
   } else {
     return user !== null && user ? <BottomNavTabs /> : <AuthNavigator />;
   }

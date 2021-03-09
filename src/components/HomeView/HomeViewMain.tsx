@@ -1,30 +1,30 @@
 import React from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
-import { SIGN_OUT } from "../../redux/types/Authtypes";
+import { Text, View } from "react-native";
+
 import { Center } from "../dumbComponents/Center";
+import { Styles } from "../HomeView/styles";
+import { CustomButton } from "../dumbComponents/CustomButton";
 
 type HomeMainProps = {};
 export const HomeViewMain = (props: HomeMainProps) => {
-  const dispatch = useDispatch();
-  const onLogoutPress = async () => {
-    await AsyncStorage.removeItem("userToken");
-    dispatch({
-      type: SIGN_OUT,
-    });
-  };
   return (
-    <Center>
-      <Text style={{ fontSize: 20 }}>Home View</Text>
-      <View style={{ marginTop: 200 }}>
-        <Button
-          onPress={onLogoutPress}
-          title="Logout"
-          color="#121"
-          accessibilityLabel="Logout Button"
+    <View style={Styles.container}>
+      <View style={Styles.eightyPercenContainer}>
+        <Text style={Styles.introText}>
+          Do you want to start a Group or Single session?
+        </Text>
+        <CustomButton
+          text="Group"
+          style={Styles.groupsButton}
+          textStyle={Styles.buttonText}
+        />
+        <CustomButton
+          text="Single"
+          style={Styles.singleButton}
+          textStyle={Styles.buttonText}
         />
       </View>
-    </Center>
+    </View>
   );
 };
