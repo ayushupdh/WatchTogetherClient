@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "strict": true,
 
-  },"include": ["src/components", "./custom.d.ts", "src/AppEntry.tsx"]
+  },"include": ["src/components", "./custom.d.ts", "src/AppEntry.tsx", "src/utils"]
 }
