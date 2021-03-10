@@ -25,24 +25,24 @@ const BottomNavTabs = () => {
             let iconName;
 
             if (route.name === "HomeScreen") {
-              return <Ionicons name={"home"} size={size} color={color} />;
+              return <Ionicons name={"home"} size={size} color={"#FAA286"} />;
             } else if (route.name === "AccountScreen") {
               return (
-                <Ionicons name={"person-circle"} size={size} color={color} />
+                <Ionicons
+                  name={"person-circle"}
+                  size={size}
+                  color={"#03F9EA"}
+                />
               );
             } else if (route.name === "GroupsScreen") {
-              return <Ionicons name={"people"} size={size} color={color} />;
+              return <Ionicons name={"people"} size={size} color={"green"} />;
             } else if (route.name === "LikesScreen") {
-              return <Ionicons name={"heart"} size={size} color={color} />;
+              return <Ionicons name={"heart"} size={size} color={"red"} />;
             }
 
             // You can return any component that you like here!
           },
         })}
-        tabBarOptions={{
-          activeTintColor: "tomato",
-          inactiveTintColor: "gray",
-        }}
       >
         <Tab.Screen name="LikesScreen" component={LikesMain} />
         <Tab.Screen name="GroupsScreen" component={GroupsNavigator} />
