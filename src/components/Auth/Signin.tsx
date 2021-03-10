@@ -39,6 +39,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         },
       });
     } catch (e) {
+      console.log(e);
       if (e && e.message) {
         return setError(e.message);
       }

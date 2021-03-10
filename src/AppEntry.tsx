@@ -13,6 +13,9 @@ export const AppEntry = () => {
   const user = useSelector((state: { user: UserType }) => state.user);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+
+  //TODO:  Work on opening login only when the server says unauthorized
+
   const loadUser = async () => {
     try {
       const config = {
@@ -37,6 +40,7 @@ export const AppEntry = () => {
       });
       return true;
     } catch (error) {
+      console.log(error);
       // If the user is unauthorised first time, remove the authtoken to reduce api calls
       if (error.response && error.response.status === 401) {
         await AsyncStorage.removeItem("userToken");
@@ -55,6 +59,6 @@ export const AppEntry = () => {
   if (loading) {
     return <ActivityIndicator style={{ flex: 1 }} />;
   } else {
-    return user !== null && user ? <BottomNavTabs /> : <AuthNavigator />;
+    return user === null || !user ? <AuthNavigator /> : <BottomNavTabs />;
   }
 };
