@@ -8,6 +8,7 @@ import { CreateGroupForm } from "./CreateGroupForm";
 import { SelectGenres } from "./SelectGenres";
 import { AddFriend } from "./AddFriend";
 import { SwipingView } from "./SwipingView";
+import { addGroupsStack } from "./GroupsStack";
 
 type GroupsNavigatorProps = {};
 
@@ -16,11 +17,7 @@ const Stack = createStackNavigator<GroupsParamList>();
 const GroupsNavigator = (props: GroupsNavigatorProps) => {
   return (
     <Stack.Navigator initialRouteName="Your Groups">
-      <Stack.Screen name="Your Groups" component={GroupsMain} />
-      <Stack.Screen name="Group Session" component={CreateGroupForm} />
-      <Stack.Screen name="SelectGenres" component={SelectGenres} />
-      <Stack.Screen name="Add a Friend" component={AddFriend} />
-      <Stack.Screen name="SwipingView" component={SwipingView} />
+      {addGroupsStack(Stack)}
     </Stack.Navigator>
   );
 };
