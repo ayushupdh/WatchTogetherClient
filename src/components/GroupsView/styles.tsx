@@ -30,9 +30,8 @@ export const styles = StyleSheet.create({
   },
   createButton: {
     backgroundColor: "#F78473",
-    width: "50%",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     borderRadius: 30,
     shadowOffset: { width: 5, height: 4 },
     shadowColor: "#000",

@@ -5,6 +5,7 @@ import { GroupsNavProps } from "./GroupsTypes";
 import { styles } from "./styles";
 
 export const SelectGenres = ({
+  route,
   navigation,
 }: GroupsNavProps<"SelectGenres">) => {
   const genres = [
@@ -58,7 +59,11 @@ export const SelectGenres = ({
       <CustomButton
         text={"Next"}
         style={[styles.unsubmittedButton, { width: "80%" }]}
-        onPressHandler={() => navigation.navigate("Add a Friend")}
+        onPressHandler={() =>
+          navigation.navigate("Add a Friend", {
+            groupName: route.params.groupName,
+          })
+        }
       />
     </View>
   );

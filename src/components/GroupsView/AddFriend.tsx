@@ -8,12 +8,14 @@ import { CustomButton } from "../dumbComponents/CustomButton";
 import { GroupsNavProps } from "./GroupsTypes";
 
 type AddFriendProps = {};
-export const AddFriend = ({ navigation }: GroupsNavProps<"Add a Friend">) => {
+export const AddFriend = ({
+  route,
+  navigation,
+}: GroupsNavProps<"Add a Friend">) => {
   const [friend, setFriend] = useState<string>("");
   const [friendList, setFriendList] = useState<{ name: string; key: string }[]>(
     []
   );
-
   const addToFriendList = (name: string) => {
     setFriendList((oldList) => [
       ...oldList,
@@ -66,7 +68,11 @@ export const AddFriend = ({ navigation }: GroupsNavProps<"Add a Friend">) => {
         <CustomButton
           text="Start"
           style={styles.unsubmittedButton}
-          onPressHandler={() => navigation.navigate("SwipingView")}
+          onPressHandler={() =>
+            navigation.navigate("SwipingView", {
+              groupName: route.params.groupName,
+            })
+          }
         />
       </View>
     </View>

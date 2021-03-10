@@ -1,11 +1,18 @@
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 export type GroupsParamList = {
   "Your Groups": undefined;
   "Group Session": undefined;
-  "Add a Friend": undefined;
-  SelectGenres: undefined;
-  SwipingView: undefined;
+  "Add a Friend": {
+    groupName: string;
+  };
+  SelectGenres: {
+    groupName: string;
+  };
+  SwipingView: {
+    groupName: string;
+  };
 };
 export type GroupsDataType = {
   name: string;
@@ -16,4 +23,5 @@ export type GroupsDataType = {
 
 export type GroupsNavProps<T extends keyof GroupsParamList> = {
   navigation: StackNavigationProp<GroupsParamList, T>;
+  route: RouteProp<GroupsParamList, T>;
 };

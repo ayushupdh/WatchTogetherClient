@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View, StyleSheet, Button, StatusBar } from "react-native";
 import Swiper from "react-native-deck-swiper";
+
 import { styles } from "./styles";
 
-type SwipingViewProps = {};
-export const SwipingView = (props: SwipingViewProps) => {
+export const SwipingView = () => {
   return (
     <View style={styles.container}>
       <View

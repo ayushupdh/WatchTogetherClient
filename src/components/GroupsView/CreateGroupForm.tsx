@@ -59,7 +59,9 @@ export const CreateGroupForm = ({
         <CustomButton
           text={"Next"}
           style={styles.unsubmittedButton}
-          onPressHandler={() => navigation.navigate("SelectGenres")}
+          onPressHandler={() =>
+            navigation.navigate("SelectGenres", { groupName: groupData.name })
+          }
         />
       </View>
     </View>
