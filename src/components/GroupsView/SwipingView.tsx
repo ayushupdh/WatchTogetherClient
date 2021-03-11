@@ -1,29 +1,32 @@
 import React from "react";
 import { Text, View, StyleSheet, Button, StatusBar } from "react-native";
 import Swiper from "react-native-deck-swiper";
+import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 import { styles } from "./styles";
 
-export const SwipingView = () => {
+export const SwipingView = ({ route }: GroupsNavProps<"SwipingView">) => {
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          paddingHorizontal: 10,
-          marginTop: 10,
-          backgroundColor: "#F78473",
-          borderRadius: 20,
-        }}
-      >
-        <Text
+      {!route.params ? null : (
+        <View
           style={{
-            fontSize: 20,
-            color: "white",
+            paddingHorizontal: 10,
+            marginTop: 10,
+            backgroundColor: "#F78473",
+            borderRadius: 20,
           }}
         >
-          5:00
-        </Text>
-      </View>
+          <Text
+            style={{
+              fontSize: 20,
+              color: "white",
+            }}
+          >
+            5:00
+          </Text>
+        </View>
+      )}
 
       <Swiper
         cards={[
@@ -37,6 +40,7 @@ export const SwipingView = () => {
         ]}
         containerStyle={{
           marginTop: "10%",
+          backgroundColor: "#E2EAF4",
         }}
         renderCard={(card) => {
           return (
@@ -44,6 +48,7 @@ export const SwipingView = () => {
               style={{
                 marginTop: "-15%",
                 flex: 0.7,
+
                 borderRadius: 4,
                 borderWidth: 2,
                 borderColor: "#fff",

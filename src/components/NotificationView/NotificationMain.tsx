@@ -2,11 +2,11 @@ import React from "react";
 import { Text } from "react-native";
 import { Center } from "../dumbComponents/Center";
 
-type LikesMainProps = {};
-export const LikesMain = (props: LikesMainProps) => {
+type NotificationMainProps = {};
+export const NotificationMain = (props: NotificationMainProps) => {
   return (
     <Center>
-      <Text>Likes View</Text>
+      <Text>Notification View</Text>
     </Center>
   );
 };
