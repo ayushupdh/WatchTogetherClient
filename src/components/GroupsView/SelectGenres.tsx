@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { CustomButton } from "../dumbComponents/CustomButton";
-import { GroupsNavProps } from "./GroupsTypes";
+import { GroupsNavProps } from "./Navigation/GroupsTypes";
 import { styles } from "./styles";
 
 export const SelectGenres = ({

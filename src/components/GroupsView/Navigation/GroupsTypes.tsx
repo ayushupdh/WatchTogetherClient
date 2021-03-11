@@ -14,6 +14,7 @@ export type GroupsParamList = {
     groupName: string;
   };
 };
+
 export type GroupsDataType = {
   name: string;
   genres: string[];

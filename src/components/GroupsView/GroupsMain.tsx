@@ -5,7 +5,7 @@ import { useGetGroups } from "../../hooks/useGetGroups";
 import { styles } from "./styles";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { CustomButton } from "../dumbComponents/CustomButton";
-import { GroupsNavProps } from "./GroupsTypes";
+import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
   const { groups, error } = useGetGroups();

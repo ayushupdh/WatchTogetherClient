@@ -7,7 +7,7 @@ import { BottomNavParamList, BottomNavProps } from "./BottomNavTypes";
 import { NavigationContainer } from "@react-navigation/native";
 import { GroupsMain } from "../GroupsView/GroupsMain";
 import { LikesMain } from "../LikesView/LikesMain";
-import GroupsNavigator from "../GroupsView/GroupsNavigator";
+import GroupsNavigator from "../GroupsView/Navigation/GroupsNavigator";
 import HomeViewNavigator from "../HomeView/HomeNavigation";
 import AccountNavigator from "../AccountView/AccountNavigator";
 const Tab = createBottomTabNavigator<BottomNavParamList>();

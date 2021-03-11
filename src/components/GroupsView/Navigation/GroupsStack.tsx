@@ -1,17 +1,35 @@
-import { TypedNavigator, StackNavigationState } from "@react-navigation/native";
+import {
+  TypedNavigator,
+  StackNavigationState,
+  DefaultRouterOptions,
+  Route,
+  DefaultNavigatorOptions,
+  StackRouterOptions,
+} from "@react-navigation/native";
 import { StackNavigationOptions } from "@react-navigation/stack";
-import { StackNavigationEventMap } from "@react-navigation/stack/lib/typescript/src/types";
+import {
+  StackNavigationConfig,
+  StackNavigationEventMap,
+} from "@react-navigation/stack/lib/typescript/src/types";
 import React, { Props } from "react";
-import { AddFriend } from "./AddFriend";
-import { CreateGroupForm } from "./CreateGroupForm";
-import { GroupsMain } from "./GroupsMain";
+import { HomeViewParamList } from "../../HomeView/HomeViewTypes";
+import { AddFriend } from "../AddFriend";
+import { CreateGroupForm } from "../CreateGroupForm";
+import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
-import { SelectGenres } from "./SelectGenres";
-import { SwipingView } from "./SwipingView";
+import { SelectGenres } from "../SelectGenres";
+import { SwipingView } from "../SwipingView";
+/* TypedNavigator<
+    HomeViewParamList | GroupsParamList,
+    StackNavigationState<Record<string, object | undefined>>,
+    any,
+    any,
+    any
+  >*/
 
 export const addGroupsStack = (
   Stack: TypedNavigator<
-    GroupsParamList,
+    HomeViewParamList | GroupsParamList,
     StackNavigationState<Record<string, object | undefined>>,
     any,
     any,

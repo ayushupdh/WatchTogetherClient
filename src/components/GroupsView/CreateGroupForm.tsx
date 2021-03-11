@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Center } from "../dumbComponents/Center";
 import { Text, View } from "react-native";
 import { FormField } from "./FormField";
-import { GroupsDataType, GroupsNavProps } from "./GroupsTypes";
+import { GroupsDataType, GroupsNavProps } from "./Navigation/GroupsTypes";
 import { styles } from "./styles";
 import { CustomButton } from "../dumbComponents/CustomButton";
 export const CreateGroupForm = ({

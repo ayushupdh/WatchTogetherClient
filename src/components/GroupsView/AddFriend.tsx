@@ -5,7 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import { FormField } from "./FormField";
 import { styles } from "./styles";
 import { CustomButton } from "../dumbComponents/CustomButton";
-import { GroupsNavProps } from "./GroupsTypes";
+import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 type AddFriendProps = {};
 export const AddFriend = ({
