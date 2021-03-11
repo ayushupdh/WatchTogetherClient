@@ -45,6 +45,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           user: {
             username: res.data.user.name,
           },
+          token: res.data.token,
         },
       });
     } catch (e) {

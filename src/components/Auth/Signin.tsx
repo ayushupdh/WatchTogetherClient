@@ -36,12 +36,12 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
           user: {
             username: res.data.user.name,
           },
+          token: res.data.token,
         },
       });
     } catch (e) {
-      console.log(e);
-      if (e && e.message) {
-        return setError(e.message);
+      if (e && e.message === "Network Error") {
+        return setError("Internet is unavailable");
       }
       setError("Invalid username or password");
     }
