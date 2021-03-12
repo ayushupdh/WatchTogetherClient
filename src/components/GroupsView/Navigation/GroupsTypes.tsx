@@ -3,7 +3,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 export type GroupsParamList = {
   "Your Groups": undefined;
-  "Group Session": undefined;
+
+  "Create a Group":
+    | {
+        groupName: any;
+      }
+    | undefined;
   "Add a Friend": {
     groupName: string;
   };

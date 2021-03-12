@@ -14,7 +14,7 @@ export const Timer = (props: TimerProps) => {
           maxLength={2}
           defaultValue="00"
         />
-        <Text style={styles.groupTitle}>: </Text>
+        <Text style={styles.colonSeparator}>: </Text>
         <TextInput
           placeholder="00"
           style={styles.input}
@@ -30,6 +30,11 @@ const styles = StyleSheet.create({
   groupTitle: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  colonSeparator: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginHorizontal: 5,
   },
   timerContainer: {
     flexDirection: "row",
@@ -50,6 +55,5 @@ const styles = StyleSheet.create({
     elevation: 5,
     fontSize: 20,
     color: "black",
-    marginHorizontal: 10,
   },
 });

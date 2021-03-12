@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { Center } from "../dumbComponents/Center";
 import { useGetGroups } from "../../hooks/useGetGroups";
@@ -16,7 +16,16 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     return (
       <View style={styles.item}>
         <View style={[styles.smallDot, { backgroundColor: randomColor }]} />
-        <Text style={styles.groupName}>{item.name}</Text>
+        <Text
+          style={styles.groupName}
+          onPress={() => {
+            navigation.navigate("Create a Group", {
+              groupName: item.name,
+            });
+          }}
+        >
+          {item.name}
+        </Text>
         <SimpleLineIcons
           name="options-vertical"
           size={20}
@@ -32,7 +41,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
         <CustomButton
           text="Create a Group"
           style={styles.createButton}
-          onPressHandler={() => navigation.navigate("Group Session")}
+          onPressHandler={() => navigation.navigate("Create a Group")}
         />
       </View>
       <View style={styles.hundredpercenContainer}>

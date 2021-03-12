@@ -2,7 +2,6 @@ import { StyleSheet, StatusBar } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 0,
     alignItems: "center",
     backgroundColor: "#E2EAF4",
   },
@@ -17,11 +16,12 @@ export const styles = StyleSheet.create({
   eightypercenContainer: {
     flex: 1,
     width: "80%",
+    paddingTop: 10,
   },
   createGroupContainer: {
     flex: 1,
     width: "80%",
-    marginTop: 20,
+    // marginTop: 20,
   },
   timerContainer: {
     backgroundColor: "#F78473",

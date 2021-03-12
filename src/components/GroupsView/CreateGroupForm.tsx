@@ -7,6 +7,15 @@ import { styles } from "./styles";
 import { CustomButton } from "../dumbComponents/CustomButton";
 import { Timer } from "../dumbComponents/Timer";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
+import {
+  ColorChangeButton,
+  ColorChangeField,
+} from "../dumbComponents/ColorChangeField";
+import {
+  Dropdown,
+  GroupDropdown,
+  MultiselectDropdown,
+} from "sharingan-rn-modal-dropdown";
 export const CreateGroupForm = ({
   navigation,
 }: GroupsNavProps<"Group Session">) => {
@@ -23,22 +32,27 @@ export const CreateGroupForm = ({
       "Musical",
       "Dummy",
       "Dummy",
-      "Dummy",
-      "Dummy",
-      "Dummy",
-      "Dummy",
     ],
-    languages: [],
+    languages: ["English", "Japanese", "Chinese"],
     time: "",
   });
   const [error, seterror] = useState<string>("");
-
+  const [valueMS, setValueMS] = useState<string[]>([]);
+  const onChangeMS = (value: string[]) => {
+    setValueMS(value);
+  };
+  const onPressHandler = () => {
+    console.log("h");
+  };
   return (
     <View style={styles.container}>
-      <View style={{ width: "100%", flex: 1, marginVertical: 20 }}>
+      <View style={{ width: "100%", flex: 1, paddingTop: 10 }}>
         <ScrollView
           style={{ flex: 1 }}
-          contentContainerStyle={{ alignItems: "center" }}
+          contentContainerStyle={{
+            alignItems: "center",
+            paddingBottom: 20,
+          }}
         >
           <View style={styles.createGroupContainer}>
             <FormField
@@ -50,54 +64,31 @@ export const CreateGroupForm = ({
               }
               error={error}
             />
-            <FormField
-              placeholder="Language"
-              title="Select Languages"
-              value={groupData.languages[0]}
-              onChangeHandler={(name: string) =>
-                setGroupData({ ...groupData, languages: ["ok lol"] })
-              }
-              error={error}
-            />
-
             <Timer />
 
-            <Text style={styles.groupTitle}>Select Genres</Text>
+            <ColorChangeField
+              data={groupData.genres}
+              titleText={"Select Genres"}
+            />
+            <ColorChangeField
+              data={groupData.languages}
+              titleText={"Select Languages"}
+            />
+
             <View
               style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                // justifyContent: "center",
-
-                overflow: "hidden",
+                paddingTop: 30,
+                marginLeft: 20,
+                marginRight: 20,
+                flex: 1,
               }}
-            >
-              {groupData.genres.map((genre) => {
-                return (
-                  <TouchableHighlight
-                    key={Math.floor(Math.random() * 16777215).toString(16)}
-                    style={{
-                      padding: 10,
-                      backgroundColor: "#f4f4f4",
-                      marginHorizontal: 8,
-                      marginVertical: 8,
-                      borderRadius: 20,
-                      shadowOffset: { width: 5, height: 4 },
-                      shadowColor: "#000",
-                      shadowOpacity: 0.4,
-                    }}
-                  >
-                    <Text>{genre}</Text>
-                  </TouchableHighlight>
-                );
-              })}
-            </View>
+            ></View>
 
             <CustomButton
               text={"Next"}
               style={styles.unsubmittedButton}
               onPressHandler={() =>
-                navigation.navigate("SelectGenres", {
+                navigation.navigate("Add a Friend", {
                   groupName: groupData.name,
                 })
               }

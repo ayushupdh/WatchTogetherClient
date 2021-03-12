@@ -1,17 +1,7 @@
-import {
-  TypedNavigator,
-  StackNavigationState,
-  DefaultRouterOptions,
-  Route,
-  DefaultNavigatorOptions,
-  StackRouterOptions,
-} from "@react-navigation/native";
-import { StackNavigationOptions } from "@react-navigation/stack";
-import {
-  StackNavigationConfig,
-  StackNavigationEventMap,
-} from "@react-navigation/stack/lib/typescript/src/types";
-import React, { Props } from "react";
+import { TypedNavigator, StackNavigationState } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+import React from "react";
 import { HomeViewParamList } from "../../HomeView/HomeViewTypes";
 import { AddFriend } from "../AddFriend";
 import { CreateGroupForm } from "../CreateGroupForm";
@@ -40,9 +30,15 @@ export const addGroupsStack = (
     <>
       <Stack.Screen name="Your Groups" component={GroupsMain} />
       <Stack.Screen
-        name="Group Session"
+        name="Create a Group"
         component={CreateGroupForm}
-        options={{ headerBackTitleVisible: false }}
+        options={({ route }: GroupsNavProps<"SwipingView">) => ({
+          title:
+            route.params && route.params.groupName
+              ? route.params.groupName
+              : "Create a Group",
+          headerBackTitleVisible: false,
+        })}
       />
       <Stack.Screen
         name="SelectGenres"
@@ -58,10 +54,19 @@ export const addGroupsStack = (
         name="SwipingView"
         component={SwipingView}
         options={({ route }: GroupsNavProps<"SwipingView">) => ({
+          headerLeft: null,
+          headerRight: () => (
+            <Ionicons
+              name={"menu"}
+              style={{ paddingRight: 15 }}
+              size={32}
+              color={"#313B68"}
+            />
+          ),
           title:
             route.params && route.params.groupName
               ? route.params.groupName
-              : "Single",
+              : "Watch Together",
           headerBackTitleVisible: false,
         })}
       />
