@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useRef, useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Image, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
 import { SIGN_UP } from "../../redux/types/Authtypes";
@@ -73,6 +73,17 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   return (
     <KeyboardDismiss>
       <Text style={Styles.title}> Watch Together</Text>
+      <Image
+        style={{
+          height: 300,
+          width: 300,
+          flexWrap: "wrap",
+          flexShrink: 1,
+          paddingBottom: 10,
+        }}
+        resizeMode="contain"
+        source={require("./assets/Signup.png")}
+      ></Image>
       <View style={Styles.textInputView}>
         <TextInput
           style={Styles.inputBox}
