@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 const theme = {
   mainColor: "#313B68",
   blueBackgroundCOlor: "#E2EAF4",
@@ -8,14 +8,15 @@ const AuthStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E2EAF4",
-    justifyContent: "center",
     alignItems: "center",
+    marginTop: StatusBar.currentHeight || 0,
   },
   title: {
     fontSize: 30,
-    padding: 50,
+    padding: 10,
     alignSelf: "center",
     fontWeight: "bold",
+    // flexShrink: 1,
   },
   textInputView: {
     width: "80%",
@@ -52,13 +53,14 @@ const AuthStyles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.4,
     opacity: 0.5,
-    marginTop: 40,
+    marginTop: 20,
     elevation: 5,
   },
   bottomTextContainer: {
     marginTop: 30,
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: 20,
   },
   bottomPlainText: {
     fontSize: 20,

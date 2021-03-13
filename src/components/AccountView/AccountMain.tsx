@@ -1,14 +1,16 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, Image, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { SIGN_OUT } from "../../redux/types/Authtypes";
 import { Center } from "../dumbComponents/Center";
 import { CustomButton } from "../dumbComponents/CustomButton";
 import { Styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AccountNavProps } from "./AccountTypes";
 
-type AccountMainProps = {};
-export const AccountMain = (props: AccountMainProps) => {
+export const AccountMain = ({
+  navigation,
+}: AccountNavProps<"Your Account">) => {
   const dispatch = useDispatch();
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem("userToken");
@@ -17,29 +19,43 @@ export const AccountMain = (props: AccountMainProps) => {
     });
   };
   return (
-    <Center>
-      <Text>AccountMain</Text>
+    <View style={Styles.container}>
+      <View style={Styles.avatarContainer}>
+        <Image style={Styles.avatar} source={require("./avatar.png")}></Image>
+        <View style={Styles.avatarNameContainer}>
+          <Text style={Styles.avatarText}>Ayush Upadhyay</Text>
+          <CustomButton
+            style={Styles.editprofileButton}
+            textStyle={Styles.editprofileButtonText}
+            text={"Edit Profile"}
+            onPressHandler={() => navigation.navigate("Edit Profile")}
+          />
+        </View>
+      </View>
       <CustomButton
-        text={"Add Friend"}
+        text={"Your Friends"}
         style={Styles.button}
         textStyle={Styles.buttonText}
         pressedColor="#red"
-      ></CustomButton>
+        onPressHandler={() => navigation.navigate("Friends")}
+      />
+      <CustomButton
+        text={"Your Likes"}
+        style={Styles.button}
+        textStyle={Styles.buttonText}
+        onPressHandler={() => navigation.navigate("Likes")}
+      />
       <CustomButton
         text={"..."}
         style={Styles.button}
         textStyle={Styles.buttonText}
-      ></CustomButton>
-      <CustomButton
-        text={"..."}
-        style={Styles.button}
-        textStyle={Styles.buttonText}
-      ></CustomButton>
+      />
       <CustomButton
         onPressHandler={onLogoutPress}
         text={"Logout"}
         style={Styles.redButton}
-      ></CustomButton>
-    </Center>
+        textStyle={{ fontWeight: "bold", fontSize: 22 }}
+      />
+    </View>
   );
 };
