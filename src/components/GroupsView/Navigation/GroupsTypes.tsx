@@ -3,7 +3,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 export type GroupsParamList = {
   "Your Groups": undefined;
-
   "Create a Group":
     | {
         groupName: any;
@@ -17,6 +16,9 @@ export type GroupsParamList = {
   };
   SwipingView: {
     groupName: string;
+  };
+  GroupInfo: {
+    groupId: string;
   };
 };
 

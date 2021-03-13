@@ -9,6 +9,7 @@ import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
 import { SelectGenres } from "../SelectGenres";
 import { SwipingView } from "../SwipingView";
+import { GroupInfo } from "../GroupInfo";
 /* TypedNavigator<
     HomeViewParamList | GroupsParamList,
     StackNavigationState<Record<string, object | undefined>>,
@@ -39,6 +40,11 @@ export const addGroupsStack = (
               : "Create a Group",
           headerBackTitleVisible: false,
         })}
+      />
+      <Stack.Screen
+        name="GroupInfo"
+        component={GroupInfo}
+        options={{ headerBackTitleVisible: false }}
       />
       <Stack.Screen
         name="SelectGenres"

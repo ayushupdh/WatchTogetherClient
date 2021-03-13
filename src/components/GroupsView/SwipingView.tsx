@@ -1,4 +1,6 @@
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+
 import { Text, View, StyleSheet, Button, StatusBar } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
@@ -15,12 +17,16 @@ export const SwipingView = ({ route }: GroupsNavProps<"SwipingView">) => {
             marginTop: 10,
             backgroundColor: "#F78473",
             borderRadius: 20,
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
+          <Ionicons name="time-outline" size={20} color="white" />
           <Text
             style={{
               fontSize: 20,
               color: "white",
+              paddingLeft: 5,
             }}
           >
             5:00

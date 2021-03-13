@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { FlatList, Text, View } from "react-native";
 import { FormField } from "./FormField";
 import { styles } from "./styles";

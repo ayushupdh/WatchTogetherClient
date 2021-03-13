@@ -20,7 +20,6 @@ const BottomNavTabs = () => {
         initialRouteName="HomeScreen"
         screenOptions={({ route }) => ({
           title: "",
-
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -28,7 +27,7 @@ const BottomNavTabs = () => {
               return <Ionicons name={"home"} size={size} color={"#313B68"} />;
             } else if (route.name === "AccountScreen") {
               return (
-                <Ionicons name={"person-circle"} size={30} color={"#03F9EA"} />
+                <Ionicons name={"person-circle"} size={30} color={"red"} />
               );
             } else if (route.name === "GroupsScreen") {
               return <Ionicons name={"people"} size={size} color={"green"} />;

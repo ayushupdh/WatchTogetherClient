@@ -18,7 +18,7 @@ import {
 } from "sharingan-rn-modal-dropdown";
 export const CreateGroupForm = ({
   navigation,
-}: GroupsNavProps<"Group Session">) => {
+}: GroupsNavProps<"Create a Group">) => {
   const [groupData, setGroupData] = useState<GroupsDataType>({
     name: "",
     genres: [

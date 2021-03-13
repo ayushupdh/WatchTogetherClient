@@ -7,8 +7,16 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { CustomButton } from "../dumbComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
+type GetGroupsType = {
+  groups: {
+    name: string;
+    id: string;
+  };
+  error: string | null;
+};
+
 export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
-  const { groups, error } = useGetGroups();
+  const { groups, error }: GetGroupsType = useGetGroups();
 
   const renderItem = ({ item }: any) => {
     const randomColor: string =
@@ -19,9 +27,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
         <Text
           style={styles.groupName}
           onPress={() => {
-            navigation.navigate("Create a Group", {
-              groupName: item.name,
-            });
+            navigation.navigate("GroupInfo", { groupId: groups.id });
           }}
         >
           {item.name}
