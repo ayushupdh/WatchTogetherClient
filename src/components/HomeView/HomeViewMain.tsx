@@ -1,12 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Text, View } from "react-native";
-
-import { Center } from "../dumbComponents/Center";
 import { Styles } from "../HomeView/styles";
 import { CustomButton } from "../dumbComponents/CustomButton";
 import { HomeViewNavProps } from "./HomeViewTypes";
-
 type HomeMainProps = {};
 export const HomeViewMain = ({
   navigation,
