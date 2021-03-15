@@ -8,10 +8,12 @@ import { CustomButton } from "../dumbComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 type GetGroupsType = {
-  groups: {
-    name: string;
-    id: string;
-  };
+  groups: [
+    {
+      name: string;
+      id: string;
+    }
+  ];
   error: string | null;
 };
 
@@ -27,7 +29,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
         <Text
           style={styles.groupName}
           onPress={() => {
-            navigation.navigate("GroupInfo", { groupId: groups.id });
+            navigation.navigate("GroupInfo", { groupId: item.id });
           }}
         >
           {item.name}
