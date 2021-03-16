@@ -6,6 +6,7 @@ import { Card } from "./Card";
 import { Modalize } from "react-native-modalize";
 import { MovieInfoModal } from "./MovieInfoModal";
 import { useHeaderHeight } from "@react-navigation/stack";
+import { OverlayLabel } from "./Overlay";
 
 type SwipeCardProps = {};
 export const SwipeCard = (props: SwipeCardProps) => {
@@ -18,6 +19,15 @@ export const SwipeCard = (props: SwipeCardProps) => {
   };
   const windowHeight = useWindowDimensions().height;
   const headerHeight = useHeaderHeight();
+
+  const handleLike = (index: any) => {
+    const movie = movies[index]["_id"];
+    console.log(movie);
+  };
+  const handleDislike = (index: any) => {
+    const movie = movies[index]["_id"];
+    console.log(movie);
+  };
 
   if (movies && movies.length !== 0) {
     return (
@@ -34,7 +44,37 @@ export const SwipeCard = (props: SwipeCardProps) => {
           onTapCard={(index) => onPressHandler(index)}
           cardIndex={0}
           backgroundColor={"#fff"}
-          stackSize={3}
+          stackSize={10}
+          stackSeparation={1}
+          overlayLabels={{
+            left: {
+              title: "NOPE",
+              element: <OverlayLabel label="NOPE" color="#E5566D" />,
+              style: {
+                wrapper: {
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  marginLeft: -30,
+                  justifyContent: "flex-start",
+                },
+              },
+            },
+            right: {
+              title: "LIKE",
+              element: <OverlayLabel label="LIKE" color="#4CCC93" />,
+              style: {
+                wrapper: {
+                  flexDirection: "column",
+                  marginLeft: 30,
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                },
+              },
+            },
+          }}
+          disableBottomSwipe
+          onSwipedLeft={handleDislike}
+          onSwipedRight={handleLike}
         ></Swiper>
         <Modalize
           ref={modalizeRef}
