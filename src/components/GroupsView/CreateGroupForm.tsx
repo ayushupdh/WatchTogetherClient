@@ -22,18 +22,19 @@ export const CreateGroupForm = ({
   const [groupData, setGroupData] = useState<GroupsDataType>({
     name: "",
     genres: [
-      "Action",
-      "Adventure",
+      "Drama",
+      "Crime",
       "Comedy",
-      "Romance",
-      "Horror",
-      "Romcom",
+      "Action",
       "Thriller",
-      "Musical",
-      "Dummy",
-      "Dummy",
+      "Documentary",
+      "Adventure",
+      "Science Fiction",
+      "Animation",
+      "Family",
+      "Romance",
     ],
-    languages: ["English", "Japanese", "Chinese"],
+    languages: ["English", "German", "Spanish", "French", "Arabic"],
     time: "",
   });
   const [error, seterror] = useState<string>("");

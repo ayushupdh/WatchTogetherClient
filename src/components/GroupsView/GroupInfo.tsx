@@ -9,7 +9,8 @@ import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 export const GroupInfo = ({ navigation }: GroupsNavProps<"GroupInfo">) => {
   const [sessionsSelected, setsessionsSelected] = useState(false);
-  const { groupInfo, error } = useGroupsInfo("603f06f41cad9e4404ccfbdb");
+  // TODO Change here
+  const { groupInfo, error } = useGroupsInfo("604f06bcf3619df0376ba89d");
 
   useLayoutEffect(() => {
     if (groupInfo) {
