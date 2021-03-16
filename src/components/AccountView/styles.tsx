@@ -7,10 +7,19 @@ const theme = {
 export const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     width: "100%",
     paddingTop: 20,
     backgroundColor: "#E2EAF4",
+  },
+  buttonsContainer: {
+    flex: 1,
+    alignItems: "center",
+    width: "100%",
+  },
+  eightyPercenContainer: {
+    flex: 1,
+    alignItems: "center",
+    width: "80%",
   },
   avatarContainer: {
     flexDirection: "row",
@@ -76,5 +85,41 @@ export const Styles = StyleSheet.create({
     width: 118,
     height: 130,
     borderRadius: 40,
+  },
+  addFriendContainer: {
+    backgroundColor: "#F78473",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    alignSelf: "flex-start",
+    marginHorizontal: 20,
+    shadowOffset: { width: 0, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+  },
+  customText: {
+    fontSize: 20,
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
+  friends: {
+    flexDirection: "row",
+    backgroundColor: "#FAFAFA",
+    paddingVertical: 13,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    marginBottom: 15,
+    alignSelf: "flex-start",
+    marginHorizontal: 20,
+    shadowOffset: { width: 0, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+  },
+  friendsName: {
+    flex: 1,
+    fontSize: 22,
+    color: "#767676",
+    fontWeight: "500",
+    paddingLeft: 15,
   },
 });

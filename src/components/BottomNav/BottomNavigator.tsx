@@ -9,7 +9,7 @@ import { GroupsMain } from "../GroupsView/GroupsMain";
 import { NotificationMain } from "../NotificationView/NotificationMain";
 import GroupsNavigator from "../GroupsView/Navigation/GroupsNavigator";
 import HomeViewNavigator from "../HomeView/HomeNavigation";
-import AccountNavigator from "../AccountView/AccountNavigator";
+import AccountNavigator from "../AccountView/Navigation/AccountNavigator";
 const Tab = createBottomTabNavigator<BottomNavParamList>();
 
 // ctrl + cmd + z

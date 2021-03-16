@@ -5,6 +5,8 @@ import {
   TextInput,
   TextInputSubmitEditingEventData,
   NativeSyntheticEvent,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import { styles } from "./styles";
 type FormFieldProps = {
@@ -13,6 +15,8 @@ type FormFieldProps = {
   value: string;
   onChangeHandler: (name: string) => void;
   error: string;
+  containerStyle?: StyleProp<ViewStyle>;
+
   returnKeyType?:
     | "done"
     | "go"
@@ -35,7 +39,7 @@ type FormFieldProps = {
 };
 export const FormField = (props: FormFieldProps) => {
   return (
-    <View>
+    <View style={props.containerStyle}>
       <Text style={styles.groupTitle}>{props.title}</Text>
       <TextInput
         style={styles.groupTextInput}

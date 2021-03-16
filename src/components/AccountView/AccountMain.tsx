@@ -6,7 +6,7 @@ import { Center } from "../dumbComponents/Center";
 import { CustomButton } from "../dumbComponents/CustomButton";
 import { Styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AccountNavProps } from "./AccountTypes";
+import { AccountNavProps } from "./Navigation/AccountTypes";
 
 export const AccountMain = ({
   navigation,
@@ -32,30 +32,32 @@ export const AccountMain = ({
           />
         </View>
       </View>
-      <CustomButton
-        text={"Your Friends"}
-        style={Styles.button}
-        textStyle={Styles.buttonText}
-        pressedColor="#red"
-        onPressHandler={() => navigation.navigate("Friends")}
-      />
-      <CustomButton
-        text={"Your Likes"}
-        style={Styles.button}
-        textStyle={Styles.buttonText}
-        onPressHandler={() => navigation.navigate("Likes")}
-      />
-      <CustomButton
-        text={"..."}
-        style={Styles.button}
-        textStyle={Styles.buttonText}
-      />
-      <CustomButton
-        onPressHandler={onLogoutPress}
-        text={"Logout"}
-        style={Styles.redButton}
-        textStyle={{ fontWeight: "bold", fontSize: 22 }}
-      />
+      <View style={Styles.buttonsContainer}>
+        <CustomButton
+          text={"Your Friends"}
+          style={Styles.button}
+          textStyle={Styles.buttonText}
+          pressedColor="#red"
+          onPressHandler={() => navigation.navigate("Friends")}
+        />
+        <CustomButton
+          text={"Your Likes"}
+          style={Styles.button}
+          textStyle={Styles.buttonText}
+          onPressHandler={() => navigation.navigate("Likes")}
+        />
+        <CustomButton
+          text={"..."}
+          style={Styles.button}
+          textStyle={Styles.buttonText}
+        />
+        <CustomButton
+          onPressHandler={onLogoutPress}
+          text={"Logout"}
+          style={Styles.redButton}
+          textStyle={{ fontWeight: "bold", fontSize: 22 }}
+        />
+      </View>
     </View>
   );
 };
