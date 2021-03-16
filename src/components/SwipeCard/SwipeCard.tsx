@@ -32,7 +32,6 @@ export const SwipeCard = (props: SwipeCardProps) => {
         cardIndex={0}
         backgroundColor={"#fff"}
         stackSize={2}
-        infinite={false}
       ></Swiper>
       <Modalize
         ref={modalizeRef}
