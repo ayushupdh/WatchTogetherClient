@@ -3,10 +3,11 @@ import "react-native-gesture-handler";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { AccountParamList } from "./AccountTypes";
-import { AccountMain } from "./AccountMain";
-import { EditProfile } from "./EditProfile";
-import { Likes } from "./Likes";
-import { Friends } from "./Friends";
+import { AccountMain } from "../AccountMain";
+import { EditProfile } from "../EditProfile";
+import { Likes } from "../Likes";
+import { Friends } from "../Friends";
+import { AddFreind } from "../AddFreind";
 
 type AccountNavigatorProps = {};
 
@@ -24,6 +25,7 @@ const AccountNavigator = (props: AccountNavigatorProps) => {
       <Stack.Screen name="Edit Profile" component={EditProfile} />
       <Stack.Screen name="Likes" component={Likes} />
       <Stack.Screen name="Friends" component={Friends} />
+      <Stack.Screen name="Add a Friend" component={AddFreind} />
     </Stack.Navigator>
   );
 };

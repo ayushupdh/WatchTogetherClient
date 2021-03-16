@@ -5,6 +5,7 @@ export type AccountParamList = {
   "Edit Profile": undefined;
   Likes: undefined;
   Friends: undefined;
+  "Add a Friend": undefined;
 };
 
 export type AccountNavProps<T extends keyof AccountParamList> = {
