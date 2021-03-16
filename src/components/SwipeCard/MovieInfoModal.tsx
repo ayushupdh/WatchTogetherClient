@@ -105,7 +105,7 @@ export const MovieInfoModal = ({ info }: any) => {
               Language
             </Text>
             <Text style={{ fontSize: 19, fontWeight: "500" }}>
-              {movieInfo.runtime}
+              {movieInfo.spoken_languages[0]}
             </Text>
           </View>
         </View>
@@ -143,7 +143,10 @@ export const MovieInfoModal = ({ info }: any) => {
             >
               {movieInfo.providers.map((provider: any) => {
                 return (
-                  <View style={{ alignItems: "center", flexBasis: 80 }}>
+                  <View
+                    key={provider.provider_id}
+                    style={{ alignItems: "center", flexBasis: 80 }}
+                  >
                     <Image
                       style={{
                         width: 50,

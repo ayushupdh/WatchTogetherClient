@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useWindowDimensions, View } from "react-native";
+import { ActivityIndicator, useWindowDimensions, View } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { useGetMovies } from "../../hooks/useGetMovies";
 import { Card } from "./Card";
@@ -16,30 +16,36 @@ export const SwipeCard = (props: SwipeCardProps) => {
     setstate(movies[movieIndex]._id);
     modalizeRef.current?.open();
   };
+  const windowHeight = useWindowDimensions().height;
+  const headerHeight = useHeaderHeight();
 
-  return (
-    <>
-      <Swiper
-        cards={movies ? movies : [{ title: "Loading" }]}
-        containerStyle={{
-          marginTop: "10%",
-          backgroundColor: "#E2EAF4",
-        }}
-        renderCard={(card) => {
-          return <Card onModalOpen={onPressHandler} card={card} />;
-        }}
-        onTapCard={(index) => onPressHandler(index)}
-        cardIndex={0}
-        backgroundColor={"#fff"}
-        stackSize={2}
-      ></Swiper>
-      <Modalize
-        ref={modalizeRef}
-        snapPoint={500}
-        modalHeight={useWindowDimensions().height - useHeaderHeight() - 100}
-      >
-        <MovieInfoModal info={state} />
-      </Modalize>
-    </>
-  );
+  if (movies && movies.length !== 0) {
+    return (
+      <>
+        <Swiper
+          cards={movies ? movies : [{ title: "Loading" }]}
+          containerStyle={{
+            marginTop: "10%",
+            backgroundColor: "#E2EAF4",
+          }}
+          renderCard={(card) => {
+            return <Card onModalOpen={onPressHandler} card={card} />;
+          }}
+          onTapCard={(index) => onPressHandler(index)}
+          cardIndex={0}
+          backgroundColor={"#fff"}
+          stackSize={3}
+        ></Swiper>
+        <Modalize
+          ref={modalizeRef}
+          snapPoint={500}
+          modalHeight={windowHeight - headerHeight - 100}
+        >
+          <MovieInfoModal info={state} />
+        </Modalize>
+      </>
+    );
+  } else {
+    return <ActivityIndicator style={{ flex: 1 }} />;
+  }
 };
