@@ -4,7 +4,7 @@ import { setAuthToken } from "../utils/authToken";
 
 import { server } from "../api/server";
 
-export const useGetFriends = () => {
+export const useGetFriends = (get: string) => {
   const [friends, setFriends] = useState<any>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,6 +27,6 @@ export const useGetFriends = () => {
         setError(e.message);
       }
     })();
-  }, []);
+  }, [get]);
   return { friends, error };
 };

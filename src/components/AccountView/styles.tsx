@@ -28,12 +28,12 @@ export const Styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginBottom: 50,
+    marginBottom: 20,
   },
   avatarNameContainer: {
     flexDirection: "column",
     alignItems: "flex-start",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     paddingLeft: 20,
     flexShrink: 1,
   },
@@ -101,6 +101,13 @@ export const Styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 20,
     marginHorizontal: 20,
+    fontWeight: "500",
+  },
+  errorText: {
+    fontSize: 20,
+    marginVertical: 20,
+    marginHorizontal: 20,
+    color: "red",
   },
   friends: {
     flexDirection: "row",

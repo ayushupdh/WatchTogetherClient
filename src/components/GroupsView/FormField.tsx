@@ -16,7 +16,7 @@ type FormFieldProps = {
   onChangeHandler: (name: string) => void;
   error: string;
   containerStyle?: StyleProp<ViewStyle>;
-
+  onFocus?: () => void;
   returnKeyType?:
     | "done"
     | "go"
@@ -48,9 +48,12 @@ export const FormField = (props: FormFieldProps) => {
         onChangeText={props.onChangeHandler}
         onSubmitEditing={props.onSubmitEditing}
         returnKeyType={props.returnKeyType}
+        onFocus={props.onFocus}
       />
       <View>
-        <Text>{props.error}</Text>
+        <Text style={{ color: "red", padding: 2, marginLeft: 12 }}>
+          {props.error}
+        </Text>
       </View>
     </View>
   );
