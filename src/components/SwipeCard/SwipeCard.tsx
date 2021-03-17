@@ -7,6 +7,7 @@ import { Modalize } from "react-native-modalize";
 import { MovieInfoModal } from "./MovieInfoModal";
 import { useHeaderHeight } from "@react-navigation/stack";
 import { OverlayLabel } from "./Overlay";
+import { addDislikedMovie, addLikedMovie } from "../../utils/addUserMoviestoDB";
 
 type SwipeCardProps = {};
 export const SwipeCard = (props: SwipeCardProps) => {
@@ -20,13 +21,19 @@ export const SwipeCard = (props: SwipeCardProps) => {
   const windowHeight = useWindowDimensions().height;
   const headerHeight = useHeaderHeight();
 
-  const handleLike = (index: any) => {
-    const movie = movies[index]["_id"];
-    console.log(movie);
+  const handleLike = async (index: any) => {
+    const movieID = movies[index]["_id"];
+    const { response, error } = await addLikedMovie(movieID);
+    if (error) {
+      console.log(error);
+    }
   };
-  const handleDislike = (index: any) => {
-    const movie = movies[index]["_id"];
-    console.log(movie);
+  const handleDislike = async (index: any) => {
+    const movieID = movies[index]["_id"];
+    const { response, error } = await addDislikedMovie(movieID);
+    if (error) {
+      console.log(error);
+    }
   };
 
   if (movies && movies.length !== 0) {

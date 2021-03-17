@@ -11,7 +11,6 @@ import { AccountNavProps } from "./Navigation/AccountTypes";
 type FriendsProps = {};
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
   const { friends, error } = useGetFriends();
-  console.log(friends);
 
   const renderFriends = () => {
     return friends.map(

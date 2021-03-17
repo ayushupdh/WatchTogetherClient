@@ -17,7 +17,6 @@ export const useGroupsInfo = (groupId: string) => {
         setGroupInfo(g);
         setError(null);
       } catch (e) {
-        console.log(e);
         setError(e.message);
         setGroupInfo(null);
       }

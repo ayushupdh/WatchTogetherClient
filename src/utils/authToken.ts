@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import { server } from "../api/server";
 
 export const setAuthToken = (token?:string|null) => {
