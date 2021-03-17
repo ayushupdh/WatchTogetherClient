@@ -2,11 +2,11 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 import { View, Text } from "react-native";
-import { useGetFriends } from "../../hooks/useGetFriends";
-import { Center } from "../dumbComponents/Center";
-import { CustomButton } from "../dumbComponents/CustomButton";
-import { Styles } from "./styles";
-import { AccountNavProps } from "./Navigation/AccountTypes";
+import { useGetFriends } from "../../../hooks/useGetFriends";
+import { Center } from "../../dumbComponents/Center";
+import { CustomButton } from "../../dumbComponents/CustomButton";
+import { Styles } from "../styles";
+import { AccountNavProps } from "../Navigation/AccountTypes";
 
 type FriendsProps = {};
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {

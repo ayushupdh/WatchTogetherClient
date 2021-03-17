@@ -15,6 +15,7 @@ export const Styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     width: "100%",
+    marginTop: 40,
   },
   eightyPercenContainer: {
     flex: 1,

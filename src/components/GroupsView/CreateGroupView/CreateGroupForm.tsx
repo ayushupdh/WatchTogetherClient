@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Center } from "../dumbComponents/Center";
+import { Center } from "../../dumbComponents/Center";
 import { Text, View } from "react-native";
-import { FormField } from "./FormField";
-import { GroupsDataType, GroupsNavProps } from "./Navigation/GroupsTypes";
-import { styles } from "./styles";
-import { CustomButton } from "../dumbComponents/CustomButton";
-import { Timer } from "../dumbComponents/Timer";
+import { FormField } from "../FormField";
+import { GroupsDataType, GroupsNavProps } from "../Navigation/GroupsTypes";
+import { styles } from "../styles";
+import { CustomButton } from "../../dumbComponents/CustomButton";
+import { Timer } from "../../dumbComponents/Timer";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import {
   ColorChangeButton,
   ColorChangeField,
-} from "../dumbComponents/ColorChangeField";
+} from "../../dumbComponents/ColorChangeField";
 import {
   Dropdown,
   GroupDropdown,

@@ -9,10 +9,10 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from "@react-navigation/stack";
-import { HomeViewMain } from "./HomeViewMain";
+import { HomeViewMain } from "../HomeViewMain";
 import { HomeViewParamList } from "./HomeViewTypes";
-import { addGroupsStack } from "../GroupsView/Navigation/GroupsStack";
-import { GroupsParamList } from "../GroupsView/Navigation/GroupsTypes";
+import { addGroupsStack } from "../../GroupsView/Navigation/GroupsStack";
+import { GroupsParamList } from "../../GroupsView/Navigation/GroupsTypes";
 import { StackNavigationEventMap } from "@react-navigation/stack/lib/typescript/src/types";
 
 type HomeViewNavigatorProps = {};
@@ -23,6 +23,7 @@ const HomeViewNavigator = (props: HomeViewNavigatorProps) => {
   return (
     <Stack.Navigator initialRouteName="Watch Together">
       <Stack.Screen name="Watch Together" component={HomeViewMain} />
+      <Stack.Screen name="Select options" component={HomeViewMain} />
       {addGroupsStack(Stack as any)}
     </Stack.Navigator>
   );

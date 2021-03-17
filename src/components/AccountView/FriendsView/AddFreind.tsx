@@ -3,11 +3,11 @@ import { View, Text, FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
-import { setAuthToken } from "../../utils/authToken";
-import { FormField } from "../GroupsView/FormField";
-import { Styles } from "./styles";
-import { server } from "../../api/server";
-import { searchUsers } from "../../utils/userdbUtils";
+import { setAuthToken } from "../../../utils/authToken";
+import { FormField } from "../../GroupsView/FormField";
+import { Styles } from "../styles";
+import { server } from "../../../api/server";
+import { searchUsers } from "../../../utils/userdbUtils";
 import { Modalize } from "react-native-modalize";
 import { AddFriendModal } from "./AddFriendModal";
 

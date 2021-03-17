@@ -8,7 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { GroupsMain } from "../GroupsView/GroupsMain";
 import { NotificationMain } from "../NotificationView/NotificationMain";
 import GroupsNavigator from "../GroupsView/Navigation/GroupsNavigator";
-import HomeViewNavigator from "../HomeView/HomeNavigation";
+import HomeViewNavigator from "../HomeView/Navigation/HomeNavigation";
 import AccountNavigator from "../AccountView/Navigation/AccountNavigator";
 const Tab = createBottomTabNavigator<BottomNavParamList>();
 

@@ -2,9 +2,9 @@ import { TypedNavigator, StackNavigationState } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 import React from "react";
-import { HomeViewParamList } from "../../HomeView/HomeViewTypes";
-import { AddFriend } from "../AddFriend";
-import { CreateGroupForm } from "../CreateGroupForm";
+import { HomeViewParamList } from "../../HomeView/Navigation/HomeViewTypes";
+import { AddFriend } from "../CreateGroupView/AddFriend";
+import { CreateGroupForm } from "../CreateGroupView/CreateGroupForm";
 import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
 import { SelectGenres } from "../SelectGenres";
