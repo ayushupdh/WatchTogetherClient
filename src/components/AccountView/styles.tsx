@@ -58,6 +58,13 @@ export const Styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
   },
+  selectionTitleText: {
+    color: "black",
+    fontSize: 15,
+    fontWeight: "bold",
+    paddingBottom: 5,
+    marginTop: 20,
+  },
   button: {
     width: "80%",
     backgroundColor: "#f6f6f6",
@@ -81,6 +88,17 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+  },
+  nextButton: {
+    width: "80%",
+    backgroundColor: "#313B68",
+    marginVertical: 30,
+    paddingVertical: 12,
+    borderRadius: 30,
+    shadowOffset: { width: 0, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    alignSelf: "center",
   },
   avatar: {
     width: 118,

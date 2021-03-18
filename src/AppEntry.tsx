@@ -6,17 +6,18 @@ import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
-import HomeViewTabs from "./components/BottomNav/BottomNavigator";
-import HomeScreen from "./components/HomeScreen";
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
+  // const user = useSelector(
+  //   (state: { user: UserType; token: string }) => state.user
+  // );
   const user = useSelector(
-    (state: { user: UserType; token: string }) => state.user
+    ({ auth }: { auth: { user: UserType } }) => auth.user
   );
   const token = useSelector(
-    (state: { user: UserType; userToken: string }) => state.userToken
+    ({ auth }: { auth: { user: UserType; userToken: string } }) =>
+      auth.userToken
   );
-
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   //TODO:  Work on opening login only when the server says unauthorized

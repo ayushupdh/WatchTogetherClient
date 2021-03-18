@@ -26,7 +26,7 @@ export const HomeViewMain = ({
           style={Styles.singleButton}
           textStyle={Styles.buttonText}
           onPressHandler={() => {
-            navigation.navigate("SwipingView", { groupName: "Single" });
+            navigation.navigate("Select options");
           }}
         />
       </View>
