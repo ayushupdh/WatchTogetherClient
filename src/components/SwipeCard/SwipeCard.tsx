@@ -35,7 +35,7 @@ export const SwipeCard = () => {
   const reloadCards = async () => {
     const response = await server.get("/movies/getNRandom", {
       params: {
-        qty: 3,
+        qty: 15,
         genres: ["Drama", "Action"],
       },
     });
@@ -132,6 +132,7 @@ export const SwipeCard = () => {
           onSwiped={swiped}
           onSwipedAll={onSwipedAll}
           disableBottomSwipe
+          disableTopSwipe
           onSwipedLeft={handleDislike}
           onSwipedRight={handleLike}
           key={movies.length} //Very Important--> cards rerendering wont work without this

@@ -8,12 +8,14 @@ import { CustomButton } from "../dumbComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 type GetGroupsType = {
-  groups: [
-    {
-      name: string;
-      id: string;
-    }
-  ];
+  groups:
+    | [
+        {
+          name: string;
+          id: string;
+        }
+      ]
+    | [];
   error: string | null;
 };
 
@@ -45,19 +47,37 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.createButtonContainer}>
-        <CustomButton
-          text="Create a Group"
-          style={styles.createButton}
-          onPressHandler={() => navigation.navigate("Create a Group")}
-        />
-      </View>
       <View style={styles.hundredpercenContainer}>
-        <FlatList
-          data={groups}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
+        {groups && groups.length !== 0 ? (
+          <>
+            <View style={styles.createButtonContainer}>
+              <CustomButton
+                text="Create a Group"
+                style={styles.createButton}
+                onPressHandler={() => navigation.navigate("Create a Group")}
+              />
+            </View>
+            <FlatList
+              data={groups}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </>
+        ) : (
+          <View style={{ ...styles.container, justifyContent: "center" }}>
+            <Text style={styles.customText}>
+              You don't have any groups yet!
+            </Text>
+            <Text style={styles.customText}>Let's get started!</Text>
+            <CustomButton
+              text="Create a Group"
+              style={{ ...styles.createButton, width: "60%", marginTop: 20 }}
+              onPressHandler={() => {
+                navigation.navigate("Create a Group");
+              }}
+            />
+          </View>
+        )}
       </View>
     </View>
   );

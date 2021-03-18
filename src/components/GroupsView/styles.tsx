@@ -59,6 +59,14 @@ export const styles = StyleSheet.create({
     width: "95%",
     justifyContent: "center",
   },
+  selectionContainer: {
+    marginHorizontal: -20,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   groupsSelectorText: {
     padding: 10,
     backgroundColor: "#fafafa",
@@ -94,8 +102,11 @@ export const styles = StyleSheet.create({
     fontSize: 22,
   },
   groupTitle: {
-    fontSize: 18,
+    color: "black",
+    fontSize: 15,
     fontWeight: "bold",
+    marginTop: 20,
+    alignSelf: "center",
   },
   groupTextInput: {
     padding: 10,
@@ -140,6 +151,9 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     flex: 1,
     marginLeft: 10,
+  },
+  customText: {
+    fontSize: 20,
   },
   friends: {
     width: "95%",

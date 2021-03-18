@@ -23,10 +23,10 @@ export type GroupsParamList = {
 };
 
 export type GroupsDataType = {
-  name: string;
   genres: string[];
   languages: string[];
   time: string;
+  providers: string[];
 };
 
 export type GroupsNavProps<T extends keyof GroupsParamList> = {
