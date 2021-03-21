@@ -84,7 +84,7 @@ export const AddFreind = (props: AddFreindProps) => {
   };
 
   return (
-    <View style={Styles.container}>
+    <View style={{ ...Styles.container, padding: 0 }}>
       <FormField
         containerStyle={{ width: "90%", alignSelf: "center" }}
         title="Search for friends"

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 type FormFieldProps = {
+  children?: any;
   title: string;
   placeholder: string;
   value: string;
@@ -49,12 +50,17 @@ export const FormField = (props: FormFieldProps) => {
         onSubmitEditing={props.onSubmitEditing}
         returnKeyType={props.returnKeyType}
         onFocus={props.onFocus}
-      />
-      <View>
-        <Text style={{ color: "red", padding: 2, marginLeft: 12 }}>
-          {props.error}
-        </Text>
-      </View>
+      >
+        {props.children}
+      </TextInput>
+
+      {props.error !== "" && (
+        <View>
+          <Text style={{ color: "red", padding: 2, marginLeft: 12 }}>
+            {props.error}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

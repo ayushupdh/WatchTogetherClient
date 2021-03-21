@@ -64,3 +64,22 @@ export const addFriend = async (username: string) => {
     return { response, error };
   }
 };
+
+export const searchFriends = async (username: string) => {
+  let error = null;
+  let response = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/users/me/searchFriend", {
+      params: {
+        username,
+      },
+    });
+    response = res.data;
+    return { response, error };
+  } catch (e) {
+    error = e.message;
+    return { response, error };
+  }
+};
