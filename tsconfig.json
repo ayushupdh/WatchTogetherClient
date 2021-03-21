@@ -8,6 +8,6 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true,
-
-  },"include": ["src/components", "./custom.d.ts", "src/AppEntry.tsx", "src/utils", "src/redux/reducers/index.ts"]
+    "esModuleInterop": true
+  },"include": ["__tests__","src/components", "./custom.d.ts", "src/AppEntry.tsx", "src/utils", "src/redux/reducers/index.ts"]
 }
