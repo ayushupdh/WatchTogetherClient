@@ -7,7 +7,7 @@ import { AccountMain } from "../AccountMain";
 import { EditProfile } from "../EditProfile";
 import { Likes } from "../Likes";
 import { Friends } from "../FriendsView/Friends";
-import { AddFreind } from "../FriendsView/AddFreind";
+import { AddFreind } from "../FriendsView/AddFriend";
 
 type AccountNavigatorProps = {};
 
