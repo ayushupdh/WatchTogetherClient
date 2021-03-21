@@ -118,7 +118,7 @@ export const Styles = StyleSheet.create({
   },
   customText: {
     fontSize: 20,
-    marginVertical: 20,
+    marginVertical: 10,
     marginHorizontal: 20,
     fontWeight: "500",
   },
