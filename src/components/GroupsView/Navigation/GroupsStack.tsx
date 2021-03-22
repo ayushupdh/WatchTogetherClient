@@ -9,6 +9,7 @@ import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
 import { SwipingView } from "../SwipingView";
 import { GroupInfo } from "../GroupInfo";
+import { Text } from "react-native";
 /* TypedNavigator<
     HomeViewParamList | GroupsParamList,
     StackNavigationState<Record<string, object | undefined>>,
@@ -55,14 +56,15 @@ export const addGroupsStack = (
         component={SwipingView}
         options={({ route }: GroupsNavProps<"SwipingView">) => ({
           headerLeft: null,
-          headerRight: () => (
-            <Ionicons
-              name={"menu"}
-              style={{ paddingRight: 15 }}
-              size={32}
-              color={"#313B68"}
-            />
-          ),
+          // headerRight: () => (
+
+          // <Ionicons
+          //   name={"menu"}
+          //   style={{ paddingRight: 15 }}
+          //   size={32}
+          //   color={"#313B68"}
+          // />
+          // ),
           title:
             route.params && route.params.groupName
               ? route.params.groupName

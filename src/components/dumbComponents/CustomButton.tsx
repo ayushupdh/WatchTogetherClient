@@ -13,7 +13,10 @@ export const CustomButton = (props: CustomButtonProps) => {
   return (
     <Pressable
       onPress={props.onPressHandler}
-      style={props.style}
+      style={({ pressed }) => [
+        props.style,
+        pressed && { opacity: 0.9, shadowColor: "#111" },
+      ]}
       disabled={props.disabled}
     >
       <Text

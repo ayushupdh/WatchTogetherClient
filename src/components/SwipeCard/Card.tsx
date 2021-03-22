@@ -12,7 +12,7 @@ export const Card = ({ card, onModalOpen }: CardProps) => {
     <View
       style={{
         marginTop: "-15%",
-        flex: 0.7,
+        flex: 0.8,
         borderRadius: 20,
         borderWidth: 2,
         borderColor: "#fff",

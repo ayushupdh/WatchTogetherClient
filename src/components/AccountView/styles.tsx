@@ -69,7 +69,7 @@ export const Styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "#f6f6f6",
     paddingVertical: 12,
-    borderRadius: 30,
+    borderRadius: 20,
     marginBottom: 20,
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
@@ -126,7 +126,9 @@ export const Styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 20,
     marginHorizontal: 20,
+    flex: 1,
     color: "red",
+    textAlign: "center",
   },
   friends: {
     flexDirection: "row",

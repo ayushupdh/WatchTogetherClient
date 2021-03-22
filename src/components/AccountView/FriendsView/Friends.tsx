@@ -10,8 +10,8 @@ import { AccountNavProps } from "../Navigation/AccountTypes";
 
 type FriendsProps = {};
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
-  const { friends, error } = useGetFriends(Math.random().toString());
-
+  const { friends, error } = useGetFriends();
+  console.log(1);
   const renderFriends = () => {
     if (friends && friends.length !== 0) {
       return (
@@ -27,17 +27,15 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
           {friends.map(
             (friend: { _id: string; name: string; username: string }) => {
               return (
-                <>
-                  <View key={friend._id} style={Styles.friends}>
-                    <Ionicons
-                      name="person-circle-sharp"
-                      size={24}
-                      color="black"
-                    />
+                <View key={friend._id} style={Styles.friends}>
+                  <Ionicons
+                    name="person-circle-sharp"
+                    size={24}
+                    color="black"
+                  />
 
-                    <Text style={Styles.friendsName}> {friend.name}</Text>
-                  </View>
-                </>
+                  <Text style={Styles.friendsName}> {friend.name}</Text>
+                </View>
               );
             }
           )}

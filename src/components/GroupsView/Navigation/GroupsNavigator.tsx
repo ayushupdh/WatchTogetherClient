@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { GroupsParamList } from "./GroupsTypes";
-import { GroupsMain } from "../GroupsMain";
-import { CreateGroupForm } from "../CreateGroupView/CreateGroupForm";
-import { SelectGenres } from "../SelectGenres";
-import { AddFriend } from "../CreateGroupView/AddFriend";
-import { SwipingView } from "../SwipingView";
+
 import { addGroupsStack } from "./GroupsStack";
 
 type GroupsNavigatorProps = {};

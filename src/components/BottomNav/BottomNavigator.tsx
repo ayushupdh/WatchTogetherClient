@@ -4,7 +4,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { BottomNavParamList, BottomNavProps } from "./BottomNavTypes";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  NavigationContainer,
+  RouteProp,
+} from "@react-navigation/native";
 import { GroupsMain } from "../GroupsView/GroupsMain";
 import { NotificationMain } from "../NotificationView/NotificationMain";
 import GroupsNavigator from "../GroupsView/Navigation/GroupsNavigator";
@@ -14,6 +18,18 @@ const Tab = createBottomTabNavigator<BottomNavParamList>();
 
 // ctrl + cmd + z
 const BottomNavTabs = () => {
+  const getTabBarVisibility = (route: RouteProp<any, any>) => {
+    const state = getFocusedRouteNameFromRoute(route);
+    // const routeName = route.state
+    //   ? route.state.routes[route.state.index].name
+    //   : "";
+
+    if (state === "SwipingView") {
+      return false;
+    }
+
+    return true;
+  };
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -46,8 +62,20 @@ const BottomNavTabs = () => {
         })}
       >
         <Tab.Screen name="LikesScreen" component={NotificationMain} />
-        <Tab.Screen name="GroupsScreen" component={GroupsNavigator} />
-        <Tab.Screen name="HomeScreen" component={HomeViewNavigator} />
+        <Tab.Screen
+          name="GroupsScreen"
+          component={GroupsNavigator}
+          options={({ route }) => ({
+            tabBarVisible: getTabBarVisibility(route),
+          })}
+        />
+        <Tab.Screen
+          name="HomeScreen"
+          component={HomeViewNavigator}
+          options={({ route }) => ({
+            tabBarVisible: getTabBarVisibility(route),
+          })}
+        />
         <Tab.Screen name="AccountScreen" component={AccountNavigator} />
       </Tab.Navigator>
     </NavigationContainer>

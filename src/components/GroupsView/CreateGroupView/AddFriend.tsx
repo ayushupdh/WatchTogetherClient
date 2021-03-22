@@ -8,6 +8,7 @@ import { GroupsNavProps } from "../Navigation/GroupsTypes";
 import { ModalDropDown } from "../../dumbComponents/ModalDropDown";
 import { searchFriends } from "../../../utils/userdbUtils";
 import { TouchableWithoutFeedback } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 type UserType = { name: string; _id: string };
 
@@ -57,13 +58,36 @@ export const AddFriend = ({
       </View>
     );
   };
+  const render = () => {
+    return addedFriends.map((friend) => {
+      return (
+        <View key={friend._id} style={styles.friendsNotjoined}>
+          <Ionicons name="person-circle-sharp" size={24} color="black" />
+          <Text style={styles.friendsName}>{friend.name}</Text>
+          <MaterialIcons
+            onPress={() =>
+              setAddedFriends((oldList) =>
+                oldList.filter((list) => list._id !== friend._id)
+              )
+            }
+            name="cancel"
+            size={24}
+            color="#aaa"
+          />
+        </View>
+      );
+    });
+  };
 
   return (
     <TouchableWithoutFeedback
       style={{ flex: 1, alignItems: "center" }}
       onPress={() => showModal(false)}
     >
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: "center" }}
+        style={{ flex: 1, backgroundColor: "#E2EAF4" }}
+      >
         <View style={styles.eightypercenContainer}>
           <FormField
             title="Add a Friend"
@@ -78,6 +102,7 @@ export const AddFriend = ({
             onSubmitEditing={(e) => showUsers()}
             error=""
             returnKeyType="search"
+            autoFocus={true}
           />
 
           {modal && (
@@ -86,17 +111,18 @@ export const AddFriend = ({
             </View>
           )}
 
-          <Text style={{ fontSize: 15, color: "#767676" }}>
+          <Text style={{ fontSize: 15, color: "#767676", paddingVertical: 5 }}>
             {addedFriends && addedFriends.length === 0
               ? "Add friends to the group"
               : "Waiting for friends to join..."}
           </Text>
           <View style={styles.hundredpercenContainer}>
-            <FlatList
+            {/* <FlatList
               data={addedFriends}
               renderItem={renderItem}
               keyExtractor={(item) => item._id}
-            />
+            /> */}
+            {render()}
           </View>
           <CustomButton
             text="Start"
@@ -108,7 +134,7 @@ export const AddFriend = ({
             }
           />
         </View>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };

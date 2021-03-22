@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Text, View, StyleSheet, Button, StatusBar, Alert } from "react-native";
@@ -11,6 +11,25 @@ export const SwipingView = ({
   route,
   navigation,
 }: GroupsNavProps<"SwipingView">) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: false,
+      headerRight: () => (
+        <Text
+          onPress={() => navigation.goBack()}
+          style={{
+            color: "blue",
+            alignSelf: "center",
+            fontSize: 18,
+            fontWeight: "500",
+            paddingRight: 10,
+          }}
+        >
+          Done
+        </Text>
+      ),
+    });
+  }, [navigation]);
   useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
       // Prevent default behavior of leaving the screen
@@ -23,7 +42,10 @@ export const SwipingView = ({
           style: "destructive",
           // If the user confirmed, then we dispatch the action we blocked earlier
           // This will continue the action that had triggered the removal of the screen
-          onPress: () => navigation.dispatch(e.data.action),
+          onPress: () => {
+            navigation.dispatch(e.data.action);
+            navigation.popToTop();
+          },
         },
       ]);
     });
@@ -45,8 +67,8 @@ export const SwipingView = ({
             alignItems: "center",
           }}
         >
-          <Ionicons name="time-outline" size={20} color="white" />
-          <Text
+          {/* <Ionicons name="time-outline" size={20} color="white" /> */}
+          {/* <Text
             style={{
               fontSize: 20,
               color: "white",
@@ -54,7 +76,7 @@ export const SwipingView = ({
             }}
           >
             5:00
-          </Text>
+          </Text> */}
         </View>
       )}
 

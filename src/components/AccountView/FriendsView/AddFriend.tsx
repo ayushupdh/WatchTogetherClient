@@ -77,7 +77,7 @@ export const AddFreind = (props: AddFreindProps) => {
     } else {
       return (
         <Text style={Styles.errorText}>
-          No user found with that username or email
+          No user found with matching username or email
         </Text>
       );
     }

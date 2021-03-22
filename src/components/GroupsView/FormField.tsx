@@ -18,6 +18,7 @@ type FormFieldProps = {
   error: string;
   containerStyle?: StyleProp<ViewStyle>;
   onFocus?: () => void;
+  autoFocus?: boolean | undefined;
   returnKeyType?:
     | "done"
     | "go"
@@ -50,6 +51,7 @@ export const FormField = (props: FormFieldProps) => {
         onSubmitEditing={props.onSubmitEditing}
         returnKeyType={props.returnKeyType}
         onFocus={props.onFocus}
+        autoFocus={props.autoFocus || false}
       >
         {props.children}
       </TextInput>

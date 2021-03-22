@@ -27,7 +27,7 @@ export const SwipeCard = () => {
   // Sets the activity indicator for when the data is loading
   const [loading, setLoading] = useState(true);
   // Holds the movie index of the clicked card
-  const [state, setstate] = useState();
+  const [state, setstate] = useState("");
   useEffect(() => {
     reloadCards();
   }, []);

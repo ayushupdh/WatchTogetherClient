@@ -20,11 +20,11 @@ export const SelectOptions = ({
     { text: "Adventure", _id: "12324 " },
     { text: "Fantasy", _id: "134 " },
     { text: "Feature", _id: "145234 " },
-    { text: "holahola", _id: "143234 " },
-    { text: "hello", _id: "12354 " },
-    { text: "holahola", _id: "1234234 " },
-    { text: "hello", _id: "1265734 " },
-    { text: "hola", _id: "198234 " },
+    { text: "Documentary", _id: "143234 " },
+    { text: "Comedy", _id: "12354 " },
+    { text: "Drama", _id: "1234234 " },
+    { text: "Thriller", _id: "1265734 " },
+    { text: "Horror", _id: "198234 " },
   ];
   const langList = [
     { text: "English", _id: "12324 " },
@@ -34,6 +34,7 @@ export const SelectOptions = ({
   const providerList = [
     { text: "Netflix", _id: "1" },
     { text: "Hulu", _id: "00012" },
+    { text: "Amazon Prime", _id: "00112" },
   ];
 
   const handleGenre = (text: string, value: boolean) => {

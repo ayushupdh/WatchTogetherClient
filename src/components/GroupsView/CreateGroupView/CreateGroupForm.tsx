@@ -20,14 +20,11 @@ export const CreateGroupForm = ({
       "Thriller",
       "Documentary",
       "Adventure",
-      "Science Fiction",
-      "Animation",
-      "Family",
-      "Romance",
+      "Horror",
     ],
     languages: ["English", "German", "Spanish", "French", "Arabic"],
     time: "",
-    providers: ["Netflix", "Hulu"],
+    providers: ["Netflix", "Hulu", "Amazon Prime"],
   };
   const [name, setName] = useState<string>("");
   const [time, setTime] = useState<{ min: string; sec: string }>({
@@ -78,6 +75,7 @@ export const CreateGroupForm = ({
               value={name}
               onChangeHandler={(name: string) => setName(name)}
               error={error}
+              autoFocus={true}
             />
             <Timer time={time} setTime={setTime} />
 
