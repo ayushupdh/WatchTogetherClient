@@ -3,6 +3,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { server } from "../api/server";
 import { setAuthToken } from "./authToken";
 
+export const getLikedMovies = async () => {
+  let error = null;
+  let response = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/users/me/likedMovies");
+    response = res.data;
+    return { response, error };
+  } catch (e) {
+    error = e;
+    return { response, error };
+  }
+};
+
 export const addLikedMovie = async (movieId: string) => {
   let error = null;
   let response = null;

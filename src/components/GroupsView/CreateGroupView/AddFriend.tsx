@@ -81,7 +81,7 @@ export const AddFriend = ({
           />
 
           {modal && (
-            <View style={{ zIndex: 1, marginTop: -15 }}>
+            <View style={{ zIndex: 1 }}>
               <ModalDropDown data={friendList} onClick={addToFriendList} />
             </View>
           )}

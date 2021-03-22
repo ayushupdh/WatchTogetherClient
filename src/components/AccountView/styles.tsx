@@ -140,6 +140,7 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+    elevation: 5,
   },
   friendsName: {
     flex: 1,
@@ -147,5 +148,35 @@ export const Styles = StyleSheet.create({
     color: "#767676",
     fontWeight: "500",
     paddingLeft: 15,
+  },
+  movies: {
+    flexDirection: "row",
+    padding: 20,
+    backgroundColor: "white",
+    marginVertical: 5,
+    width: "90%",
+    alignSelf: "center",
+    borderRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    elevation: 5,
+    overflow: "hidden",
+  },
+  movieTextContainer: {
+    flex: 1,
+    flexDirection: "column",
+    overflow: "hidden",
+    paddingLeft: 10,
+  },
+  movieText: {
+    fontSize: 15,
+    color: "#000",
+    fontWeight: "bold",
+    paddingTop: -10,
+  },
+  movieOverview: {
+    fontSize: 12,
+    color: "#333",
   },
 });

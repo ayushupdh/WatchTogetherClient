@@ -12,13 +12,12 @@ import { genreBox } from "./Card";
 
 //TODO: Move the styles to their own file
 type MovieInfoModalProps = {
-  //   modalOpen: Boolean;
+  info: string;
 };
-export const MovieInfoModal = ({ info }: any) => {
+export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
   const { movieInfo, error } = useGetMovieInfo(info);
   const width = useWindowDimensions().width;
-  //   let movieInfo = { title: "ascasc" };
-  //   return <View></View>;
+
   if (!movieInfo) {
     return <ActivityIndicator style={{ flex: 1 }} />;
   } else {
