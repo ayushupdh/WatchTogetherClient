@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { Center } from "../dumbComponents/Center";
 import { useGetGroups } from "../../hooks/useGetGroups";
@@ -6,6 +6,8 @@ import { styles } from "./styles";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { CustomButton } from "../dumbComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
+import { Modalize } from "react-native-modalize";
+import { GroupOptionModal } from "./GroupOptionModal";
 
 type GetGroupsType = {
   groups:
@@ -21,6 +23,8 @@ type GetGroupsType = {
 
 export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
   const { groups, error }: GetGroupsType = useGetGroups();
+  const [groupSelected, setGroupSelected] = useState("");
+  const modalizeRef = useRef<Modalize>();
 
   const renderItem = ({ item }: any) => {
     const randomColor: string =
@@ -39,10 +43,16 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
         <SimpleLineIcons
           name="options-vertical"
           size={20}
-          style={{ alignItems: "flex-end" }}
+          style={{ paddingHorizontal: 20 }}
+          onPress={() => showModal(item.id)}
         />
       </View>
     );
+  };
+
+  const showModal = (groupID: string) => {
+    setGroupSelected(groupID);
+    modalizeRef.current?.open();
   };
 
   return (
@@ -78,6 +88,9 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
             />
           </View>
         )}
+        <Modalize ref={modalizeRef} adjustToContentHeight={true}>
+          <GroupOptionModal />
+        </Modalize>
       </View>
     </View>
   );

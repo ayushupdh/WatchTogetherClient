@@ -7,10 +7,14 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 import { useGroupsInfo } from "../../hooks/useGroupsInfo";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
-export const GroupInfo = ({ navigation }: GroupsNavProps<"GroupInfo">) => {
+export const GroupInfo = ({
+  navigation,
+  route,
+}: GroupsNavProps<"GroupInfo">) => {
   const [sessionsSelected, setsessionsSelected] = useState(false);
   // TODO Change here
-  const { groupInfo, error } = useGroupsInfo("604f06bcf3619df0376ba89d");
+  const groupId = route.params.groupId;
+  const { groupInfo, error } = useGroupsInfo(groupId);
 
   useLayoutEffect(() => {
     if (groupInfo) {
@@ -22,7 +26,7 @@ export const GroupInfo = ({ navigation }: GroupsNavProps<"GroupInfo">) => {
     <View style={styles.friends}>
       <Ionicons name="person-circle-sharp" size={24} color="black" />
       <Text style={styles.friendsName}>{item.name}</Text>
-      <SimpleLineIcons name="options-vertical" size={24} color="#555" />
+      {/* <SimpleLineIcons name="options-vertical" size={20} /> */}
     </View>
   );
   const FriendsView = () => {
@@ -53,15 +57,30 @@ export const GroupInfo = ({ navigation }: GroupsNavProps<"GroupInfo">) => {
           style={{
             fontSize: 12,
             fontWeight: "bold",
-            paddingVertical: 10,
+            paddingTop: 10,
             paddingHorizontal: 20,
           }}
         >
-          By: {groupInfo ? groupInfo.created_by : "Loading.."}
+          Started By:{" "}
+          {groupInfo && groupInfo.created_by
+            ? groupInfo.created_by.name
+            : "Loading.."}
+        </Text>
+        <Text
+          style={{
+            fontSize: 12,
+            fontWeight: "bold",
+            paddingVertical: 5,
+            paddingHorizontal: 20,
+          }}
+        >
+          Members:{" "}
+          {groupInfo && groupInfo.users ? groupInfo.users.length : "Loading.."}
         </Text>
       </View>
       <View style={styles.groupsSelectorContainer}>
         <TouchableHighlight
+          underlayColor="none"
           style={[
             styles.groupsSelectorText,
             { backgroundColor: sessionsSelected ? "white" : "#313B68" },
@@ -78,6 +97,7 @@ export const GroupInfo = ({ navigation }: GroupsNavProps<"GroupInfo">) => {
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
+          underlayColor="none"
           style={[
             styles.groupsSelectorText,
             { backgroundColor: !sessionsSelected ? "white" : "#313B68" },

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   hundredpercenContainer: {
-    flex: 0.8,
+    flex: 1,
     width: "100%",
   },
   eightypercenContainer: {
@@ -166,6 +166,18 @@ export const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.4,
     marginVertical: 5,
+    elevation: 5,
+  },
+  optionModalButton: {
+    alignSelf: "center",
+    padding: 10,
+    backgroundColor: "#fff",
+    width: "80%",
+    marginVertical: 5,
+    borderRadius: 20,
+    shadowOffset: { width: 5, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
     elevation: 5,
   },
 });

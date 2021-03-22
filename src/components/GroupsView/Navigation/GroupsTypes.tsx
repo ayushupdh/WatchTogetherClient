@@ -11,9 +11,7 @@ export type GroupsParamList = {
   "Add a Friend": {
     groupName: string;
   };
-  SelectGenres: {
-    groupName: string;
-  };
+
   SwipingView: {
     groupName: string;
   };

@@ -7,7 +7,6 @@ import { AddFriend } from "../CreateGroupView/AddFriend";
 import { CreateGroupForm } from "../CreateGroupView/CreateGroupForm";
 import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
-import { SelectGenres } from "../SelectGenres";
 import { SwipingView } from "../SwipingView";
 import { GroupInfo } from "../GroupInfo";
 /* TypedNavigator<
@@ -44,11 +43,6 @@ export const addGroupsStack = (
       <Stack.Screen
         name="GroupInfo"
         component={GroupInfo}
-        options={{ headerBackTitleVisible: false }}
-      />
-      <Stack.Screen
-        name="SelectGenres"
-        component={SelectGenres}
         options={{ headerBackTitleVisible: false }}
       />
       <Stack.Screen
