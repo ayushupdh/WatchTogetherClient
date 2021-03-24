@@ -118,10 +118,15 @@ export const Styles = StyleSheet.create({
   },
   customText: {
     fontSize: 20,
-    marginVertical: 10,
-    marginHorizontal: 20,
+    marginTop: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     fontWeight: "500",
+    borderColor: "#ccc",
+    borderBottomWidth: 1,
+    // borderTopWidth: 1,
   },
+
   errorText: {
     fontSize: 20,
     marginVertical: 20,

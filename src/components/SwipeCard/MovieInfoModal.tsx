@@ -17,7 +17,9 @@ type MovieInfoModalProps = {
 export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
   const { movieInfo, error } = useGetMovieInfo(info);
   const width = useWindowDimensions().width;
-
+  let time = movieInfo ? parseInt(movieInfo.runtime, 10) : 0;
+  let hr = ~~(time / 60);
+  let min = time % 60;
   if (!movieInfo) {
     return <ActivityIndicator style={{ flex: 1 }} />;
   } else {
@@ -74,7 +76,8 @@ export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
               Length
             </Text>
             <Text style={{ fontSize: 19, fontWeight: "500" }}>
-              {movieInfo.runtime}
+              {/* {movieInfo.runtime} */}
+              {`${hr}hr ${min}min`}
             </Text>
           </View>
           <View style={{ alignItems: "center" }}>

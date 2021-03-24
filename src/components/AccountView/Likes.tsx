@@ -10,12 +10,17 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { getLikedMovies } from "../../utils/userdbUtils";
-import { Center } from "../dumbComponents/Center";
+import { Center } from "../UtilComponents/Center";
 import { MovieInfoModal } from "../SwipeCard/MovieInfoModal";
 import { Styles } from "./styles";
 
-type LikesProps = {};
-export const Likes = (props: LikesProps) => {
+type MovieType = {
+  _id: string;
+  poster_path: string;
+  overview: string;
+  title: string;
+};
+export const Likes = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setselectedMovie] = useState("");
   const modalizeRef = useRef<Modalize>();
@@ -33,11 +38,7 @@ export const Likes = (props: LikesProps) => {
     modalizeRef.current?.open();
   };
 
-  const renderMovies = ({
-    item,
-  }: {
-    item: { _id: string; poster_path: string; overview: string; title: string };
-  }) => {
+  const renderMovies = ({ item }: { item: MovieType }) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => showModal(item._id)}
@@ -66,7 +67,7 @@ export const Likes = (props: LikesProps) => {
       <FlatList
         renderItem={renderMovies}
         data={movies}
-        keyExtractor={(item: any) => item._id}
+        keyExtractor={(item: MovieType) => item._id}
         contentContainerStyle={{ paddingTop: 20 }}
       />
       <Modalize

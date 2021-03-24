@@ -1,12 +1,8 @@
 import React, { useRef, useState } from "react";
-import { View, Text, FlatList } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Text, FlatList, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
-import { setAuthToken } from "../../../utils/authToken";
 import { FormField } from "../../GroupsView/FormField";
 import { Styles } from "../styles";
-import { server } from "../../../api/server";
 import { searchUsers } from "../../../utils/userdbUtils";
 import { Modalize } from "react-native-modalize";
 import { AddFriendModal } from "./AddFriendModal";
@@ -66,8 +62,13 @@ export const AddFreind = (props: AddFreindProps) => {
     } else if (foundUsers && foundUsers.length !== 0) {
       return (
         <View style={{ flex: 1 }}>
-          <Text style={Styles.customText}>Users</Text>
+          {/* Used Textinput to support botton border */}
+
+          <TextInput editable={false} style={Styles.customText}>
+            Users
+          </TextInput>
           <FlatList
+            contentContainerStyle={{ paddingVertical: 20 }}
             data={foundUsers}
             renderItem={renderItem}
             keyExtractor={(item: any) => item._id}
@@ -76,9 +77,15 @@ export const AddFreind = (props: AddFreindProps) => {
       );
     } else {
       return (
-        <Text style={Styles.errorText}>
-          No user found with matching username or email
-        </Text>
+        <>
+          {/* Used Textinput to support botton border */}
+          <TextInput editable={false} style={Styles.customText}>
+            Users
+          </TextInput>
+          <Text style={Styles.errorText}>
+            No user found with matching username or email
+          </Text>
+        </>
       );
     }
   };
