@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Styles } from "../HomeView/styles";
-import { CustomButton } from "../dumbComponents/CustomButton";
+import { CustomButton } from "../UtilComponents/CustomButton";
 import { HomeViewNavProps } from "./Navigation/HomeViewTypes";
 type HomeMainProps = {};
 export const HomeViewMain = ({

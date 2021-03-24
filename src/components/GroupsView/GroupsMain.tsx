@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Text, View } from "react-native";
-import { Center } from "../dumbComponents/Center";
+import { Center } from "../UtilComponents/Center";
 import { useGetGroups } from "../../hooks/useGetGroups";
 import { styles } from "./styles";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { CustomButton } from "../dumbComponents/CustomButton";
+import { CustomButton } from "../UtilComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 import { Modalize } from "react-native-modalize";
 import { GroupOptionModal } from "./GroupOptionModal";

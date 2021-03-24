@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { CustomButton } from "../dumbComponents/CustomButton";
+import { CustomButton } from "../UtilComponents/CustomButton";
 import { styles } from "./styles";
 
 type GroupOptionModalProps = {};

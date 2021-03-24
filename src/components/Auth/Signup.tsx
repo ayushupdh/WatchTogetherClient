@@ -4,8 +4,8 @@ import { Image, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
 import { SIGN_UP } from "../../redux/types/Authtypes";
-import { CustomButton } from "../dumbComponents/CustomButton";
-import { KeyboardDismiss } from "../dumbComponents/KeyboardDismiss";
+import { CustomButton } from "../UtilComponents/CustomButton";
+import { KeyboardDismiss } from "../UtilComponents/KeyboardDismiss";
 import { AuthStyles as Styles } from "../styles";
 import { AuthNavProps } from "./AuthTypes";
 
@@ -158,6 +158,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
             setError("");
             setPassword({ ...passwordVerify, password: text });
           }}
+          blurOnSubmit={false}
           value={passwordVerify.password}
           returnKeyType="done"
           textContentType="password"

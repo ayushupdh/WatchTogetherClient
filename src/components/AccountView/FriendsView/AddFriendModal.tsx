@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
 import { Text, View, Image, Alert } from "react-native";
-import { CustomButton } from "../../dumbComponents/CustomButton";
+import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Styles } from "../styles";
 import { addFriend } from "../../../utils/userdbUtils";
 
