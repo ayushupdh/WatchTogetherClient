@@ -1,17 +1,36 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import { View, Text } from "react-native";
+import { View, Text, FlatList, TextInput } from "react-native";
 import { useGetFriends } from "../../../hooks/useGetFriends";
-import { Center } from "../../dumbComponents/Center";
-import { CustomButton } from "../../dumbComponents/CustomButton";
+import { Center } from "../../UtilComponents/Center";
+import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Styles } from "../styles";
 import { AccountNavProps } from "../Navigation/AccountTypes";
 
-type FriendsProps = {};
+type FriendsType = {
+  _id: string;
+  name: string;
+  username: string;
+};
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
-  const { friends, error } = useGetFriends();
-  console.log(1);
+  const {
+    friends,
+    error,
+  }: {
+    friends: readonly FriendsType[] | null;
+    error: string | null;
+  } = useGetFriends();
+  const renderItem = ({ item }: { item: FriendsType }) => {
+    return (
+      <View key={item._id} style={Styles.friends}>
+        <Ionicons name="person-circle-sharp" size={24} color="black" />
+
+        <Text style={Styles.friendsName}> {item.name}</Text>
+      </View>
+    );
+  };
+
   const renderFriends = () => {
     if (friends && friends.length !== 0) {
       return (
@@ -23,22 +42,20 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
               navigation.navigate("Add a Friend");
             }}
           />
-          <Text style={Styles.customText}>Friends</Text>
-          {friends.map(
+          <TextInput editable={false} style={Styles.customText}>
+            Friends
+          </TextInput>
+          <FlatList
+            contentContainerStyle={{ paddingVertical: 20 }}
+            renderItem={renderItem}
+            data={friends}
+            keyExtractor={(item: FriendsType) => item._id}
+          />
+          {/* {friends.map(
             (friend: { _id: string; name: string; username: string }) => {
-              return (
-                <View key={friend._id} style={Styles.friends}>
-                  <Ionicons
-                    name="person-circle-sharp"
-                    size={24}
-                    color="black"
-                  />
-
-                  <Text style={Styles.friendsName}> {friend.name}</Text>
-                </View>
-              );
+              
             }
-          )}
+          )} */}
         </>
       );
     } else {
