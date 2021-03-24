@@ -14,8 +14,8 @@ export const AddFriendModal = ({ user, handleClose }: AddFriendModalProps) => {
   const handlePress = async () => {
     await addFriend(user.username);
     Alert.alert(
-      "Friend Request Sent!",
-      `Your request to user @${user.username} was sent.`,
+      "Friend has been added!",
+      `Your request to add user @${user.username} was successfull.`,
       [
         {
           text: "OK",
@@ -49,7 +49,7 @@ export const AddFriendModal = ({ user, handleClose }: AddFriendModalProps) => {
           alignSelf: "center",
         }}
         onPressHandler={handlePress}
-        text="Send a friend Request"
+        text="Add to your friend list"
       />
     </View>
   );
