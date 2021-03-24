@@ -3,12 +3,13 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { FlatList, Text, View } from "react-native";
 import { FormField } from "../FormField";
 import { styles } from "../styles";
-import { CustomButton } from "../../dumbComponents/CustomButton";
+import { CustomButton } from "../../UtilComponents/CustomButton";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
-import { ModalDropDown } from "../../dumbComponents/ModalDropDown";
-import { searchFriends } from "../../../utils/userdbUtils";
+import { ModalDropDown } from "../../UtilComponents/ModalDropDown";
+import { createGroup, searchFriends } from "../../../utils/userdbUtils";
 import { TouchableWithoutFeedback } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { showAlert } from "../../UtilComponents/Alert";
 
 type UserType = { name: string; _id: string };
 
@@ -22,13 +23,14 @@ export const AddFriend = ({
   const [addedFriends, setAddedFriends] = useState<UserType[]>([]);
 
   const addToFriendList = (selectedUser: UserType) => {
+    showModal(false);
+
     let isPresent = addedFriends?.findIndex(
       (user) => selectedUser._id === user._id
     );
     if (isPresent === -1) {
       setAddedFriends((oldList) => [...oldList, selectedUser]);
     }
-    showModal(false);
   };
 
   const showUsers = async () => {
@@ -40,24 +42,6 @@ export const AddFriend = ({
     }
   };
 
-  const renderItem = ({ item }: { item: UserType }) => {
-    return (
-      <View key={item._id} style={styles.friendsNotjoined}>
-        <Ionicons name="person-circle-sharp" size={24} color="black" />
-        <Text style={styles.friendsName}>{item.name}</Text>
-        <MaterialIcons
-          onPress={() =>
-            setAddedFriends((oldList) =>
-              oldList.filter((list) => list._id !== item._id)
-            )
-          }
-          name="cancel"
-          size={24}
-          color="#aaa"
-        />
-      </View>
-    );
-  };
   const render = () => {
     return addedFriends.map((friend) => {
       return (
@@ -126,12 +110,23 @@ export const AddFriend = ({
           </View>
           <CustomButton
             text="Start"
-            style={styles.unsubmittedButton}
-            onPressHandler={() =>
-              navigation.navigate("SwipingView", {
-                groupName: route.params.groupName,
-              })
-            }
+            style={[
+              styles.unsubmittedButton,
+              addedFriends.length > 0 ? { opacity: 1 } : null,
+            ]}
+            onPressHandler={() => {
+              if (addedFriends.length > 0) {
+                navigation.navigate("SwipingView", {
+                  groupName: route.params.groupName,
+                });
+                createGroup(route.params.groupName, "00 00");
+              } else {
+                showAlert({
+                  firstText: "Need atleast one friend to start a group session",
+                  firstButtonText: "ok",
+                });
+              }
+            }}
           />
         </View>
       </ScrollView>

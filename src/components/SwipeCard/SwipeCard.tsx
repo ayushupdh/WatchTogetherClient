@@ -5,6 +5,8 @@ import {
   View,
   Text,
 } from "react-native";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
+
 import Swiper from "react-native-deck-swiper";
 import { useGetMovies } from "../../hooks/useGetMovies";
 import { Card } from "./Card";
@@ -15,6 +17,7 @@ import { OverlayLabel } from "./Overlay";
 import { addDislikedMovie, addLikedMovie } from "../../utils/userdbUtils";
 import { server } from "../../api/server";
 import { GroupsNavProps } from "../GroupsView/Navigation/GroupsTypes";
+import { useSelector } from "react-redux";
 
 type SwipeCardProps = {};
 export const SwipeCard = () => {
@@ -28,6 +31,11 @@ export const SwipeCard = () => {
   const [loading, setLoading] = useState(true);
   // Holds the movie index of the clicked card
   const [state, setstate] = useState("");
+  const params = useSelector((state) => state.session.sessionParams);
+  const [swipes, setSwipes] = useState({
+    swipedRight: false,
+    swipedLeft: false,
+  });
   useEffect(() => {
     reloadCards();
   }, []);
@@ -36,7 +44,9 @@ export const SwipeCard = () => {
     const response = await server.get("/movies/getNRandom", {
       params: {
         qty: 15,
-        genres: ["Drama", "Action"],
+        genres: params.genres,
+        // lang: params.lang,
+        // providers: params.providers,
       },
     });
     const m = response.data;
@@ -109,10 +119,10 @@ export const SwipeCard = () => {
               element: <OverlayLabel label="NOPE" color="#E5566D" />,
               style: {
                 wrapper: {
-                  flexDirection: "column",
+                  position: "absolute",
+                  right: 10,
+                  top: "30%",
                   alignItems: "flex-end",
-                  marginLeft: -30,
-                  justifyContent: "flex-start",
                 },
               },
             },
@@ -121,10 +131,10 @@ export const SwipeCard = () => {
               element: <OverlayLabel label="LIKE" color="#4CCC93" />,
               style: {
                 wrapper: {
-                  flexDirection: "column",
-                  marginLeft: 30,
+                  position: "absolute",
+                  left: 10,
+                  top: "30%",
                   alignItems: "flex-start",
-                  justifyContent: "flex-start",
                 },
               },
             },
@@ -137,6 +147,55 @@ export const SwipeCard = () => {
           onSwipedRight={handleLike}
           key={movies.length} //Very Important--> cards rerendering wont work without this
         ></Swiper>
+        {swipes.swipedRight && (
+          <View
+            style={{
+              position: "absolute",
+              right: 10,
+              top: (windowHeight - headerHeight) / 2.5,
+            }}
+          >
+            <View
+              style={{
+                padding: 10,
+                backgroundColor: "white",
+                borderRadius: 50,
+                shadowOffset: { width: 5, height: 4 },
+                shadowColor: "#000",
+                shadowOpacity: 0.4,
+                marginBottom: 20,
+                elevation: 5,
+              }}
+            >
+              <FontAwesome name="heart" size={30} color="red" />
+            </View>
+          </View>
+        )}
+        {swipes.swipedLeft && (
+          <View
+            style={{
+              position: "absolute",
+              left: 10,
+              top: (windowHeight - headerHeight) / 2.5,
+            }}
+          >
+            <View
+              style={{
+                padding: 10,
+                backgroundColor: "white",
+                borderRadius: 50,
+                shadowOffset: { width: 5, height: 4 },
+                shadowColor: "#000",
+                shadowOpacity: 0.4,
+                marginBottom: 20,
+                elevation: 5,
+              }}
+            >
+              <AntDesign name="dislike1" size={30} color="#313B68" />
+            </View>
+          </View>
+        )}
+
         <Modalize
           ref={modalizeRef}
           snapPoint={500}

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
+import { START_SESSION } from "../../redux/types/SessionTypes";
 import { Styles } from "../AccountView/styles";
-import { ColorChangeField } from "../dumbComponents/ColorChangeField";
-import { CustomButton } from "../dumbComponents/CustomButton";
+import { ColorChangeField } from "../UtilComponents/ColorChangeField";
+import { CustomButton } from "../UtilComponents/CustomButton";
 import { HomeViewNavProps } from "./Navigation/HomeViewTypes";
 
 type SelectOptionsProps = {};
@@ -13,13 +15,11 @@ export const SelectOptions = ({
   const [genres, setGenres] = useState<string[]>([]);
   const [lang, setLang] = useState<string[]>([]);
   const [provider, setProvider] = useState<string[]>([]);
-
+  const dispatch = useDispatch();
   const genreList = [
-    { text: "Dark", _id: "12344 " },
     { text: "Action", _id: "123754 " },
     { text: "Adventure", _id: "12324 " },
     { text: "Fantasy", _id: "134 " },
-    { text: "Feature", _id: "145234 " },
     { text: "Documentary", _id: "143234 " },
     { text: "Comedy", _id: "12354 " },
     { text: "Drama", _id: "1234234 " },
@@ -57,6 +57,19 @@ export const SelectOptions = ({
     } else {
       setProvider((prev) => prev.filter((el) => el !== text));
     }
+  };
+  const handleStart = () => {
+    dispatch({
+      type: START_SESSION,
+      payload: {
+        sessionType: "Single",
+        genres,
+        providers: provider,
+        lang,
+      },
+    });
+
+    navigation.navigate("SwipingView", { groupName: "Single" });
   };
   return (
     <ScrollView
@@ -113,7 +126,7 @@ export const SelectOptions = ({
         text="Start"
         style={Styles.nextButton}
         onPressHandler={() => {
-          navigation.navigate("SwipingView", { groupName: "Single" });
+          handleStart();
         }}
       />
     </ScrollView>
