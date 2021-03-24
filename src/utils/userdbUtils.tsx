@@ -98,3 +98,23 @@ export const searchFriends = async (username: string) => {
     return { response, error };
   }
 };
+
+export const createGroup = async (groupName: string, time: string) => {
+  let error = null;
+  let response = null;
+  try {
+    const t = time.split(" ");
+    const sessiontime = parseInt(t[0], 10) * 60 + parseInt(t[1], 10);
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.post("/groups/create", {
+      name: groupName,
+      current_session_time: sessiontime,
+    });
+    response = "OK";
+    return { response, error };
+  } catch (e) {
+    error = e.message;
+    return { response, error };
+  }
+};
