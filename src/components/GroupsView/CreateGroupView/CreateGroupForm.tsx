@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { Center } from "../../dumbComponents/Center";
 import { Text, View } from "react-native";
 import { FormField } from "../FormField";
 import { GroupsDataType, GroupsNavProps } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
-import { CustomButton } from "../../dumbComponents/CustomButton";
-import { Timer } from "../../dumbComponents/Timer";
+import { CustomButton } from "../../UtilComponents/CustomButton";
+import { Timer } from "../../UtilComponents/Timer";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
-import { showAlert } from "../../dumbComponents/Alert";
+import { showAlert } from "../../UtilComponents/Alert";
 export const CreateGroupForm = ({
   navigation,
 }: GroupsNavProps<"Create a Group">) => {
@@ -55,6 +54,19 @@ export const CreateGroupForm = ({
       setProvider((prev) => prev.concat(text));
     } else {
       setProvider((prev) => prev.filter((el) => el !== text));
+    }
+  };
+
+  const handleNext = async () => {
+    if (name !== "") {
+      navigation.navigate("Add a Friend", {
+        groupName: name,
+      });
+    } else {
+      showAlert({
+        firstText: "Group Name is required",
+        firstButtonText: "ok",
+      });
     }
   };
 
@@ -134,16 +146,7 @@ export const CreateGroupForm = ({
                   ? styles.unsubmittedButton
                   : { ...styles.unsubmittedButton, opacity: 1 }
               }
-              onPressHandler={() => {
-                name !== ""
-                  ? navigation.navigate("Add a Friend", {
-                      groupName: name,
-                    })
-                  : showAlert({
-                      firstText: "Group Name is required",
-                      firstButtonText: "ok",
-                    });
-              }}
+              onPressHandler={handleNext}
             />
           </View>
         </ScrollView>
