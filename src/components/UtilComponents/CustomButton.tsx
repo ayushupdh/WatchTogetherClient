@@ -4,7 +4,7 @@ import React from "react";
 type CustomButtonProps = {
   text: string;
   onPressHandler?: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   disabled?: boolean;
   textStyle?: StyleProp<TextStyle>;
   pressedColor?: string;
