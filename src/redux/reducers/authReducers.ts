@@ -1,10 +1,10 @@
-import { SIGN_IN, SIGN_UP, SIGN_OUT, LOAD_USER } from "../types/Authtypes";
+import { SIGN_IN, SIGN_UP, SIGN_OUT, LOAD_USER, AuthType } from "../types/Authtypes";
 const initialState = {
     user:null,
     userToken:null
 }
 
-export default (user = initialState, {type, payload})=>{
+export default (user = initialState, {type, payload}:{type:AuthType, payload:any})=>{
     switch (type) {
         case LOAD_USER:
           return {

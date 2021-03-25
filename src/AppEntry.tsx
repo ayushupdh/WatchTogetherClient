@@ -48,9 +48,7 @@ export const AppEntry = () => {
     dispatch({
       type: LOAD_USER,
       payload: {
-        user: {
-          username: response?.data.name || null,
-        },
+        user: response.data,
         token: fetchedtoken,
       },
     });
