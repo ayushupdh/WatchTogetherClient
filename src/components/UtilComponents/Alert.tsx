@@ -2,7 +2,7 @@ import { Alert } from "react-native";
 type AlertProp = {
   firstText: string;
   secondText?: string;
-  firstButtonText: string;
+  firstButtonText?: string;
   firstButtonHandleClose?: () => void;
   secondButtonText?: string;
   secondButtonHandleClose?: () => void;

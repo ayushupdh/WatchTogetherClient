@@ -7,10 +7,15 @@ import {
   NativeSyntheticEvent,
   StyleProp,
   ViewStyle,
+  TextStyle,
 } from "react-native";
 import { styles } from "./styles";
 type FormFieldProps = {
+  titleStyle?: StyleProp<TextStyle>;
+  textInputStyle?: StyleProp<TextStyle>;
+
   children?: any;
+
   title: string;
   placeholder: string;
   value: string;
@@ -42,9 +47,12 @@ type FormFieldProps = {
 export const FormField = (props: FormFieldProps) => {
   return (
     <View style={props.containerStyle}>
-      <Text style={styles.groupTitle}>{props.title}</Text>
+      <Text style={props.titleStyle || styles.groupTitle}>{props.title}</Text>
       <TextInput
-        style={styles.groupTextInput}
+        style={[
+          props.textInputStyle || styles.groupTextInput,
+          props.error ? { borderColor: "red", borderWidth: 1 } : null,
+        ]}
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={props.onChangeHandler}
