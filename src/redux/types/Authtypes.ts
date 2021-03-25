@@ -10,5 +10,6 @@ export type AuthPayload={
     email:string,
     name:string,
     user_status:string,
-    username:string
+    username:string,
+    avatar:string
 }

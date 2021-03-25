@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, Image, View } from "react-native";
 import { useDispatch } from "react-redux";
-import { SIGN_OUT } from "../../redux/types/Authtypes";
+import { LOAD_USER, SIGN_OUT } from "../../redux/types/Authtypes";
 import { Center } from "../UtilComponents/Center";
 import { CustomButton } from "../UtilComponents/CustomButton";
 import { Styles } from "./styles";
@@ -11,7 +11,6 @@ import { AccountNavProps } from "./Navigation/AccountTypes";
 export const AccountMain = ({
   navigation,
 }: AccountNavProps<"Your Account">) => {
-  const dispatch = useDispatch();
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem("userToken");
     dispatch({

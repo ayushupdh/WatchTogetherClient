@@ -1,20 +1,21 @@
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
+import { FontAwesome } from "@expo/vector-icons";
 
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, ActivityIndicator, Pressable } from "react-native";
-import { useSelector } from "react-redux";
-import { AuthPayload } from "../../redux/types/Authtypes";
-import { changeUserInfo } from "../../utils/userdbUtils";
-import { FormField } from "../GroupsView/FormField";
-import { showAlert } from "../UtilComponents/Alert";
-import { CustomButton } from "../UtilComponents/CustomButton";
-import { Styles } from "./EditProfile.style";
-import { AccountNavProps } from "./Navigation/AccountTypes";
-
-type UserStateType = {
-  avatar?: string;
-} & AuthPayload;
+import { useDispatch, useSelector } from "react-redux";
+import { AuthPayload, LOAD_USER } from "../../../redux/types/Authtypes";
+import {
+  changeUserInfo,
+  changeUserProfile,
+  loadUser,
+} from "../../../utils/userdbUtils";
+import { FormField } from "../../GroupsView/FormField";
+import { showAlert } from "../../UtilComponents/Alert";
+import { CustomButton } from "../../UtilComponents/CustomButton";
+import { Styles } from "./EditProfile.styles";
+import { AccountNavProps } from "../Navigation/AccountTypes";
 
 export const EditProfile = ({
   navigation,
@@ -22,7 +23,10 @@ export const EditProfile = ({
   const user = useSelector(
     ({ auth }: { auth: { user: AuthPayload } }) => auth.user
   );
-  const [userState, setUserState] = useState<UserStateType>({
+  console.log(user);
+  const dispatch = useDispatch();
+
+  const [userState, setUserState] = useState<AuthPayload>({
     _id: "",
     email: "",
     name: "",
@@ -36,9 +40,7 @@ export const EditProfile = ({
     emailError: "",
     usernameError: "",
   });
-
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     (async () => {
       const {
@@ -53,6 +55,34 @@ export const EditProfile = ({
   useEffect(() => {
     setUserState(user);
   }, [user]);
+  const goBack = async () => {
+    const { user, error } = await loadUser();
+    if (user) {
+      dispatch({
+        type: LOAD_USER,
+        payload: {
+          user: user[0],
+          token: user[1],
+        },
+      });
+    }
+
+    navigation.navigate("Your Account");
+  };
+
+  const changeAvatar = async (newAvatar: ImageManipulator.ImageResult) => {
+    if (newAvatar) {
+      setLoading(true);
+      const fetched = await changeUserProfile({
+        uri: newAvatar?.uri,
+      });
+      if (fetched.error) {
+        showAlert({ firstText: "Error changing", firstButtonText: "Ok" });
+      }
+      setLoading(false);
+      await goBack();
+    }
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,37 +91,43 @@ export const EditProfile = ({
       aspect: [1, 1],
     });
     if (!result.cancelled) {
-      let resizedImage = await ImageManipulator.manipulateAsync(
-        result.uri,
-        [{ resize: { width: 500, height: 500 } }],
-        { base64: true }
-      );
-      let imageBased64 = resizedImage.base64 ?? "";
-      setUserState({ ...userState, avatar: imageBased64 });
+      let resizedImage = await ImageManipulator.manipulateAsync(result.uri, [
+        { resize: { width: 500, height: 500 } },
+      ]);
+      changeAvatar(resizedImage);
     }
   };
 
   const setUserInfo = async () => {
     setLoading(true);
+    // Check if anything has changed
     let name = userState.name === user.name ? undefined : userState.name;
     let username =
       userState.username === user.username ? undefined : userState.username;
     let email = userState.email === user.email ? undefined : userState.email;
 
+    // Send to backend
     const { response, error } = await changeUserInfo(name, username, email);
+    // Finished
     setLoading(false);
+
+    // If error from backend
     if (error) {
+      // Username error -> Show Alert
       if (error.usernameError) {
         showAlert({ firstText: error.usernameError, firstButtonText: "OK" });
         return setError({ ...error, usernameError: error.usernameError });
       }
+      // Email error -> Show Alert
       if (error.emailError) {
         showAlert({ firstText: error.emailError, firstButtonText: "OK" });
         return setError({ ...error, emailError: error.emailError });
       }
+      // Any other error -> Show Alert
       showAlert({ firstText: error, firstButtonText: "OK" });
     } else {
-      navigation.navigate("Your Account");
+      // If everything is okay -> go back
+      await goBack();
     }
   };
 
@@ -114,7 +150,6 @@ export const EditProfile = ({
       firstButtonHandleClose: setUserInfo,
     });
   };
-
   return (
     <View style={Styles.container}>
       {loading && (
@@ -123,13 +158,15 @@ export const EditProfile = ({
         </View>
       )}
       <Pressable style={Styles.imageContainer} onPress={pickImage}>
-        {userState.avatar && userState.avatar !== "" ? (
-          <Image
-            style={Styles.avatar}
-            source={{ uri: "data:image/jpeg;base64," + userState.avatar }}
-          />
+        {user && user.avatar ? (
+          <Image style={Styles.avatar} source={{ uri: user.avatar }} />
         ) : (
-          <Image style={Styles.avatar} source={require("./avatar.png")} />
+          <FontAwesome
+            name="user-circle-o"
+            style={Styles.avatar}
+            size={110}
+            color="black"
+          />
         )}
         <Text onPress={pickImage} style={Styles.changeText}>
           Change Photo
