@@ -158,6 +158,7 @@ export const changeUserInfo = async (
       changes = { ...changes, email };
     }
     const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
     const res = await server.patch("/users/me", changes);
     return { response, error };
   } catch (e) {
