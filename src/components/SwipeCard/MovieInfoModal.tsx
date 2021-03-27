@@ -24,18 +24,20 @@ export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
     return <ActivityIndicator style={{ flex: 1 }} />;
   } else {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingBottom: 50 }}>
         <View style={{ alignItems: "center" }}>
           <Image
             style={{ width, height: 200, borderRadius: 10 }}
             source={{
-              uri: `https://image.tmdb.org/t/p/original${movieInfo.poster_path}`,
+              uri: `https://image.tmdb.org/t/p/original${movieInfo.backdrop_path}`,
             }}
           ></Image>
         </View>
 
-        <View style={{ padding: 5, alignItems: "center" }}>
-          <Text style={{ fontSize: 32, fontWeight: "bold" }}>
+        <View style={{ padding: 5, marginTop: 15, alignItems: "center" }}>
+          <Text
+            style={{ fontSize: 32, fontWeight: "bold", textAlign: "center" }}
+          >
             {movieInfo.title}
           </Text>
           <View
@@ -126,6 +128,70 @@ export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
             {movieInfo.overview}
           </Text>
         </View>
+
+        {movieInfo.cast.length > 0 && (
+          <View style={{ padding: 20, justifyContent: "space-around" }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "500",
+                paddingBottom: 10,
+              }}
+            >
+              Cast
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
+            >
+              {movieInfo.cast.map((castInfo: any) => {
+                return (
+                  <View
+                    key={castInfo.castInfo_id}
+                    style={{
+                      alignItems: "flex-start",
+                      flexBasis: 80,
+                      marginHorizontal: 2,
+                    }}
+                  >
+                    <Image
+                      style={{
+                        width: 75,
+                        height: 75,
+                        borderRadius: 10,
+                      }}
+                      source={{
+                        uri: `https://image.tmdb.org/t/p/w500${castInfo.profile_path}`,
+                      }}
+                    ></Image>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: "500",
+                        textAlign: "left",
+                      }}
+                    >
+                      {castInfo.name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "grey",
+                        fontWeight: "400",
+                        textAlign: "left",
+                      }}
+                    >
+                      {castInfo.character}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
+
         {movieInfo.providers.length > 0 && (
           <View style={{ padding: 20, justifyContent: "space-around" }}>
             <Text
