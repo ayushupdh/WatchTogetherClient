@@ -8,6 +8,7 @@ export const Styles = StyleSheet.create({
     alignItems: "center",
   },
   spinnerConatiner: {
+    zIndex: 5,
     alignItems: "center",
     bottom: 0,
     justifyContent: "center",

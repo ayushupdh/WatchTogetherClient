@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { Text, Image, View } from "react-native";
-import { useDispatch } from "react-redux";
-import { LOAD_USER, SIGN_OUT } from "../../redux/types/Authtypes";
+import { useDispatch, useSelector } from "react-redux";
+import { FontAwesome } from "@expo/vector-icons";
+
+import { AuthPayload, LOAD_USER, SIGN_OUT } from "../../redux/types/Authtypes";
 import { Center } from "../UtilComponents/Center";
 import { CustomButton } from "../UtilComponents/CustomButton";
 import { Styles } from "./styles";
@@ -11,6 +13,12 @@ import { AccountNavProps } from "./Navigation/AccountTypes";
 export const AccountMain = ({
   navigation,
 }: AccountNavProps<"Your Account">) => {
+  const user = useSelector(
+    ({ auth }: { auth: { user: AuthPayload } }) => auth.user
+  );
+  console.log(user);
+  const dispatch = useDispatch();
+
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem("userToken");
     dispatch({
@@ -20,9 +28,18 @@ export const AccountMain = ({
   return (
     <View style={Styles.container}>
       <View style={Styles.avatarContainer}>
-        <Image style={Styles.avatar} source={require("./avatar.png")}></Image>
+        {user && user.avatar && user.avatar !== "" ? (
+          <Image style={Styles.avatar} source={{ uri: user.avatar }}></Image>
+        ) : (
+          <FontAwesome
+            name="user-circle-o"
+            style={Styles.avatar}
+            size={110}
+            color="black"
+          />
+        )}
         <View style={Styles.avatarNameContainer}>
-          <Text style={Styles.avatarText}>Ayush Upadhyay</Text>
+          <Text style={Styles.avatarText}>{user.name}</Text>
           <CustomButton
             style={Styles.editprofileButton}
             textStyle={Styles.editprofileButtonText}

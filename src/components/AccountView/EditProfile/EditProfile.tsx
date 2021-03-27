@@ -23,7 +23,6 @@ export const EditProfile = ({
   const user = useSelector(
     ({ auth }: { auth: { user: AuthPayload } }) => auth.user
   );
-  console.log(user);
   const dispatch = useDispatch();
 
   const [userState, setUserState] = useState<AuthPayload>({

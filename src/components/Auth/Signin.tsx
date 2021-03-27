@@ -34,7 +34,12 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         type: SIGN_IN,
         payload: {
           user: {
-            username: res.data.user.name,
+            _id: res.data.user._id,
+            email: res.data.user.email,
+            name: res.data.user.name,
+            user_status: res.data.user.user_status,
+            username: res.data.user.username,
+            avatar: res.data.user.avatar,
           },
           token: res.data.token,
         },
