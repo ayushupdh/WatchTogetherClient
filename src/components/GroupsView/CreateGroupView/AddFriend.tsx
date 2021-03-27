@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import { FormField } from "../FormField";
 import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
@@ -11,7 +11,7 @@ import { TouchableWithoutFeedback } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { showAlert } from "../../UtilComponents/Alert";
 
-type UserType = { name: string; _id: string };
+type UserType = { name: string; _id: string; avatar: string };
 
 export const AddFriend = ({
   route,
@@ -46,9 +46,17 @@ export const AddFriend = ({
     return addedFriends.map((friend) => {
       return (
         <View key={friend._id} style={styles.friendsNotjoined}>
-          <Ionicons name="person-circle-sharp" size={24} color="black" />
+          {friend.avatar && friend.avatar !== "" ? (
+            <Image
+              source={{ uri: friend.avatar }}
+              style={{ width: 30, height: 30, borderRadius: 20 }}
+            />
+          ) : (
+            <Ionicons name="person-circle-sharp" size={30} color="black" />
+          )}
           <Text style={styles.friendsName}>{friend.name}</Text>
           <MaterialIcons
+            style={{ alignSelf: "center" }}
             onPress={() =>
               setAddedFriends((oldList) =>
                 oldList.filter((list) => list._id !== friend._id)

@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Image, Text, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 type ModalDropDownProps = {
-  data: { name: string; _id: string }[] | null;
+  data: { name: string; _id: string; avatar?: string }[] | null;
   onClick: any;
 };
 export const ModalDropDown = (props: ModalDropDownProps) => {
@@ -32,18 +32,29 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
                   style={{
                     flexDirection: "row",
                     padding: 10,
+                    alignSelf: "flex-start",
                   }}
                 >
-                  <Ionicons
-                    name="person-circle-sharp"
-                    size={24}
-                    color="black"
-                  />
+                  {datas.avatar && datas.avatar !== "" ? (
+                    <Image
+                      source={{ uri: datas.avatar }}
+                      style={{ width: 40, height: 40, borderRadius: 20 }}
+                    />
+                  ) : (
+                    <Ionicons
+                      name="person-circle-sharp"
+                      size={40}
+                      color="black"
+                    />
+                  )}
+
                   <Text
                     style={{
                       flex: 1,
-                      marginLeft: 5,
+                      marginLeft: 15,
                       fontSize: 20,
+                      fontWeight: "500",
+                      alignSelf: "center",
                     }}
                     onPress={() => {
                       props.onClick(datas);

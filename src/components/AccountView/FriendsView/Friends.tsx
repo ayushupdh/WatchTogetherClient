@@ -1,7 +1,7 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import { View, Text, FlatList, TextInput } from "react-native";
+import { View, Image, Text, FlatList, TextInput } from "react-native";
 import { useGetFriends } from "../../../hooks/useGetFriends";
 import { Center } from "../../UtilComponents/Center";
 import { CustomButton } from "../../UtilComponents/CustomButton";
@@ -12,6 +12,7 @@ type FriendsType = {
   _id: string;
   name: string;
   username: string;
+  avatar: string;
 };
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
   const {
@@ -24,8 +25,14 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
   const renderItem = ({ item }: { item: FriendsType }) => {
     return (
       <View key={item._id} style={Styles.friends}>
-        <Ionicons name="person-circle-sharp" size={24} color="black" />
-
+        {item.avatar && item.avatar !== "" ? (
+          <Image
+            source={{ uri: item.avatar }}
+            style={{ width: 40, height: 40, borderRadius: 20 }}
+          />
+        ) : (
+          <Ionicons name="person-circle-sharp" size={40} color="black" />
+        )}
         <Text style={Styles.friendsName}> {item.name}</Text>
       </View>
     );

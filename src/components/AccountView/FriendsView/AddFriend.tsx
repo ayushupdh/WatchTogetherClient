@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, Text, FlatList, TextInput } from "react-native";
+import { View, Text, FlatList, Image, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FormField } from "../../GroupsView/FormField";
 import { Styles } from "../styles";
@@ -15,7 +15,7 @@ export const AddFreind = (props: AddFreindProps) => {
   const [first, setFirst] = useState(true);
   const [foundUsers, setUserList] = useState([]);
   const modalizeRef = useRef<Modalize>(null);
-
+  console.log(foundUsers);
   const onPressHandler = (user: any) => {
     setUser(user);
     modalizeRef.current?.open();
@@ -43,7 +43,14 @@ export const AddFreind = (props: AddFreindProps) => {
   const renderItem = ({ item }: any) => {
     return (
       <View style={Styles.friends}>
-        <Ionicons name="person-circle-sharp" size={24} color="black" />
+        {item.avatar && item.avatar !== "" ? (
+          <Image
+            source={{ uri: item.avatar }}
+            style={{ width: 40, height: 40, borderRadius: 20 }}
+          />
+        ) : (
+          <Ionicons name="person-circle-sharp" size={30} color="black" />
+        )}
         <Text
           style={Styles.friendsName}
           onPress={() => {

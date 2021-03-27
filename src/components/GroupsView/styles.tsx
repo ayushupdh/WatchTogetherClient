@@ -151,6 +151,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     flex: 1,
     marginLeft: 10,
+    alignSelf: "center",
   },
   customText: {
     fontSize: 20,

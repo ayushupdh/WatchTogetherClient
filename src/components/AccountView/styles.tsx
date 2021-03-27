@@ -138,7 +138,7 @@ export const Styles = StyleSheet.create({
   friends: {
     flexDirection: "row",
     backgroundColor: "#FAFAFA",
-    paddingVertical: 13,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 30,
     marginBottom: 15,
@@ -155,6 +155,7 @@ export const Styles = StyleSheet.create({
     color: "#767676",
     fontWeight: "500",
     paddingLeft: 15,
+    alignSelf: "center",
   },
   movies: {
     flexDirection: "row",

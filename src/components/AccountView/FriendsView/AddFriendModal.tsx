@@ -31,12 +31,19 @@ export const AddFriendModal = ({ user, handleClose }: AddFriendModalProps) => {
   return (
     <View>
       <View style={Styles.avatarContainer}>
-        <FontAwesome
-          //   style={Styles.avatar}
-          name="user-circle"
-          size={100}
-          color="black"
-        />
+        {user.avatar && user.avatar !== "" ? (
+          <Image
+            source={{ uri: user.avatar }}
+            style={{ width: 100, height: 100, borderRadius: 10 }}
+          />
+        ) : (
+          <FontAwesome
+            //   style={Styles.avatar}
+            name="user-circle"
+            size={100}
+            color="black"
+          />
+        )}
         <View style={Styles.avatarNameContainer}>
           <Text style={Styles.avatarText}>{user.name}</Text>
           <Text style={Styles.editprofileButtonText}>@{user.username}</Text>

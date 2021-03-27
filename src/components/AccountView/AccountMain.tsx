@@ -16,7 +16,6 @@ export const AccountMain = ({
   const user = useSelector(
     ({ auth }: { auth: { user: AuthPayload } }) => auth.user
   );
-  console.log(user);
   const dispatch = useDispatch();
 
   const onLogoutPress = async () => {
