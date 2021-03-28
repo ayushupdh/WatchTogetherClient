@@ -17,6 +17,7 @@ const initialState:StateType = {
 export default (state = initialState, {type, payload}:{type:string, payload:START_SESSION_PAYLOADTYPE|undefined})=>{
     switch (type) {
         case START_SESSION:
+
           return {
             sessionType:payload?.sessionType,
             sessionRunning:true,

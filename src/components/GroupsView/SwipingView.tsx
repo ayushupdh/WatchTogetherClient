@@ -6,11 +6,15 @@ import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 import { styles } from "./styles";
 import { SwipeCard } from "../SwipeCard/SwipeCard";
+import { useDispatch } from "react-redux";
+import { END_SESSION } from "../../redux/types/SessionTypes";
 
 export const SwipingView = ({
   route,
   navigation,
 }: GroupsNavProps<"SwipingView">) => {
+  const dispatch = useDispatch();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,
@@ -45,6 +49,9 @@ export const SwipingView = ({
           onPress: () => {
             navigation.dispatch(e.data.action);
             navigation.popToTop();
+            dispatch({
+              type: END_SESSION,
+            });
           },
         },
       ]);
