@@ -1,4 +1,4 @@
-import {START_SESSION, END_SESSION, START_SESSION_PAYLOADTYPE} from '../types/SessionTypes'
+import {START_SESSION, END_SESSION, START_SESSION_PAYLOADTYPE, UPDATE_PARAMS} from '../types/SessionTypes'
 type StateType= {
   sessionType: string |null;
   sessionRunning:boolean;
@@ -17,7 +17,6 @@ const initialState:StateType = {
 export default (state = initialState, {type, payload}:{type:string, payload:START_SESSION_PAYLOADTYPE|undefined})=>{
     switch (type) {
         case START_SESSION:
-
           return {
             sessionType:payload?.sessionType,
             sessionRunning:true,
@@ -26,6 +25,15 @@ export default (state = initialState, {type, payload}:{type:string, payload:STAR
               providers:payload?.providers,
               lang:payload?.lang
             },
+          }
+          case UPDATE_PARAMS:
+          return {
+            ...state,
+            sessionParams:{
+              genres:payload?.genres,
+              providers:payload?.providers,
+              lang:payload?.lang
+            }
           }
         case END_SESSION:
           return {

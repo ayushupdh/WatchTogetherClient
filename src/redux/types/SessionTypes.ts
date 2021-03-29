@@ -1,5 +1,6 @@
 export const START_SESSION= 'startingsession'
 export const END_SESSION= 'endingsession'
+export const UPDATE_PARAMS='updatingparams'
 export const ADD_TO_GENRE= 'addinggenre'
 export const ADD_TO_LANG= 'addingLang'
 export const ADD_TO_PROV= 'addingprov'

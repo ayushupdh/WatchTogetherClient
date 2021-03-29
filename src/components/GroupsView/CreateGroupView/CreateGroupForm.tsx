@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Text, View } from "react-native";
 import { FormField } from "../FormField";
 import { GroupsDataType, GroupsNavProps } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
@@ -7,6 +7,13 @@ import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Timer } from "../../UtilComponents/Timer";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { showAlert } from "../../UtilComponents/Alert";
+import { createGroup } from "../../../utils/userdbUtils";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  END_SESSION,
+  START_SESSION,
+  UPDATE_PARAMS,
+} from "../../../redux/types/SessionTypes";
 export const CreateGroupForm = ({
   navigation,
 }: GroupsNavProps<"Create a Group">) => {
@@ -25,6 +32,12 @@ export const CreateGroupForm = ({
     time: "",
     providers: ["Netflix", "Hulu", "Amazon Prime"],
   };
+  const sessionType = useSelector(
+    ({ session }: { session: { sessionType: string | null } }) =>
+      session.sessionType
+  );
+  const dispatch = useDispatch();
+
   const [name, setName] = useState<string>("");
   const [time, setTime] = useState<{ min: string; sec: string }>({
     min: "00",
@@ -34,6 +47,36 @@ export const CreateGroupForm = ({
   const [lang, setLang] = useState<string[]>([]);
   const [provider, setProvider] = useState<string[]>([]);
   const [error, seterror] = useState<string>("");
+
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+      // Prompt the user before leaving the screen
+      Alert.alert(
+        "Are you sure?",
+        "This will delete the group you have created",
+        [
+          { text: "Cancel", style: "cancel", onPress: () => {} },
+          {
+            text: "Leave",
+            style: "destructive",
+            // If the user confirmed, then we dispatch the action we blocked earlier
+            // This will continue the action that had triggered the removal of the screen
+            onPress: () => {
+              navigation.dispatch(e.data.action);
+              dispatch({
+                type: END_SESSION,
+              });
+            },
+          },
+        ]
+      );
+    });
+    return () => {
+      navigation.removeListener("beforeRemove", () => {});
+    };
+  }, [navigation]);
 
   const handleGenre = (text: string, value: boolean) => {
     if (value) {
@@ -59,6 +102,29 @@ export const CreateGroupForm = ({
 
   const handleNext = async () => {
     if (name !== "") {
+      if (!sessionType) {
+        createGroup(name, `${time.min} ${time.sec}`);
+        dispatch({
+          type: START_SESSION,
+          payload: {
+            sessionType: "Group",
+            sessionRunning: true,
+            genres: genres,
+            providers: provider,
+            lang: lang,
+          },
+        });
+      } else {
+        dispatch({
+          type: UPDATE_PARAMS,
+          payload: {
+            genres: genres,
+            providers: provider,
+            lang: lang,
+          },
+        });
+        UPDATE_PARAMS;
+      }
       navigation.navigate("Add a Friend", {
         groupName: name,
       });

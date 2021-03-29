@@ -207,3 +207,23 @@ export const changeUserProfile = async (data: { uri: string }) => {
     return { response, error };
   }
 };
+
+export const getUserGroups = async () => {
+  let groups = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const response = await server.get("/users/me/groups");
+    const groupNames = response.data.groups.map((group: any) => {
+      return {
+        name: group.name,
+        id: group._id,
+      };
+    });
+    groups = groupNames;
+    return { groups, error };
+  } catch (e) {
+    return { groups, error: e.message };
+  }
+};

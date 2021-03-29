@@ -6,7 +6,7 @@ import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
 import { ModalDropDown } from "../../UtilComponents/ModalDropDown";
-import { createGroup, searchFriends } from "../../../utils/userdbUtils";
+import { searchFriends } from "../../../utils/userdbUtils";
 import { TouchableWithoutFeedback } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { showAlert } from "../../UtilComponents/Alert";
@@ -127,7 +127,6 @@ export const AddFriend = ({
                 navigation.navigate("SwipingView", {
                   groupName: route.params.groupName,
                 });
-                createGroup(route.params.groupName, "00 00");
               } else {
                 showAlert({
                   firstText: "Need atleast one friend to start a group session",
