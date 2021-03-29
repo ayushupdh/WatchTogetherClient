@@ -15,7 +15,7 @@ export const AddFreind = (props: AddFreindProps) => {
   const [first, setFirst] = useState(true);
   const [foundUsers, setUserList] = useState([]);
   const modalizeRef = useRef<Modalize>(null);
-  console.log(foundUsers);
+
   const onPressHandler = (user: any) => {
     setUser(user);
     modalizeRef.current?.open();

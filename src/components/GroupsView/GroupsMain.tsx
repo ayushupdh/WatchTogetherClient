@@ -7,7 +7,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { CustomButton } from "../UtilComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 import { Modalize } from "react-native-modalize";
-import { GroupOptionModal } from "./GroupOptionModal";
+import { GroupOptionModal } from "./GroupOptionModal/GroupOptionModal";
 import { getUserGroups } from "../../utils/userdbUtils";
 
 type GetGroupsType = {
@@ -66,6 +66,11 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     setGroupSelected(groupID);
     modalizeRef.current?.open();
   };
+  const closeModal = async () => {
+    modalizeRef.current?.close();
+    const { groups, error }: GetGroupsType = await getUserGroups();
+    setGroups(groups);
+  };
 
   return (
     <View style={styles.container}>
@@ -100,10 +105,10 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
             />
           </View>
         )}
-        <Modalize ref={modalizeRef} adjustToContentHeight={true}>
-          <GroupOptionModal />
-        </Modalize>
       </View>
+      <Modalize ref={modalizeRef} adjustToContentHeight={true}>
+        <GroupOptionModal groupID={groupSelected} close={closeModal} />
+      </Modalize>
     </View>
   );
 };
