@@ -1,12 +1,15 @@
 import {START_SESSION, END_SESSION, START_SESSION_PAYLOADTYPE, UPDATE_PARAMS} from '../types/SessionTypes'
-type StateType= {
+type SessionType= {
   sessionType: string |null;
   sessionRunning:boolean;
+  groupID:string |null,
+
   sessionParams: { genres?:string[], lang?:string[], providers?:string[]} |null;
 }
-const initialState:StateType = {
+const initialState:SessionType = {
     sessionType:null,
     sessionRunning:false,
+    groupID:null,
     sessionParams:{
         genres:[],
         providers:[],
@@ -20,6 +23,7 @@ export default (state = initialState, {type, payload}:{type:string, payload:STAR
           return {
             sessionType:payload?.sessionType,
             sessionRunning:true,
+            groupID:payload?.groupID,
             sessionParams:{
               genres:payload?.genres,
               providers:payload?.providers,

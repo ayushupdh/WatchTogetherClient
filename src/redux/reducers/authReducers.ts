@@ -1,5 +1,19 @@
 import { SIGN_IN, SIGN_UP, SIGN_OUT, LOAD_USER, AuthType, AuthPayload } from "../types/Authtypes";
-const initialState = {
+
+export type AuthReducerType={
+user:{
+  user_status:string;
+_id:string;
+username:string;
+email:string;
+name:string;
+avatar:string;
+}|null;
+userToken:string|null;
+}
+
+
+const initialState :AuthReducerType= {
     user:null,
     userToken:null
 }

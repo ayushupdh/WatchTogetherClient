@@ -13,4 +13,5 @@ export type START_SESSION_PAYLOADTYPE={
     genres?:string[],
     providers?:string[]
     lang?:string[]
+    groupID?:string
 }
