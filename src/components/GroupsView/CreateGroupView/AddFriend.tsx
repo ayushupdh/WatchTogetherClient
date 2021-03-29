@@ -6,10 +6,15 @@ import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
 import { ModalDropDown } from "../../UtilComponents/ModalDropDown";
-import { searchFriends } from "../../../utils/userdbUtils";
+import {
+  addUserToGroup,
+  removeUserFromGroup,
+  searchFriends,
+} from "../../../utils/userdbUtils";
 import { TouchableWithoutFeedback } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { showAlert } from "../../UtilComponents/Alert";
+import { useSelector } from "react-redux";
 
 type UserType = { name: string; _id: string; avatar: string };
 
@@ -18,32 +23,47 @@ export const AddFriend = ({
   navigation,
 }: GroupsNavProps<"Add a Friend">) => {
   const [modal, showModal] = useState(false);
-  const [friend, setFriend] = useState<string>("");
-  const [friendList, setFriendList] = useState<UserType[] | null>(null);
-  const [addedFriends, setAddedFriends] = useState<UserType[]>([]);
+  const [input, setInput] = useState<string>("");
+  const groupID = useSelector(
+    ({ session }: { session: { groupID: string } }) => session.groupID
+  );
+  const [fetchedFriendList, setFetchedFriendsList] = useState<
+    UserType[] | null
+  >(null);
+  const [displayedFriends, setDisplayedFriends] = useState<UserType[]>([]);
 
-  const addToFriendList = (selectedUser: UserType) => {
+  const addFriendsToGroup = async (selectedUser: UserType) => {
     showModal(false);
 
-    let isPresent = addedFriends?.findIndex(
+    // check if the user is present in the displayed friends list
+    let isPresent = displayedFriends?.findIndex(
       (user) => selectedUser._id === user._id
     );
+    // If not present, update the list
     if (isPresent === -1) {
-      setAddedFriends((oldList) => [...oldList, selectedUser]);
+      setDisplayedFriends((oldList) => [...oldList, selectedUser]);
+      // add in DB
+      await addUserToGroup(groupID, selectedUser._id);
     }
   };
 
   const showUsers = async () => {
-    const { response, error } = await searchFriends(friend);
-    setFriendList(response);
+    const { response, error } = await searchFriends(input);
+    setFetchedFriendsList(response);
 
-    if (friend !== "") {
+    if (input !== "") {
       showModal(true);
     }
   };
+  const handleRemoveFriends = async (friendsID: string) => {
+    setDisplayedFriends((oldList) =>
+      oldList.filter((list) => list._id !== friendsID)
+    );
+    await removeUserFromGroup(groupID, friendsID);
+  };
 
-  const render = () => {
-    return addedFriends.map((friend) => {
+  const displayFriendsList = () => {
+    return displayedFriends.map((friend) => {
       return (
         <View key={friend._id} style={styles.friendsNotjoined}>
           {friend.avatar && friend.avatar !== "" ? (
@@ -57,11 +77,7 @@ export const AddFriend = ({
           <Text style={styles.friendsName}>{friend.name}</Text>
           <MaterialIcons
             style={{ alignSelf: "center" }}
-            onPress={() =>
-              setAddedFriends((oldList) =>
-                oldList.filter((list) => list._id !== friend._id)
-              )
-            }
+            onPress={() => handleRemoveFriends(friend._id)}
             name="cancel"
             size={24}
             color="#aaa"
@@ -84,12 +100,12 @@ export const AddFriend = ({
           <FormField
             title="Add a Friend"
             placeholder="Username or Email"
-            value={friend}
+            value={input}
             onChangeHandler={(e) => {
-              if (friend === "") {
+              if (input === "") {
                 showModal(false);
               }
-              setFriend(e);
+              setInput(e);
             }}
             onSubmitEditing={(e) => showUsers()}
             error=""
@@ -99,12 +115,15 @@ export const AddFriend = ({
 
           {modal && (
             <View style={{ zIndex: 1 }}>
-              <ModalDropDown data={friendList} onClick={addToFriendList} />
+              <ModalDropDown
+                data={fetchedFriendList}
+                onClick={addFriendsToGroup}
+              />
             </View>
           )}
 
           <Text style={{ fontSize: 15, color: "#767676", paddingVertical: 5 }}>
-            {addedFriends && addedFriends.length === 0
+            {displayedFriends && displayedFriends.length === 0
               ? "Add friends to the group"
               : "Waiting for friends to join..."}
           </Text>
@@ -114,18 +133,18 @@ export const AddFriend = ({
               renderItem={renderItem}
               keyExtractor={(item) => item._id}
             /> */}
-            {render()}
+            {displayFriendsList()}
           </View>
           <CustomButton
             text="Start"
             style={[
               styles.unsubmittedButton,
-              addedFriends.length > 0 ? { opacity: 1 } : null,
+              displayedFriends.length > 0 ? { opacity: 1 } : null,
             ]}
             onPressHandler={() => {
-              if (addedFriends.length > 0) {
+              if (displayedFriends.length > 0) {
                 navigation.navigate("SwipingView", {
-                  groupName: route.params.groupName,
+                  groupName: route.params?.groupName,
                 });
               } else {
                 showAlert({

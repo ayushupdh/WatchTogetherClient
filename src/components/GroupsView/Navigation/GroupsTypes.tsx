@@ -8,9 +8,11 @@ export type GroupsParamList = {
         groupName: any;
       }
     | undefined;
-  "Add a Friend": {
-    groupName: string;
-  };
+  "Add a Friend":
+    | {
+        groupName: any;
+      }
+    | undefined;
 
   SwipingView: {
     groupName: string;

@@ -3,6 +3,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { server } from "../api/server";
 import { setAuthToken } from "./authToken";
 
+// Removes typescript error for Formdate on changeUserProfile function
+declare global {
+  interface FormDataValue {
+    uri: string;
+    name: string;
+    type: string;
+  }
+
+  interface FormData {
+    append(name: string, value: FormDataValue, fileName?: string): void;
+    set(name: string, value: FormDataValue, fileName?: string): void;
+  }
+}
 export const loadUser = async () => {
   let user: any = null;
   let error = null;
@@ -131,7 +144,8 @@ export const createGroup = async (groupName: string, time: string) => {
       name: groupName,
       current_session_time: sessiontime,
     });
-    response = "OK";
+
+    response = res.data._id;
     return { response, error };
   } catch (e) {
     error = e.message;
@@ -225,5 +239,36 @@ export const getUserGroups = async () => {
     return { groups, error };
   } catch (e) {
     return { groups, error: e.message };
+  }
+};
+
+export const addUserToGroup = async (groupId: string, userId: string) => {
+  let response = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+
+    const res = await server.post(`/groups/${groupId}/users`, {
+      userId,
+    });
+    response = "OK";
+    return { response, error };
+  } catch (e) {
+    return { response, error: e.message };
+  }
+};
+
+export const removeUserFromGroup = async (groupId: string, userId: string) => {
+  let response = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    await server.delete(`/groups/${groupId}/users/${userId}`);
+    response = "OK";
+    return { response, error };
+  } catch (e) {
+    return { response, error: e.message };
   }
 };
