@@ -159,7 +159,8 @@ export const styles = StyleSheet.create({
   friends: {
     width: "95%",
     flexDirection: "row",
-    padding: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 50,
     borderColor: "#000",
     backgroundColor: "#fafafa",
