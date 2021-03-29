@@ -149,7 +149,7 @@ export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
               {movieInfo.cast.map((castInfo: any) => {
                 return (
                   <View
-                    key={castInfo.castInfo_id}
+                    key={castInfo._id}
                     style={{
                       alignItems: "flex-start",
                       flexBasis: 80,

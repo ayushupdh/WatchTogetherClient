@@ -18,6 +18,7 @@ import { addDislikedMovie, addLikedMovie } from "../../utils/userdbUtils";
 import { server } from "../../api/server";
 import { GroupsNavProps } from "../GroupsView/Navigation/GroupsTypes";
 import { useSelector } from "react-redux";
+import { SessionType } from "../../redux/reducers/sessionReducers";
 
 type SwipeCardProps = {};
 export const SwipeCard = () => {
@@ -31,7 +32,13 @@ export const SwipeCard = () => {
   const [loading, setLoading] = useState(true);
   // Holds the movie index of the clicked card
   const [state, setstate] = useState("");
-  const params = useSelector((state) => state.session.sessionParams);
+  const params = useSelector(
+    ({
+      session,
+    }: {
+      session: { sessionParams: SessionType["sessionParams"] };
+    }) => session.sessionParams
+  );
   const [swipes, setSwipes] = useState({
     swipedRight: false,
     swipedLeft: false,
@@ -44,9 +51,9 @@ export const SwipeCard = () => {
     const response = await server.get("/movies/getNRandom", {
       params: {
         qty: 15,
-        genres: params.genres,
-        // lang: params.lang,
-        // providers: params.providers,
+        genres: params?.genres,
+        lang: params?.lang,
+        providers: params?.providers,
       },
     });
     const m = response.data;

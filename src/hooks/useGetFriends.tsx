@@ -7,8 +7,10 @@ import { server } from "../api/server";
 export const useGetFriends = () => {
   const [friends, setFriends] = useState<any>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
@@ -23,10 +25,11 @@ export const useGetFriends = () => {
         // });
         setFriends(friensList);
         setError(null);
+        setLoading(false);
       } catch (e) {
         setError(e.message);
       }
     })();
   }, []);
-  return { friends, error };
+  return { friends, loading, error };
 };

@@ -30,6 +30,7 @@ export const Likes = () => {
       setMovies(response);
     })();
   }, [setMovies]);
+
   const windowHeight = useWindowDimensions().height;
   const headerHeight = useHeaderHeight();
 

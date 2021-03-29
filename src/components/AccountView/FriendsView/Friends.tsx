@@ -1,7 +1,14 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import { View, Image, Text, FlatList, TextInput } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  FlatList,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import { useGetFriends } from "../../../hooks/useGetFriends";
 import { Center } from "../../UtilComponents/Center";
 import { CustomButton } from "../../UtilComponents/CustomButton";
@@ -17,12 +24,15 @@ type FriendsType = {
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
   const {
     friends,
+    loading,
     error,
   }: {
     friends: readonly FriendsType[] | null;
+    loading: boolean;
     error: string | null;
   } = useGetFriends();
-  const renderItem = ({ item }: { item: FriendsType }) => {
+
+  const renderFriendsList = ({ item }: { item: FriendsType }) => {
     return (
       <View key={item._id} style={Styles.friends}>
         {item.avatar && item.avatar !== "" ? (
@@ -54,7 +64,7 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
           </TextInput>
           <FlatList
             contentContainerStyle={{ paddingVertical: 20 }}
-            renderItem={renderItem}
+            renderItem={renderFriendsList}
             data={friends}
             keyExtractor={(item: FriendsType) => item._id}
           />
@@ -93,6 +103,9 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
       );
     }
   };
-
-  return <View style={Styles.container}>{friends && renderFriends()}</View>;
+  if (loading) {
+    return <ActivityIndicator style={{ flex: 1 }} />;
+  } else {
+    return <View style={Styles.container}>{friends && renderFriends()}</View>;
+  }
 };

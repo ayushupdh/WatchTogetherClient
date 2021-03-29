@@ -15,7 +15,6 @@ export const GroupInfo = ({
   // TODO Change here
   const groupId = route.params.groupId;
   const { groupInfo, error } = useGroupsInfo(groupId);
-  console.log(groupInfo);
   useLayoutEffect(() => {
     if (groupInfo) {
       navigation.setOptions({ title: groupInfo.name });

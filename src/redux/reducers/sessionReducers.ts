@@ -1,5 +1,5 @@
 import {START_SESSION, END_SESSION, START_SESSION_PAYLOADTYPE, UPDATE_PARAMS} from '../types/SessionTypes'
-type SessionType= {
+export type SessionType= {
   sessionType: string |null;
   sessionRunning:boolean;
   groupID:string |null,
