@@ -8,6 +8,7 @@ import { CustomButton } from "../UtilComponents/CustomButton";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 import { Modalize } from "react-native-modalize";
 import { GroupOptionModal } from "./GroupOptionModal";
+import { getUserGroups } from "../../utils/userdbUtils";
 
 type GetGroupsType = {
   groups:
@@ -22,9 +23,20 @@ type GetGroupsType = {
 };
 
 export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
-  const { groups, error }: GetGroupsType = useGetGroups();
+  // const { groups, error }: GetGroupsType = useGetGroups();
+  const [groups, setGroups] = useState<GetGroupsType["groups"]>();
+
   const [groupSelected, setGroupSelected] = useState("");
   const modalizeRef = useRef<Modalize>();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", async () => {
+      const { groups, error }: GetGroupsType = await getUserGroups();
+      setGroups(groups);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const renderItem = ({ item }: any) => {
     const randomColor: string =
