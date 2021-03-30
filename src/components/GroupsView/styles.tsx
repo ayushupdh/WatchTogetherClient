@@ -28,7 +28,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
     padding: 10,
     borderRadius: 20,
-    marginVertical: 20,
+    marginTop: 10,
+    marginBottom: 20,
     shadowOffset: { width: 5, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
@@ -57,7 +58,7 @@ export const styles = StyleSheet.create({
   groupsSelectorContainer: {
     flexDirection: "row",
     width: "95%",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
   },
   selectionContainer: {
     marginHorizontal: -20,
@@ -68,7 +69,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   groupsSelectorText: {
-    padding: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 25,
     backgroundColor: "#fafafa",
     marginHorizontal: 20,
     borderRadius: 10,

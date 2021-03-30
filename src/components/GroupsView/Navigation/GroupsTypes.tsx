@@ -5,12 +5,13 @@ export type GroupsParamList = {
   "Your Groups": undefined;
   "Create a Group":
     | {
-        groupName: any;
+        groupName: string;
+        groupId: string;
       }
     | undefined;
   "Add a Friend":
     | {
-        groupName: any;
+        groupName: string;
       }
     | undefined;
 
@@ -19,6 +20,10 @@ export type GroupsParamList = {
   };
   GroupInfo: {
     groupId: string;
+  };
+  "Select Options": {
+    groupId: string;
+    groupName: string;
   };
 };
 

@@ -10,25 +10,24 @@ import { Modalize } from "react-native-modalize";
 import { GroupOptionModal } from "./GroupOptionModal/GroupOptionModal";
 import { getUserGroups } from "../../utils/userdbUtils";
 
+type GroupType = {
+  name: string;
+  id: string;
+};
 type GetGroupsType = {
-  groups:
-    | [
-        {
-          name: string;
-          id: string;
-        }
-      ]
-    | [];
+  groups: GroupType[] | [];
   error: string | null;
 };
 
 export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
-  // const { groups, error }: GetGroupsType = useGetGroups();
   const [groups, setGroups] = useState<GetGroupsType["groups"]>();
-
-  const [groupSelected, setGroupSelected] = useState("");
+  const [groupSelected, setGroupSelected] = useState<GroupType>({
+    name: "",
+    id: "",
+  });
   const modalizeRef = useRef<Modalize>();
 
+  // Refresh groups list on focus
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       const { groups, error }: GetGroupsType = await getUserGroups();
@@ -38,13 +37,14 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     return unsubscribe;
   }, [navigation]);
 
-  const renderItem = ({ item }: any) => {
+  const renderGroupList = ({ item }: { item: GroupType }) => {
     const randomColor: string =
       "#" + Math.floor(Math.random() * 16777215).toString(16);
     return (
       <View style={styles.item}>
         <View style={[styles.smallDot, { backgroundColor: randomColor }]} />
         <Text
+          numberOfLines={1}
           style={styles.groupName}
           onPress={() => {
             navigation.navigate("GroupInfo", { groupId: item.id });
@@ -56,14 +56,14 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
           name="options-vertical"
           size={20}
           style={{ paddingHorizontal: 20 }}
-          onPress={() => showModal(item.id)}
+          onPress={() => showModal(item)}
         />
       </View>
     );
   };
 
-  const showModal = (groupID: string) => {
-    setGroupSelected(groupID);
+  const showModal = (group: GroupType) => {
+    setGroupSelected(group);
     modalizeRef.current?.open();
   };
   const closeModal = async () => {
@@ -86,7 +86,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
             </View>
             <FlatList
               data={groups}
-              renderItem={renderItem}
+              renderItem={renderGroupList}
               keyExtractor={(item) => item.id}
             />
           </>
@@ -106,8 +106,13 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
           </View>
         )}
       </View>
+
       <Modalize ref={modalizeRef} adjustToContentHeight={true}>
-        <GroupOptionModal groupID={groupSelected} close={closeModal} />
+        <GroupOptionModal
+          nav={navigation}
+          group={groupSelected}
+          close={closeModal}
+        />
       </Modalize>
     </View>
   );

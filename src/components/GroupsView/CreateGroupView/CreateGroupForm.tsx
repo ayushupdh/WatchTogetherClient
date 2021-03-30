@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { FormField } from "../FormField";
 import { GroupsDataType, GroupsNavProps } from "../Navigation/GroupsTypes";
@@ -17,6 +17,7 @@ import {
 } from "../../../redux/types/SessionTypes";
 export const CreateGroupForm = ({
   navigation,
+  route,
 }: GroupsNavProps<"Create a Group">) => {
   const groupData: GroupsDataType = {
     genres: [
@@ -37,7 +38,6 @@ export const CreateGroupForm = ({
   const [sessionRunning, setSession] = useState<boolean>();
   const dispatch = useDispatch();
   const [name, setName] = useState<string>("");
-
   const [time, setTime] = useState<{ min: string; sec: string }>({
     min: "00",
     sec: "00",
@@ -54,6 +54,12 @@ export const CreateGroupForm = ({
     });
     return unsubscribe;
   }, [navigation]);
+
+  useLayoutEffect(() => {
+    if (route.params?.groupName) {
+      setName(route.params?.groupName);
+    }
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -91,15 +97,21 @@ export const CreateGroupForm = ({
   const handleNext = async () => {
     if (name !== "") {
       if (!sessionRunning) {
-        const { response, error } = await createGroup(
-          name,
-          `${time.min} ${time.sec}`
-        );
+        let groupId = route.params?.groupId;
+        console.log(groupId);
+        if (!groupId) {
+          const { response, error } = await createGroup(
+            name,
+            `${time.min} ${time.sec}`
+          );
+          groupId = response;
+        }
+
         dispatch({
           type: START_SESSION,
           payload: {
             sessionType: "Group",
-            groupID: response,
+            groupID: groupId,
             sessionRunning: true,
             genres: genres,
             providers: provider,
@@ -138,14 +150,16 @@ export const CreateGroupForm = ({
           }}
         >
           <View style={styles.createGroupContainer}>
-            <FormField
-              placeholder="Name"
-              title="Group Name"
-              value={name}
-              onChangeHandler={(name: string) => setName(name)}
-              error={error}
-              autoFocus={true}
-            />
+            {!route.params?.groupName && (
+              <FormField
+                placeholder="Name"
+                title="Group Name"
+                value={name}
+                onChangeHandler={(name: string) => setName(name)}
+                error={error}
+                autoFocus={true}
+              />
+            )}
             <Timer time={time} setTime={setTime} />
 
             {/* select genres */}

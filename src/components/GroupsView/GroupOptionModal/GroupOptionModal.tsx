@@ -1,22 +1,40 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { View, Text } from "react-native";
 import { useSelector } from "react-redux";
 import { removeUserFromGroup } from "../../../utils/userdbUtils";
 import { CustomButton } from "../../UtilComponents/CustomButton";
+import { GroupsParamList } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
 
 type GroupOptionModalProps = {
-  groupID: string;
+  group: {
+    name: string;
+    id: string;
+  };
+  nav: StackNavigationProp<GroupsParamList, "Your Groups">;
   close: () => void;
 };
-export const GroupOptionModal = ({ groupID, close }: GroupOptionModalProps) => {
+export const GroupOptionModal = ({
+  group,
+  nav,
+  close,
+}: GroupOptionModalProps) => {
   const userID = useSelector(
     ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
   );
 
   const handleRemove = async () => {
-    await removeUserFromGroup(groupID, userID);
+    await removeUserFromGroup(group.id, userID);
     close();
+  };
+
+  const handleStart = () => {
+    close();
+    nav.navigate("Create a Group", {
+      groupName: group.name,
+      groupId: group.id,
+    });
   };
   return (
     <View
@@ -31,6 +49,7 @@ export const GroupOptionModal = ({ groupID, close }: GroupOptionModalProps) => {
         text="Start new session"
         style={styles.optionModalButton}
         textStyle={{ fontSize: 22, color: "black" }}
+        onPressHandler={handleStart}
       />
 
       <CustomButton
