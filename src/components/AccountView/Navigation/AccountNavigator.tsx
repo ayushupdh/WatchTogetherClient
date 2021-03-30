@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { AccountParamList } from "./AccountTypes";
 import { AccountMain } from "../AccountMain";
 import { EditProfile } from "../EditProfile/EditProfile";
-import { Likes } from "../Likes";
+import { Likes } from "../LikesView/Likes";
 import { Friends } from "../FriendsView/Friends";
 import { AddFreind } from "../FriendsView/AddFriend";
 
