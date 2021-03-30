@@ -1,9 +1,15 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 
-import { View, Image, Text, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  Image,
+  Pressable,
+  Text,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { styles } from "./styles";
-import { TouchableHighlight } from "react-native-gesture-handler";
 import { useGroupsInfo } from "../../hooks/useGroupsInfo";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
@@ -12,8 +18,9 @@ export const GroupInfo = ({
   route,
 }: GroupsNavProps<"GroupInfo">) => {
   const [sessionsSelected, setsessionsSelected] = useState(false);
-  // TODO Change here
+
   const groupId = route.params.groupId;
+
   const { groupInfo, error } = useGroupsInfo(groupId);
   useLayoutEffect(() => {
     if (groupInfo) {
@@ -21,7 +28,7 @@ export const GroupInfo = ({
     }
   }, [groupInfo]);
 
-  const renderItem = ({ item }: any) => (
+  const renderMembers = ({ item }: any) => (
     <View style={styles.friends}>
       {item.avatar && item.avatar !== "" ? (
         <Image
@@ -29,10 +36,9 @@ export const GroupInfo = ({
           style={{ width: 40, height: 40, borderRadius: 20 }}
         />
       ) : (
-        <Ionicons name="person-circle-sharp" size={30} color="black" />
+        <Ionicons name="person-circle-sharp" size={40} color="black" />
       )}
       <Text style={styles.friendsName}>{item.name}</Text>
-      {/* <SimpleLineIcons name="options-vertical" size={20} /> */}
     </View>
   );
   const FriendsView = () => {
@@ -41,7 +47,7 @@ export const GroupInfo = ({
         {groupInfo ? (
           <FlatList
             data={groupInfo.users}
-            renderItem={renderItem}
+            renderItem={renderMembers}
             keyExtractor={(item) => item._id}
           />
         ) : (
@@ -56,7 +62,7 @@ export const GroupInfo = ({
       <View style={styles.container}>
         <View style={styles.groupInfoContainer}>
           <Text
-            style={{ fontSize: 42, fontWeight: "bold", paddingHorizontal: 10 }}
+            style={{ fontSize: 32, fontWeight: "bold", paddingHorizontal: 20 }}
           >
             {groupInfo ? groupInfo.name : "Loading.."}
           </Text>
@@ -88,11 +94,13 @@ export const GroupInfo = ({
           </Text>
         </View>
         <View style={styles.groupsSelectorContainer}>
-          <TouchableHighlight
-            underlayColor="none"
-            style={[
+          <Pressable
+            style={({ pressed }) => [
               styles.groupsSelectorText,
-              { backgroundColor: sessionsSelected ? "white" : "#313B68" },
+              {
+                backgroundColor: sessionsSelected ? "white" : "#313B68",
+                opacity: pressed ? 0.8 : 1,
+              },
             ]}
             onPress={() => setsessionsSelected(false)}
           >
@@ -104,12 +112,14 @@ export const GroupInfo = ({
             >
               Members
             </Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor="none"
-            style={[
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
               styles.groupsSelectorText,
-              { backgroundColor: !sessionsSelected ? "white" : "#313B68" },
+              {
+                backgroundColor: !sessionsSelected ? "white" : "#313B68",
+                opacity: pressed ? 0.8 : 1,
+              },
             ]}
             onPress={() => setsessionsSelected(true)}
           >
@@ -121,7 +131,7 @@ export const GroupInfo = ({
             >
               Sessions
             </Text>
-          </TouchableHighlight>
+          </Pressable>
         </View>
         {sessionsSelected ? null : <FriendsView />}
       </View>
