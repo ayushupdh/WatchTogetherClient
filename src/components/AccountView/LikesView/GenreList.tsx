@@ -1,5 +1,12 @@
 import React from "react";
-import { Pressable, View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  Pressable,
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 
 type GenreListProps = {
   data: string[] | undefined;
@@ -7,24 +14,15 @@ type GenreListProps = {
 };
 export const GenreList = (props: GenreListProps) => {
   const renderGenres = ({ item }: { item: string }) => {
+    console.log(item);
     return (
       <>
-        <Pressable
-          style={({ pressed }) => [
-            styles.genreBox,
-            { opacity: pressed ? 0.5 : 1 },
-          ]}
-          onPress={() => props.onSelect(item)}
-        >
-          <Text style={styles.genreText}>{item}</Text>
-        </Pressable>
         {props.data && props.data.length === 1 && (
           <Pressable
             style={({ pressed }) => [
               styles.crossBox,
               {
                 opacity: pressed ? 0.5 : 1,
-                backgroundColor: pressed ? "red" : "white",
               },
             ]}
             onPress={() => props.onSelect(item)}
@@ -32,6 +30,29 @@ export const GenreList = (props: GenreListProps) => {
             <Text style={styles.crossBoxText}>x</Text>
           </Pressable>
         )}
+        <Pressable
+          style={({ pressed }) => [
+            styles.genreBox,
+            {
+              opacity: pressed ? 0.5 : 1,
+              backgroundColor:
+                props.data && props.data.length === 1 ? "#313B68" : "white",
+            },
+          ]}
+          onPress={() => props.onSelect(item)}
+        >
+          <Text
+            style={[
+              styles.genreText,
+              {
+                color:
+                  props.data && props.data.length === 1 ? "white" : "black",
+              },
+            ]}
+          >
+            {item}
+          </Text>
+        </Pressable>
       </>
     );
   };
@@ -68,9 +89,9 @@ const styles = StyleSheet.create({
   },
   crossBox: {
     paddingHorizontal: 15,
-    borderColor: "red",
+    paddingVertical: 8,
+    backgroundColor: "#313B68",
     margin: 5,
-    borderWidth: 2,
     borderRadius: 40,
     shadowOffset: { width: 5, height: 4 },
     shadowColor: "#000",
@@ -78,5 +99,9 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: "center",
   },
-  crossBoxText: { fontSize: 20, fontWeight: "600" },
+  crossBoxText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "white",
+  },
 });
