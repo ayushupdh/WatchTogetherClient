@@ -96,6 +96,27 @@ export const searchUsers = async (username: string) => {
     return { response, error };
   }
 };
+export const getFriends = async () => {
+  let friends = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const response = await server.get("/users/me/friend");
+    const friensList = response.data.friends;
+    // const groupNames = response.data.groups.map((group: any) => {
+    //   return {
+    //     name: group.name,
+    //     id: group._id,
+    //   };
+    // });
+    friends = friensList;
+    return { friends, error };
+  } catch (e) {
+    error = e.message;
+    return { friends, error };
+  }
+};
 
 export const addFriend = async (username: string) => {
   let error = null;

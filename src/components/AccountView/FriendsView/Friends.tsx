@@ -1,6 +1,4 @@
-import React, { useRef, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Image,
@@ -10,13 +8,13 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import { useGetFriends } from "../../../hooks/useGetFriends";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Styles } from "../styles";
 import { AccountNavProps } from "../Navigation/AccountTypes";
 import { Modalize } from "react-native-modalize";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
+import { getFriends } from "../../../utils/userdbUtils";
 
 type FriendsType = {
   _id: string;
@@ -25,24 +23,29 @@ type FriendsType = {
   avatar: string;
 };
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
-  const {
-    friends,
-    loading,
-    error,
-  }: {
-    friends: readonly FriendsType[] | null;
-    loading: boolean;
-    error: string | null;
-  } = useGetFriends();
+  const [friends, setFriends] = useState<readonly FriendsType[] | null>();
+  const [loading, setLoading] = useState(false);
+
   const [selectedUser, setUser] = useState("");
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", async () => {
+      setLoading(true);
+      const { friends, error } = await getFriends();
+      setFriends(friends);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const modalRef = useRef<Modalize>();
   const openModal = (id: string) => {
     setUser(id);
     modalRef.current?.open();
   };
-  const closeModal = () => {
+  const closeModal = async () => {
     modalRef.current?.close();
+    const { friends, error } = await getFriends();
+    setFriends(friends);
   };
 
   const renderFriends = ({ item }: { item: FriendsType }) => {
