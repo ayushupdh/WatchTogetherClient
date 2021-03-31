@@ -12,12 +12,16 @@ import {
 import { styles } from "./styles";
 import { useGroupsInfo } from "../../hooks/useGroupsInfo";
 import { GroupsNavProps } from "./Navigation/GroupsTypes";
+import { UserViewModal } from "../UserViewModal/FriendViewModal";
+import { Modalize } from "react-native-modalize";
+import { UserAvatar } from "../UserViewModal/UserAvatar";
 
 export const GroupInfo = ({
   navigation,
   route,
 }: GroupsNavProps<"GroupInfo">) => {
   const [sessionsSelected, setsessionsSelected] = useState(false);
+  const [selectedUser, setUser] = useState("");
 
   const groupId = route.params.groupId;
 
@@ -28,18 +32,21 @@ export const GroupInfo = ({
     }
   }, [groupInfo]);
 
+  const modalRef = useRef<Modalize>();
+
+  const showModal = (id: string) => {
+    setUser(id);
+    modalRef.current?.open();
+  };
+  const handleClose = () => {
+    modalRef.current?.close();
+  };
+
   const renderMembers = ({ item }: any) => (
-    <View style={styles.friends}>
-      {item.avatar && item.avatar !== "" ? (
-        <Image
-          source={{ uri: item.avatar }}
-          style={{ width: 40, height: 40, borderRadius: 20 }}
-        />
-      ) : (
-        <Ionicons name="person-circle-sharp" size={40} color="black" />
-      )}
+    <Pressable style={styles.friends} onPress={() => showModal(item._id)}>
+      <UserAvatar avatar={item.avatar} size={40} borderRadius={20} />
       <Text style={styles.friendsName}>{item.name}</Text>
-    </View>
+    </Pressable>
   );
   const FriendsView = () => {
     return (
@@ -134,6 +141,11 @@ export const GroupInfo = ({
           </Pressable>
         </View>
         {sessionsSelected ? null : <FriendsView />}
+        <UserViewModal
+          modalRef={modalRef}
+          userID={selectedUser}
+          closeModal={handleClose}
+        />
       </View>
     );
   } else {

@@ -6,6 +6,7 @@ import { AddFriendModal } from "./AddFriendModal";
 import { CustomButton } from "../UtilComponents/CustomButton";
 import { UserAvatar } from "./UserAvatar";
 import { showAlert } from "../UtilComponents/Alert";
+import { useSelector } from "react-redux";
 
 type UserType = {
   name: string;
@@ -23,24 +24,32 @@ type UserViewModalProps = {
   closeModal: () => void;
 };
 export const UserViewModal = (props: UserViewModalProps) => {
+  const self = useSelector(({ auth }: { auth: { user: any } }) => auth.user);
   const [user, setUser] = useState<UserType>();
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
-
-    (async () => {
-      const { user, error } = await getOtherUsersInfo(props.userID);
-      setUser(user);
+    if (props.userID === self._id) {
+      setUser(self);
       setLoading(false);
-    })();
-  }, [props.userID]);
+    } else {
+      (async () => {
+        const { user, error } = await getOtherUsersInfo(props.userID);
+        setUser(user);
+        setLoading(false);
+      })();
+    }
+  }, [props]);
   return (
     <Modalize ref={props.modalRef} adjustToContentHeight>
       {!user || loading ? (
         <ActivityIndicator style={styles.fullFlex} />
       ) : (
-        <UserView user={user} handleClose={props.closeModal}></UserView>
+        <UserView
+          self={props.userID === self._id}
+          user={user}
+          handleClose={props.closeModal}
+        ></UserView>
       )}
     </Modalize>
   );
@@ -49,9 +58,11 @@ export const UserViewModal = (props: UserViewModalProps) => {
 export const UserView = ({
   user,
   handleClose,
+  self,
 }: {
   user: UserType;
   handleClose: () => void;
+  self: boolean;
 }) => {
   const handleRemove = () => {
     showAlert({
@@ -65,40 +76,55 @@ export const UserView = ({
       },
     });
   };
-
-  if (user.isFriend) {
+  if (self) {
     return (
       <View style={styles.container}>
         <View style={styles.rowContainer}>
           <UserAvatar avatar={user.avatar} />
           <View style={styles.colContainer}>
             <Text adjustsFontSizeToFit style={styles.name} numberOfLines={2}>
-              {user.name}
+              You
             </Text>
-
             <Text style={styles.username}>@{user.username}</Text>
-            <Text style={styles.friends}>Is Friends with you</Text>
           </View>
         </View>
-        <View style={styles.bottomContainer}>
-          <View style={styles.centerDiv}>
-            <Text style={styles.name}> Groups</Text>
-            <Text style={styles.largeText}>{user.groups}</Text>
-          </View>
-          <View style={styles.centerDiv}>
-            <Text style={styles.name}> Movies Liked</Text>
-            <Text style={styles.largeText}>{user.liked_movies}</Text>
-          </View>
-        </View>
-        <CustomButton
-          style={styles.button}
-          text="Remove as a friend"
-          onPressHandler={handleRemove}
-        />
       </View>
     );
   } else {
-    return <AddFriendModal user={user} handleClose={handleClose} />;
+    if (user.isFriend) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.rowContainer}>
+            <UserAvatar avatar={user.avatar} />
+            <View style={styles.colContainer}>
+              <Text adjustsFontSizeToFit style={styles.name} numberOfLines={2}>
+                {user.name}
+              </Text>
+
+              <Text style={styles.username}>@{user.username}</Text>
+              <Text style={styles.friends}>Is Friends with you</Text>
+            </View>
+          </View>
+          <View style={styles.bottomContainer}>
+            <View style={styles.centerDiv}>
+              <Text style={styles.name}> Groups</Text>
+              <Text style={styles.largeText}>{user.groups}</Text>
+            </View>
+            <View style={styles.centerDiv}>
+              <Text style={styles.name}> Movies Liked</Text>
+              <Text style={styles.largeText}>{user.liked_movies}</Text>
+            </View>
+          </View>
+          <CustomButton
+            style={styles.button}
+            text="Remove as a friend"
+            onPressHandler={handleRemove}
+          />
+        </View>
+      );
+    } else {
+      return <AddFriendModal user={user} handleClose={handleClose} />;
+    }
   }
 };
 
