@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Text, View } from "react-native";
-import { Center } from "../UtilComponents/Center";
-import { useGetGroups } from "../../hooks/useGetGroups";
 import { styles } from "./styles";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { CustomButton } from "../UtilComponents/CustomButton";

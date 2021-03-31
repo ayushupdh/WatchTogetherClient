@@ -5,14 +5,12 @@ import { FontAwesome } from "@expo/vector-icons";
 type UserAvatarProps = {
   avatar: string | undefined;
   size?: number;
-  border?: boolean;
   borderRadius?: number;
 };
 export const UserAvatar = ({
   avatar,
   size = 150,
   borderRadius = 10,
-  border = true,
 }: UserAvatarProps) => {
   return avatar && avatar !== "" ? (
     <Image
@@ -22,12 +20,11 @@ export const UserAvatar = ({
   ) : (
     <View
       style={{
-        borderWidth: border ? 1 : 0,
         width: size,
         height: size,
         borderRadius,
         alignItems: "center",
-        backgroundColor: "#fafafa",
+        backgroundColor: "#e9e9e9",
       }}
     >
       <FontAwesome

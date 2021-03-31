@@ -55,12 +55,7 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
         style={Styles.friends}
         onPress={() => openModal(item._id)}
       >
-        <UserAvatar
-          avatar={item.avatar}
-          size={35}
-          borderRadius={30}
-          border={false}
-        />
+        <UserAvatar avatar={item.avatar} size={35} borderRadius={30} />
         <Text style={Styles.friendsName}> {item.name}</Text>
       </Pressable>
     );

@@ -46,12 +46,7 @@ export const AddFreind = (props: AddFreindProps) => {
   const renderItem = ({ item }: any) => {
     return (
       <View style={Styles.friends}>
-        <UserAvatar
-          avatar={item.avatar}
-          size={35}
-          borderRadius={30}
-          border={false}
-        />
+        <UserAvatar avatar={item.avatar} size={35} borderRadius={30} />
         <Text
           style={Styles.friendsName}
           onPress={() => {
