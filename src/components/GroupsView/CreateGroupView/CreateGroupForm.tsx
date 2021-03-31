@@ -1,14 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 import { FormField } from "../FormField";
 import { GroupsDataType, GroupsNavProps } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Timer } from "../../UtilComponents/Timer";
-import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { showAlert } from "../../UtilComponents/Alert";
 import { createGroup } from "../../../utils/userdbUtils";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { store } from "../../../redux/store";
 import {
   END_SESSION,
@@ -129,7 +128,6 @@ export const CreateGroupForm = ({
       }
       navigation.navigate("Add a Friend", {
         groupName: name,
-        groupId: route.params?.groupId,
       });
     } else {
       showAlert({

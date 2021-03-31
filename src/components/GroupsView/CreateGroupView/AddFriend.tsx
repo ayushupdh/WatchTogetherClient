@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { FlatList, Image, Text, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Pressable, Text, View, ScrollView } from "react-native";
 import { FormField } from "../FormField";
 import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
@@ -12,10 +12,11 @@ import {
   removeUserFromGroup,
   searchFriends,
 } from "../../../utils/userdbUtils";
-import { TouchableWithoutFeedback } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import { showAlert } from "../../UtilComponents/Alert";
 import { useSelector } from "react-redux";
+import { Modalize } from "react-native-modalize";
+import { UserViewModal } from "../../UserViewModal/FriendViewModal";
+import { UserAvatar } from "../../UserViewModal/UserAvatar";
 
 type UserType = { name: string; _id: string; avatar: string };
 
@@ -25,6 +26,7 @@ export const AddFriend = ({
 }: GroupsNavProps<"Add a Friend">) => {
   const [modal, showModal] = useState(false);
   const [input, setInput] = useState<string>("");
+  const [clickedUser, setUser] = useState<string>("");
   const groupID = useSelector(
     ({ session }: { session: { groupID: string } }) => session.groupID
   );
@@ -38,17 +40,34 @@ export const AddFriend = ({
 
   useLayoutEffect(() => {
     (async () => {
-      if (route.params?.groupId) {
-        const { response, error } = await getGroupUsers(route.params?.groupId);
-        if (response && response.length > 0) {
-          let users = response.filter((user) => {
-            return user._id !== userID;
-          });
-          setDisplayedFriends(users);
-        }
+      const { response, error } = await getGroupUsers(groupID);
+      if (response && response.length > 0) {
+        let users = response.filter((user) => {
+          return user._id !== userID;
+        });
+        setDisplayedFriends(users);
       }
     })();
   }, []);
+
+  // For userModals
+  const modalRef = useRef<Modalize>();
+
+  const showUserModal = (id: string) => {
+    setUser(id);
+    modalRef.current?.open();
+  };
+  const handleModalClose = async () => {
+    const { response, error } = await getGroupUsers(groupID);
+    if (response && response.length > 0) {
+      let users = response.filter((user) => {
+        return user._id !== userID;
+      });
+      setDisplayedFriends(users);
+    }
+    modalRef.current?.close();
+  };
+
   const addFriendsToGroup = async (selectedUser: UserType) => {
     showModal(false);
 
@@ -82,15 +101,12 @@ export const AddFriend = ({
   const displayFriendsList = () => {
     return displayedFriends.map((friend) => {
       return (
-        <View key={friend._id} style={styles.friendsNotjoined}>
-          {friend.avatar && friend.avatar !== "" ? (
-            <Image
-              source={{ uri: friend.avatar }}
-              style={{ width: 30, height: 30, borderRadius: 20 }}
-            />
-          ) : (
-            <Ionicons name="person-circle-sharp" size={30} color="black" />
-          )}
+        <Pressable
+          onPress={() => showUserModal(friend._id)}
+          key={friend._id}
+          style={styles.friendsNotjoined}
+        >
+          <UserAvatar avatar={friend.avatar} size={30} borderRadius={20} />
           <Text style={styles.friendsName}>{friend.name}</Text>
           <MaterialIcons
             style={{ alignSelf: "center" }}
@@ -99,16 +115,13 @@ export const AddFriend = ({
             size={24}
             color="#aaa"
           />
-        </View>
+        </Pressable>
       );
     });
   };
 
   return (
-    <TouchableWithoutFeedback
-      style={{ flex: 1, alignItems: "center" }}
-      onPress={() => showModal(false)}
-    >
+    <Pressable style={{ flex: 1 }} onPress={() => showModal(false)}>
       <ScrollView
         contentContainerStyle={{ alignItems: "center" }}
         style={{ flex: 1, backgroundColor: "#E2EAF4" }}
@@ -173,6 +186,11 @@ export const AddFriend = ({
           />
         </View>
       </ScrollView>
-    </TouchableWithoutFeedback>
+      <UserViewModal
+        modalRef={modalRef}
+        userID={clickedUser}
+        closeModal={handleModalClose}
+      />
+    </Pressable>
   );
 };

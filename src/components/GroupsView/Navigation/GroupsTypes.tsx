@@ -9,18 +9,15 @@ export type GroupsParamList = {
         groupId: string | undefined;
       }
     | undefined;
-  "Add a Friend":
-    | {
-        groupName: string | undefined;
-        groupId: string | undefined;
-      }
-    | undefined;
+  "Add a Friend": {
+    groupName: string;
+  };
 
   SwipingView: {
     groupName: string | undefined;
   };
   GroupInfo: {
-    groupId: string | undefined;
+    groupId: string;
   };
   "Select Options": {
     groupId: string | undefined;
