@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Text, Image, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 
-import { AuthPayload, LOAD_USER, SIGN_OUT } from "../../redux/types/Authtypes";
-import { Center } from "../UtilComponents/Center";
+import { AuthPayload, SIGN_OUT } from "../../redux/types/Authtypes";
+
 import { CustomButton } from "../UtilComponents/CustomButton";
 import { Styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,14 +16,15 @@ export const AccountMain = ({
   const user = useSelector(
     ({ auth }: { auth: { user: AuthPayload } }) => auth.user
   );
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem("userToken");
     dispatch({
       type: SIGN_OUT,
     });
   };
+
   return (
     <View style={Styles.container}>
       <View style={Styles.avatarContainer}>

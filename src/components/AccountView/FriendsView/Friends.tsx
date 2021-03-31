@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 import {
@@ -8,12 +8,15 @@ import {
   FlatList,
   TextInput,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useGetFriends } from "../../../hooks/useGetFriends";
-import { Center } from "../../UtilComponents/Center";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Styles } from "../styles";
 import { AccountNavProps } from "../Navigation/AccountTypes";
+import { Modalize } from "react-native-modalize";
+import { UserViewModal } from "../../UserViewModal/FriendViewModal";
+import { UserAvatar } from "../../UserViewModal/UserAvatar";
 
 type FriendsType = {
   _id: string;
@@ -31,24 +34,36 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
     loading: boolean;
     error: string | null;
   } = useGetFriends();
+  const [selectedUser, setUser] = useState("");
 
-  const renderFriendsList = ({ item }: { item: FriendsType }) => {
+  const modalRef = useRef<Modalize>();
+  const openModal = (id: string) => {
+    setUser(id);
+    modalRef.current?.open();
+  };
+  const closeModal = () => {
+    modalRef.current?.close();
+  };
+
+  const renderFriends = ({ item }: { item: FriendsType }) => {
     return (
-      <View key={item._id} style={Styles.friends}>
-        {item.avatar && item.avatar !== "" ? (
-          <Image
-            source={{ uri: item.avatar }}
-            style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
-        ) : (
-          <Ionicons name="person-circle-sharp" size={40} color="black" />
-        )}
+      <Pressable
+        key={item._id}
+        style={Styles.friends}
+        onPress={() => openModal(item._id)}
+      >
+        <UserAvatar
+          avatar={item.avatar}
+          size={35}
+          borderRadius={30}
+          border={false}
+        />
         <Text style={Styles.friendsName}> {item.name}</Text>
-      </View>
+      </Pressable>
     );
   };
 
-  const renderFriends = () => {
+  const renderFriendsComponent = () => {
     if (friends && friends.length !== 0) {
       return (
         <>
@@ -64,15 +79,15 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
           </TextInput>
           <FlatList
             contentContainerStyle={{ paddingVertical: 20 }}
-            renderItem={renderFriendsList}
+            renderItem={renderFriends}
             data={friends}
             keyExtractor={(item: FriendsType) => item._id}
           />
-          {/* {friends.map(
-            (friend: { _id: string; name: string; username: string }) => {
-              
-            }
-          )} */}
+          <UserViewModal
+            modalRef={modalRef}
+            userID={selectedUser}
+            closeModal={closeModal}
+          />
         </>
       );
     } else {
@@ -106,6 +121,10 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
   if (loading) {
     return <ActivityIndicator style={{ flex: 1 }} />;
   } else {
-    return <View style={Styles.container}>{friends && renderFriends()}</View>;
+    return (
+      <View style={Styles.container}>
+        {friends && renderFriendsComponent()}
+      </View>
+    );
   }
 };

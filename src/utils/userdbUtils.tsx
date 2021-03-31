@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { server } from "../api/server";
 import { setAuthToken } from "./authToken";
+type UserType = { name: string; _id: string; avatar: string };
 
 // Removes typescript error for Formdate on changeUserProfile function
 declare global {
@@ -104,6 +105,22 @@ export const addFriend = async (username: string) => {
     setAuthToken(token);
     const r = await server.patch("/users/me/friend", {
       friend: username,
+    });
+    response = "OK";
+    return { response, error };
+  } catch (e) {
+    error = e.message;
+    return { response, error };
+  }
+};
+export const removeFriend = async (userID: string) => {
+  let error = null;
+  let response = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const r = await server.delete("/users/me/friend", {
+      params: { id: userID },
     });
     response = "OK";
     return { response, error };
@@ -242,6 +259,20 @@ export const getUserGroups = async () => {
   }
 };
 
+export const getGroupUsers = async (groupID: string) => {
+  let response: UserType[] | null = null;
+  let error: string | null = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get(`/groups/${groupID}/users`);
+    const users: UserType[] | undefined = res.data.users;
+    return { response: users, error };
+  } catch (e) {
+    return { response, error: e.message };
+  }
+};
+
 export const addUserToGroup = async (groupId: string, userId: string) => {
   let response = null;
   let error = null;
@@ -269,6 +300,25 @@ export const removeUserFromGroup = async (groupId: string, userId: string) => {
     response = "OK";
     return { response, error };
   } catch (e) {
+    console.log(e);
     return { response, error: e.message };
+  }
+};
+
+export const getOtherUsersInfo = async (userId: string) => {
+  let user: any = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/users/me/otherUserInfo", {
+      params: {
+        id: userId,
+      },
+    });
+    return { user: res.data, error };
+  } catch (error) {
+    error = error.message;
+    return { user, error };
   }
 };

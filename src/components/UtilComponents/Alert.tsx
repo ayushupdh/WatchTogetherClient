@@ -12,7 +12,7 @@ export const showAlert = (props: AlertProp) => {
   Alert.alert(props.firstText, props.secondText ? props.secondText : "", [
     {
       text: props.firstButtonText,
-      style: "cancel",
+      style: "destructive",
       onPress: props.firstButtonHandleClose
         ? props.firstButtonHandleClose
         : () => {},
@@ -20,7 +20,7 @@ export const showAlert = (props: AlertProp) => {
     props.secondButtonText
       ? {
           text: props.secondButtonText,
-          style: "cancel",
+          style: "default",
           onPress: props.secondButtonHandleClose
             ? props.secondButtonHandleClose
             : () => {},

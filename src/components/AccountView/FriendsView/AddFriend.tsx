@@ -5,19 +5,22 @@ import { FormField } from "../../GroupsView/FormField";
 import { Styles } from "../styles";
 import { searchUsers } from "../../../utils/userdbUtils";
 import { Modalize } from "react-native-modalize";
-import { AddFriendModal } from "./AddFriendModal";
+import { AddFriendModal } from "../../UserViewModal/AddFriendModal";
+import { UserViewModal } from "../../UserViewModal/UserViewModal";
+import { UserAvatar } from "../../UserViewModal/UserAvatar";
 
 type AddFreindProps = {};
 export const AddFreind = (props: AddFreindProps) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUser, setUser] = useState({});
+  const [selectedUser, setUser] = useState("");
   const [error, setError] = useState("");
   const [first, setFirst] = useState(true);
   const [foundUsers, setUserList] = useState([]);
-  const modalizeRef = useRef<Modalize>(null);
 
-  const onPressHandler = (user: any) => {
-    setUser(user);
+  const modalizeRef = useRef<Modalize>();
+
+  const onPressHandler = (userID: string) => {
+    setUser(userID);
     modalizeRef.current?.open();
   };
 
@@ -43,18 +46,16 @@ export const AddFreind = (props: AddFreindProps) => {
   const renderItem = ({ item }: any) => {
     return (
       <View style={Styles.friends}>
-        {item.avatar && item.avatar !== "" ? (
-          <Image
-            source={{ uri: item.avatar }}
-            style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
-        ) : (
-          <Ionicons name="person-circle-sharp" size={30} color="black" />
-        )}
+        <UserAvatar
+          avatar={item.avatar}
+          size={35}
+          borderRadius={30}
+          border={false}
+        />
         <Text
           style={Styles.friendsName}
           onPress={() => {
-            onPressHandler(item);
+            onPressHandler(item._id);
           }}
         >
           {item.name}
@@ -112,14 +113,19 @@ export const AddFreind = (props: AddFreindProps) => {
         }}
       />
       {loadBody()}
-      <Modalize ref={modalizeRef} adjustToContentHeight>
+      <UserViewModal
+        modalRef={modalizeRef}
+        userID={selectedUser}
+        closeModal={closeModal}
+      />
+      {/* <Modalize ref={modalizeRef} adjustToContentHeight>
         <AddFriendModal
           user={selectedUser}
           handleClose={() => {
             closeModal();
           }}
         />
-      </Modalize>
+      </Modalize> */}
     </View>
   );
 };
