@@ -98,7 +98,6 @@ export const CreateGroupForm = ({
     if (name !== "") {
       if (!sessionRunning) {
         let groupId = route.params?.groupId;
-        console.log(groupId);
         if (!groupId) {
           const { response, error } = await createGroup(
             name,
@@ -130,6 +129,7 @@ export const CreateGroupForm = ({
       }
       navigation.navigate("Add a Friend", {
         groupName: name,
+        groupId: route.params?.groupId,
       });
     } else {
       showAlert({
@@ -162,7 +162,6 @@ export const CreateGroupForm = ({
             )}
             <Timer time={time} setTime={setTime} />
 
-            {/* select genres */}
             <Text style={styles.groupTitle}>Select Genres</Text>
             <View style={styles.selectionContainer}>
               {groupData.genres.map((p) => (
@@ -177,7 +176,6 @@ export const CreateGroupForm = ({
                 flex: 1,
               }}
             ></View>
-            {/* select Lang */}
             <Text style={styles.groupTitle}>Select Languages</Text>
 
             <View style={styles.selectionContainer}>

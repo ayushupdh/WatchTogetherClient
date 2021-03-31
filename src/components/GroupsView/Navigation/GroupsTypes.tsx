@@ -5,25 +5,26 @@ export type GroupsParamList = {
   "Your Groups": undefined;
   "Create a Group":
     | {
-        groupName: string;
-        groupId: string;
+        groupName: string | undefined;
+        groupId: string | undefined;
       }
     | undefined;
   "Add a Friend":
     | {
-        groupName: string;
+        groupName: string | undefined;
+        groupId: string | undefined;
       }
     | undefined;
 
   SwipingView: {
-    groupName: string;
+    groupName: string | undefined;
   };
   GroupInfo: {
-    groupId: string;
+    groupId: string | undefined;
   };
   "Select Options": {
-    groupId: string;
-    groupName: string;
+    groupId: string | undefined;
+    groupName: string | undefined;
   };
 };
 

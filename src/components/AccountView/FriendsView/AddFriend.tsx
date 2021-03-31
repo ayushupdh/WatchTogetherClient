@@ -6,7 +6,7 @@ import { Styles } from "../styles";
 import { searchUsers } from "../../../utils/userdbUtils";
 import { Modalize } from "react-native-modalize";
 import { AddFriendModal } from "../../UserViewModal/AddFriendModal";
-import { UserViewModal } from "../../UserViewModal/UserViewModal";
+import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
 
 type AddFreindProps = {};

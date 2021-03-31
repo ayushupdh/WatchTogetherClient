@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { FlatList, Image, Text, View } from "react-native";
 import { FormField } from "../FormField";
@@ -8,6 +8,7 @@ import { GroupsNavProps } from "../Navigation/GroupsTypes";
 import { ModalDropDown } from "../../UtilComponents/ModalDropDown";
 import {
   addUserToGroup,
+  getGroupUsers,
   removeUserFromGroup,
   searchFriends,
 } from "../../../utils/userdbUtils";
@@ -27,11 +28,27 @@ export const AddFriend = ({
   const groupID = useSelector(
     ({ session }: { session: { groupID: string } }) => session.groupID
   );
+  const userID = useSelector(
+    ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
+  );
   const [fetchedFriendList, setFetchedFriendsList] = useState<
     UserType[] | null
   >(null);
   const [displayedFriends, setDisplayedFriends] = useState<UserType[]>([]);
 
+  useLayoutEffect(() => {
+    (async () => {
+      if (route.params?.groupId) {
+        const { response, error } = await getGroupUsers(route.params?.groupId);
+        if (response && response.length > 0) {
+          let users = response.filter((user) => {
+            return user._id !== userID;
+          });
+          setDisplayedFriends(users);
+        }
+      }
+    })();
+  }, []);
   const addFriendsToGroup = async (selectedUser: UserType) => {
     showModal(false);
 
