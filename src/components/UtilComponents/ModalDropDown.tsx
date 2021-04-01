@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Text, ActivityIndicator } from "react-native";
+import { View, Image, Text, ActivityIndicator, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 type ModalDropDownProps = {
@@ -27,13 +27,19 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
           {props.data &&
             props.data.map((datas) => {
               return (
-                <View
-                  key={datas._id}
-                  style={{
-                    flexDirection: "row",
-                    padding: 10,
-                    alignSelf: "flex-start",
+                <Pressable
+                  onPress={() => {
+                    props.onClick(datas);
                   }}
+                  key={datas._id}
+                  style={({ pressed }) => [
+                    {
+                      backgroundColor: pressed ? "#f1f1f1" : "#fff",
+                      flexDirection: "row",
+                      padding: 10,
+                      alignSelf: "flex-start",
+                    },
+                  ]}
                 >
                   {datas.avatar && datas.avatar !== "" ? (
                     <Image
@@ -56,13 +62,10 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
                       fontWeight: "500",
                       alignSelf: "center",
                     }}
-                    onPress={() => {
-                      props.onClick(datas);
-                    }}
                   >
                     {datas.name}
                   </Text>
-                </View>
+                </Pressable>
               );
             })}
         </View>
