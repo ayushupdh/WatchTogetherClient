@@ -106,7 +106,7 @@ export const Styles = StyleSheet.create({
     borderRadius: 40,
   },
   addFriendContainer: {
-    backgroundColor: "#F78473",
+    backgroundColor: "#37BEB0",
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 30,

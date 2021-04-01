@@ -146,7 +146,7 @@ const SelectionButtons = (props: any) => {
         style={{
           paddingHorizontal: 15,
           paddingVertical: 5,
-          backgroundColor: state ? "#F78473" : "#f4f4f4",
+          backgroundColor: state ? "#37BEB0" : "#f4f4f4",
           marginHorizontal: 8,
           marginVertical: 8,
           borderRadius: 20,

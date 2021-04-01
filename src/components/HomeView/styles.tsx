@@ -21,7 +21,7 @@ export const Styles = StyleSheet.create({
   },
   groupsButton: {
     width: "70%",
-    backgroundColor: "#F78473",
+    backgroundColor: "#37BEB0",
     padding: 10,
     borderRadius: 30,
     marginBottom: 20,

@@ -68,7 +68,7 @@ export const SwipingView = ({
           style={{
             paddingHorizontal: 10,
             marginTop: 10,
-            backgroundColor: "#F78473",
+            backgroundColor: "#37BEB0",
             borderRadius: 20,
             flexDirection: "row",
             alignItems: "center",

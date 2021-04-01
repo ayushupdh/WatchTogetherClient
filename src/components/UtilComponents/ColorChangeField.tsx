@@ -27,7 +27,7 @@ export const ColorChangeButton = (props: ColorChangeButtonProps) => {
       onPress={() => changedClicked((prevState) => !prevState)}
       style={{
         padding: 10,
-        backgroundColor: clicked ? "#F78473" : "#f4f4f4",
+        backgroundColor: clicked ? "#37BEB0" : "#f4f4f4",
         marginHorizontal: 8,
         marginVertical: 8,
         borderRadius: 20,

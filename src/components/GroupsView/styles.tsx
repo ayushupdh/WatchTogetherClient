@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   timerContainer: {
-    backgroundColor: "#F78473",
+    backgroundColor: "#37BEB0",
     padding: 12,
     borderWidth: 2,
   },
@@ -46,9 +46,9 @@ export const styles = StyleSheet.create({
     marginVertical: 20,
   },
   createButton: {
-    backgroundColor: "#F78473",
+    backgroundColor: "#37BEB0",
     paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     borderRadius: 30,
     shadowOffset: { width: 5, height: 4 },
     shadowColor: "#000",
@@ -98,6 +98,13 @@ export const styles = StyleSheet.create({
     backgroundColor: "red",
     borderRadius: 4,
     marginRight: 10,
+  },
+  sessionRunningDot: {
+    padding: 5,
+    backgroundColor: "red",
+    borderRadius: 10,
+    marginRight: 10,
+    alignSelf: "center",
   },
   groupName: {
     flex: 1,

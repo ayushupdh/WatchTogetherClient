@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
-    backgroundColor: "#F78473",
+    backgroundColor: "#37BEB0",
     alignSelf: "center",
   },
 });
