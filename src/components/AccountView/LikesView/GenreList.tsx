@@ -14,7 +14,6 @@ type GenreListProps = {
 };
 export const GenreList = (props: GenreListProps) => {
   const renderGenres = ({ item }: { item: string }) => {
-    console.log(item);
     return (
       <>
         {props.data && props.data.length === 1 && (

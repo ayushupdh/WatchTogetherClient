@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Text, View, StyleSheet, Button, StatusBar, Alert } from "react-native";
@@ -14,7 +14,16 @@ export const SwipingView = ({
   navigation,
 }: GroupsNavProps<"SwipingView">) => {
   const dispatch = useDispatch();
-
+  const [movieFinish, setMovieFinish] = useState(false);
+  const handleMovieFinish = () => {
+    setMovieFinish(true);
+  };
+  const navigateBack = () => {
+    navigation.popToTop();
+    dispatch({
+      type: END_SESSION,
+    });
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,
@@ -35,31 +44,31 @@ export const SwipingView = ({
     });
   }, [navigation]);
   useEffect(() => {
-    navigation.addListener("beforeRemove", (e) => {
+    const unsubsribe = navigation.addListener("beforeRemove", (e) => {
       // Prevent default behavior of leaving the screen
-      e.preventDefault();
-      // Prompt the user before leaving the screen
-      Alert.alert("Do you wanna exit?", "This will end the session", [
-        { text: "Don't leave", style: "cancel", onPress: () => {} },
-        {
-          text: "Exit",
-          style: "destructive",
-          // If the user confirmed, then we dispatch the action we blocked earlier
-          // This will continue the action that had triggered the removal of the screen
-          onPress: () => {
-            navigation.dispatch(e.data.action);
-            navigation.popToTop();
-            dispatch({
-              type: END_SESSION,
-            });
+      if (!movieFinish) {
+        e.preventDefault();
+        // Prompt the user before leaving the screen
+        Alert.alert("Do you wanna exit?", "This will end the session", [
+          { text: "Don't leave", style: "cancel", onPress: () => {} },
+          {
+            text: "Exit",
+            style: "destructive",
+            // If the user confirmed, then we dispatch the action we blocked earlier
+            // This will continue the action that had triggered the removal of the screen
+            onPress: () => {
+              navigation.dispatch(e.data.action);
+              navigation.popToTop();
+              dispatch({
+                type: END_SESSION,
+              });
+            },
           },
-        },
-      ]);
+        ]);
+      }
     });
-    return () => {
-      navigation.removeListener("beforeRemove", () => {});
-    };
-  }, [navigation]);
+    return unsubsribe;
+  }, [navigation, movieFinish]);
 
   return (
     <View style={styles.container}>
@@ -87,7 +96,10 @@ export const SwipingView = ({
         </View>
       )}
 
-      <SwipeCard />
+      <SwipeCard
+        onMovieFinish={handleMovieFinish}
+        navigateBack={navigateBack}
+      />
     </View>
   );
 };

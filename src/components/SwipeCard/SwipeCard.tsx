@@ -6,22 +6,30 @@ import {
   Text,
 } from "react-native";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
-
 import Swiper from "react-native-deck-swiper";
-import { useGetMovies } from "../../hooks/useGetMovies";
 import { Card } from "./Card";
 import { Modalize } from "react-native-modalize";
 import { MovieInfoModal } from "./MovieInfoModal";
 import { useHeaderHeight } from "@react-navigation/stack";
 import { OverlayLabel } from "./Overlay";
-import { addDislikedMovie, addLikedMovie } from "../../utils/userdbUtils";
+import {
+  addDislikedMovie,
+  addLikedMovie,
+  getMoviesForUser,
+} from "../../utils/userdbUtils";
 import { server } from "../../api/server";
-import { GroupsNavProps } from "../GroupsView/Navigation/GroupsTypes";
 import { useSelector } from "react-redux";
 import { SessionType } from "../../redux/reducers/sessionReducers";
+import { CustomButton } from "../UtilComponents/CustomButton";
 
 type SwipeCardProps = {};
-export const SwipeCard = () => {
+export const SwipeCard = ({
+  onMovieFinish,
+  navigateBack,
+}: {
+  onMovieFinish: () => void;
+  navigateBack: () => void;
+}) => {
   // Store array of movies
   const [movies, setMovies] = useState<any>([]);
   // Store card index
@@ -48,21 +56,21 @@ export const SwipeCard = () => {
   }, []);
 
   const reloadCards = async () => {
-    const response = await server.get("/movies/getNRandom", {
-      params: {
-        qty: 15,
-        genres: params?.genres,
-        lang: params?.lang,
-        providers: params?.providers,
-      },
-    });
-    const m = response.data;
+    const { response, error } = await getMoviesForUser(
+      15,
+      params?.genres,
+      params?.lang,
+      params?.providers
+    );
+    if (response.length === 0) {
+      onMovieFinish();
+    }
     // This worked previously, but can be memory drain
     // setMovies((prev: any) => prev.concat(m));
-    setMovies(m); //THis works with setindex to zero
+    setMovies(response); //THis works with setindex to zero
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 200);
   };
 
   // Open modal to display movie info
@@ -211,6 +219,33 @@ export const SwipeCard = () => {
           <MovieInfoModal info={state} />
         </Modalize>
       </>
+    );
+  } else if (movies.length === 0 && !loading) {
+    return (
+      <View
+        style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}
+      >
+        <Text style={{ fontSize: 20, textAlign: "center" }}>
+          No more movies to present for the selected options. You might want to
+          go back and select different options!
+        </Text>
+        <CustomButton
+          text="Go Back"
+          style={{
+            marginTop: 10,
+            borderWidth: 1,
+            borderColor: "#313B68",
+            borderRadius: 10,
+            padding: 10,
+            alignSelf: "center",
+            backgroundColor: "transparent",
+          }}
+          onPressHandler={() => {
+            navigateBack();
+          }}
+          textStyle={{ color: "#313B68" }}
+        />
+      </View>
     );
   } else {
     return (

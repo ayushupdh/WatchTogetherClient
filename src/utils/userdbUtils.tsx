@@ -38,6 +38,34 @@ export const loadUser = async () => {
   }
 };
 
+//----------------User Movie Routes----------------
+export const getMoviesForUser = async (
+  qty: number = 20,
+  genres?: string[],
+  lang?: string[],
+  providers?: string[]
+) => {
+  let error = null;
+  let response = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/users/me/movies", {
+      params: {
+        qty,
+        genres,
+        lang,
+        providers,
+      },
+    });
+    response = res.data;
+    return { response, error };
+  } catch (e) {
+    error = e;
+    return { response, error };
+  }
+};
+
 export const getLikedMovies = async () => {
   let error = null;
   let response = null;
@@ -82,6 +110,8 @@ export const addDislikedMovie = async (movieId: string) => {
     return { response, error };
   }
 };
+
+//----------------User Movie Routes Ends----------------
 
 export const searchUsers = async (username: string) => {
   let error = null;
