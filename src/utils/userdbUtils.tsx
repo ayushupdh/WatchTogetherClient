@@ -17,6 +17,7 @@ declare global {
     set(name: string, value: FormDataValue, fileName?: string): void;
   }
 }
+// ---------------------User routes ------------------------
 export const loadUser = async () => {
   let user: any = null;
   let error = null;
@@ -169,28 +170,6 @@ export const searchFriends = async (username: string) => {
     return { response, error };
   }
 };
-
-export const createGroup = async (groupName: string, time: string) => {
-  let error = null;
-  let response = null;
-  try {
-    const t = time.split(" ");
-    const sessiontime = parseInt(t[0], 10) * 60 + parseInt(t[1], 10);
-    const token = await AsyncStorage.getItem("userToken");
-    setAuthToken(token);
-    const res = await server.post("/groups/create", {
-      name: groupName,
-      current_session_time: sessiontime,
-    });
-
-    response = res.data._id;
-    return { response, error };
-  } catch (e) {
-    error = e.message;
-    return { response, error };
-  }
-};
-
 export const changeUserInfo = async (
   name?: string,
   username?: string,
@@ -259,7 +238,6 @@ export const changeUserProfile = async (data: { uri: string }) => {
     return { response, error };
   }
 };
-
 export const getUserGroups = async () => {
   let groups = null;
   let error = null;
@@ -267,16 +245,51 @@ export const getUserGroups = async () => {
     const token = await AsyncStorage.getItem("userToken");
     setAuthToken(token);
     const response = await server.get("/users/me/groups");
-    const groupNames = response.data.groups.map((group: any) => {
-      return {
-        name: group.name,
-        id: group._id,
-      };
-    });
-    groups = groupNames;
+    groups = response.data.groups;
     return { groups, error };
   } catch (e) {
     return { groups, error: e.message };
+  }
+};
+export const getOtherUsersInfo = async (userId: string) => {
+  let user: any = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/users/me/otherUserInfo", {
+      params: {
+        id: userId,
+      },
+    });
+    return { user: res.data, error };
+  } catch (error) {
+    error = error.message;
+    return { user, error };
+  }
+};
+
+// ---------------------User routes  end------------------------
+
+// ---------------------Group routes------------------------
+export const createGroup = async (groupName: string, time: string) => {
+  let error = null;
+  let response = null;
+  try {
+    const t = time.split(" ");
+    const sessiontime = parseInt(t[0], 10) * 60 + parseInt(t[1], 10);
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.post("/groups/create", {
+      name: groupName,
+      current_session_time: sessiontime,
+    });
+
+    response = res.data._id;
+    return { response, error };
+  } catch (e) {
+    error = e.message;
+    return { response, error };
   }
 };
 
@@ -326,20 +339,100 @@ export const removeUserFromGroup = async (groupId: string, userId: string) => {
   }
 };
 
-export const getOtherUsersInfo = async (userId: string) => {
-  let user: any = null;
+export const createSession = async (
+  groupID: string,
+  userID: string,
+  current_session_time: number,
+  genres: string[],
+  lang: [],
+  platform: []
+) => {
+  let response = null;
   let error = null;
   try {
     const token = await AsyncStorage.getItem("userToken");
     setAuthToken(token);
-    const res = await server.get("/users/me/otherUserInfo", {
-      params: {
-        id: userId,
-      },
+    const res = await server.post("/groups/session", {
+      groupID,
+      userID,
+      current_session_time,
+      genres,
+      lang,
+      platform,
     });
-    return { user: res.data, error };
-  } catch (error) {
-    error = error.message;
-    return { user, error };
+    response = res.data.session;
+    return { response, error };
+  } catch (e) {
+    error = e.message;
+    return { response, error };
   }
 };
+
+export const endSession = async (groupID: string) => {
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    await server.post("/groups/session/end", {
+      groupID,
+    });
+    return true;
+  } catch (error) {
+    error = error.message;
+    return false;
+  }
+};
+
+export const addUserToSession = async (userID: string, sessionID: string) => {
+  let response = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    await server.post("/groups/session/addusers", {
+      userID,
+      sessionID,
+    });
+    return { response: true, error };
+  } catch (error) {
+    error = error.message;
+    return { response, error };
+  }
+};
+export const removeUserFromSession = async (
+  userID: string,
+  sessionID: string
+) => {
+  let response = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    await server.post("/groups/session/removeusers", {
+      userID,
+      sessionID,
+    });
+    return { response: true, error };
+  } catch (error) {
+    error = error.message;
+    return { response, error };
+  }
+};
+export const getActiveSessionUsers = async (sessionID: string) => {
+  let response = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/groups/session/users", {
+      params: {
+        sessionID,
+      },
+    });
+    return { response: res.data.users, error };
+  } catch (error) {
+    error = error.message;
+    return { response, error };
+  }
+};
+
+// ---------------------Group routes  end------------------------
