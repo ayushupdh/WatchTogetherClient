@@ -10,7 +10,8 @@ import { styles } from "../styles";
 type GroupOptionModalProps = {
   group: {
     name: string;
-    id: string;
+    _id: string;
+    session_active: boolean;
   };
   nav: StackNavigationProp<GroupsParamList, "Your Groups">;
   close: () => void;
@@ -25,7 +26,7 @@ export const GroupOptionModal = ({
   );
 
   const handleRemove = async () => {
-    await removeUserFromGroup(group.id, userID);
+    await removeUserFromGroup(group._id, userID);
     close();
   };
 
@@ -33,7 +34,7 @@ export const GroupOptionModal = ({
     close();
     nav.navigate("Create a Group", {
       groupName: group.name,
-      groupId: group.id,
+      groupId: group._id,
     });
   };
   return (
@@ -46,7 +47,7 @@ export const GroupOptionModal = ({
       }}
     >
       <CustomButton
-        text="Start new session"
+        text={group.session_active ? "Join the session" : "Start new session"}
         style={styles.optionModalButton}
         textStyle={{ fontSize: 22, color: "black" }}
         onPressHandler={handleStart}

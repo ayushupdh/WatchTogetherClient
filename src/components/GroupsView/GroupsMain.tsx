@@ -10,7 +10,8 @@ import { getUserGroups } from "../../utils/userdbUtils";
 
 type GroupType = {
   name: string;
-  id: string;
+  _id: string;
+  session_active: boolean;
 };
 type GetGroupsType = {
   groups: GroupType[] | [];
@@ -21,7 +22,8 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
   const [groups, setGroups] = useState<GetGroupsType["groups"]>();
   const [groupSelected, setGroupSelected] = useState<GroupType>({
     name: "",
-    id: "",
+    _id: "",
+    session_active: false,
   });
   const modalizeRef = useRef<Modalize>();
 
@@ -41,15 +43,21 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     return (
       <View style={styles.item}>
         <View style={[styles.smallDot, { backgroundColor: randomColor }]} />
+        {item.session_active && (
+          <View
+            style={[styles.sessionRunningDot, { backgroundColor: "green" }]}
+          />
+        )}
         <Text
           numberOfLines={1}
           style={styles.groupName}
           onPress={() => {
-            navigation.navigate("GroupInfo", { groupId: item.id });
+            navigation.navigate("GroupInfo", { groupId: item._id });
           }}
         >
           {item.name}
         </Text>
+
         <SimpleLineIcons
           name="options-vertical"
           size={20}
@@ -79,13 +87,14 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
               <CustomButton
                 text="Create a Group"
                 style={styles.createButton}
+                textStyle={{ fontWeight: "600" }}
                 onPressHandler={() => navigation.navigate("Create a Group")}
               />
             </View>
             <FlatList
               data={groups}
               renderItem={renderGroupList}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
             />
           </>
         ) : (
