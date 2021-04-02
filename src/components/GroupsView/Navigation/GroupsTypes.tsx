@@ -5,8 +5,8 @@ export type GroupsParamList = {
   "Your Groups": undefined;
   "Create a Group":
     | {
-        groupName: string | undefined;
-        groupId: string | undefined;
+        groupName: string;
+        groupId: string;
       }
     | undefined;
   "Add a Friend": {
