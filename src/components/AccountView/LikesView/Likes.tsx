@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   TouchableWithoutFeedback,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { getLikedMovies } from "../../../utils/userdbUtils";
@@ -24,7 +25,7 @@ type MovieType = {
   genres: string[];
 };
 export const Likes = () => {
-  const [movies, setMovies] = useState<MovieType[]>();
+  const [movies, setMovies] = useState<MovieType[]>([]);
   const [genreList, setGenreList] = useState<string[]>();
   const [selectedMovie, setselectedMovie] = useState("");
   const [selectedGenre, setselectedGenre] = useState("");
@@ -34,6 +35,9 @@ export const Likes = () => {
   useEffect(() => {
     (async () => {
       const { response, error } = await getLikedMovies();
+      if (error) {
+        return console.log(error);
+      }
       setMovies(response);
       const s: Set<string> = new Set();
       response.forEach((el: MovieType) => {
@@ -65,7 +69,9 @@ export const Likes = () => {
     setselectedMovie(id);
     modalizeRef.current?.open();
   };
-
+  if (movies.length === 0) {
+    return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+  }
   return (
     <View style={{ ...Styles.container, paddingTop: 0 }}>
       <GenreList
