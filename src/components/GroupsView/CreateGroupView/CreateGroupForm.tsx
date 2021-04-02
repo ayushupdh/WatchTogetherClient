@@ -8,6 +8,11 @@ import { Timer } from "../../UtilComponents/Timer";
 import { showAlert } from "../../UtilComponents/Alert";
 import { createGroup } from "../../../utils/userdbUtils";
 import { useDispatch } from "react-redux";
+import {
+  endGroupSession,
+  startGroupSession,
+  updateParams,
+} from "../../../redux/actions/sessionAction";
 import { store } from "../../../redux/store";
 import {
   END_SESSION,
@@ -63,9 +68,7 @@ export const CreateGroupForm = ({
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       if (sessionRunning) {
-        dispatch({
-          type: END_SESSION,
-        });
+        endGroupSession(dispatch);
       }
     });
     return unsubscribe;
@@ -95,6 +98,7 @@ export const CreateGroupForm = ({
 
   const handleNext = async () => {
     if (name !== "") {
+      // If session is not running: on first start
       if (!sessionRunning) {
         let groupId = route.params?.groupId;
         if (!groupId) {
@@ -104,31 +108,32 @@ export const CreateGroupForm = ({
           );
           groupId = response;
         }
-
-        dispatch({
-          type: START_SESSION,
-          payload: {
-            sessionType: "Group",
-            groupID: groupId,
+        startGroupSession(
+          {
+            groupID: groupId ? groupId : "",
             sessionRunning: true,
             genres: genres,
             providers: provider,
             lang: lang,
           },
-        });
+          dispatch
+        );
+        // If session is running: user went back and wants to update params
       } else {
-        dispatch({
-          type: UPDATE_PARAMS,
-          payload: {
+        updateParams(
+          {
             genres: genres,
             providers: provider,
             lang: lang,
           },
-        });
+          dispatch
+        );
       }
+      // Navigate to Add a friend regardless
       navigation.navigate("Add a Friend", {
         groupName: name,
       });
+      // If the name input is empty, show the alert
     } else {
       showAlert({
         firstText: "Group Name is required",

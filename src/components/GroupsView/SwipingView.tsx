@@ -8,6 +8,10 @@ import { styles } from "./styles";
 import { SwipeCard } from "../SwipeCard/SwipeCard";
 import { useDispatch } from "react-redux";
 import { END_SESSION } from "../../redux/types/SessionTypes";
+import {
+  endGroupSession,
+  endSingleSession,
+} from "../../redux/actions/sessionAction";
 
 export const SwipingView = ({
   route,
@@ -19,10 +23,10 @@ export const SwipingView = ({
     setMovieFinish(true);
   };
   const navigateBack = () => {
-    navigation.popToTop();
-    dispatch({
-      type: END_SESSION,
-    });
+    navigation.goBack();
+    if (!route.params.groupName) {
+      endSingleSession(dispatch);
+    }
   };
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,9 +63,10 @@ export const SwipingView = ({
             onPress: () => {
               navigation.dispatch(e.data.action);
               navigation.popToTop();
-              dispatch({
-                type: END_SESSION,
-              });
+
+              if (!route.params.groupName) {
+                endSingleSession(dispatch);
+              }
             },
           },
         ]);

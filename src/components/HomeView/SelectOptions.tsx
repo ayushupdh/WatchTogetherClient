@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
+import { startSingleSession } from "../../redux/actions/sessionAction";
 import { START_SESSION } from "../../redux/types/SessionTypes";
 import { Styles } from "../AccountView/styles";
 import { ColorChangeField } from "../UtilComponents/ColorChangeField";
@@ -14,7 +15,7 @@ export const SelectOptions = ({
 }: HomeViewNavProps<"Select options">) => {
   const [genres, setGenres] = useState<string[]>([]);
   const [lang, setLang] = useState<string[]>([]);
-  const [provider, setProvider] = useState<string[]>([]);
+  const [providers, setProvider] = useState<string[]>([]);
   const dispatch = useDispatch();
   const genreList = [
     { text: "Action", _id: "123754 " },
@@ -59,15 +60,16 @@ export const SelectOptions = ({
     }
   };
   const handleStart = () => {
-    dispatch({
-      type: START_SESSION,
-      payload: {
-        sessionType: "Single",
-        genres,
-        providers: provider,
-        lang,
-      },
-    });
+    startSingleSession({ genres, providers, lang }, dispatch);
+    // dispatch({
+    //   type: START_SESSION,
+    //   payload: {
+    //     sessionType: "Single",
+    //     genres,
+    //     providers: providers,
+    //     lang,
+    //   },
+    // });
 
     navigation.navigate("SwipingView", { groupName: "Single" });
   };
