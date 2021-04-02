@@ -12,6 +12,7 @@ export type LoginDataType={
 
 export type UserType={
     username:string;
+    _id:string
 }
 
 

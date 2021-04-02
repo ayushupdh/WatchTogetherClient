@@ -6,17 +6,21 @@ import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
+import { initListeners } from "./components/io/initListeners";
+import { socketClient } from "./components/io/io";
+import { emitter } from "./components/io/session.emit";
+
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
-  const [
-    user,
-    token,
-  ] = useSelector(
-    ({ auth }: { auth: { user: UserType; userToken: string } }) => [
-      auth.user,
-      auth.userToken,
-    ]
+  const { user, token } = useSelector(
+    ({ auth }: { auth: { user: UserType; userToken: string } }) => {
+      return {
+        user: auth.user,
+        token: auth.userToken,
+      };
+    }
   );
+
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   //TODO:  Work on opening login only when the server says unauthorized
@@ -73,6 +77,12 @@ export const AppEntry = () => {
     loadUser().then(() => setLoading(false));
     // setLoading(false);
   }, []);
+  useEffect(() => {
+    initListeners(socketClient);
+    if (user) {
+      emitter.setID(user._id);
+    }
+  }, [user]);
 
   if (loading) {
     return <ActivityIndicator style={{ flex: 1 }} />;
