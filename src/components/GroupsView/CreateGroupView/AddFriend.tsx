@@ -39,16 +39,18 @@ export const AddFriend = ({
   const [displayedFriends, setDisplayedFriends] = useState<UserType[]>([]);
 
   useLayoutEffect(() => {
-    (async () => {
-      const { response, error } = await getGroupUsers(groupID);
-      if (response && response.length > 0) {
-        let users = response.filter((user) => {
-          return user._id !== userID;
-        });
-        setDisplayedFriends(users);
-      }
-    })();
-  }, []);
+    if (groupID) {
+      (async () => {
+        const { response, error } = await getGroupUsers(groupID);
+        if (response && response.length > 0) {
+          let users = response.filter((user) => {
+            return user._id !== userID;
+          });
+          setDisplayedFriends(users);
+        }
+      })();
+    }
+  }, [groupID]);
 
   // For userModals
   const modalRef = useRef<Modalize>();
