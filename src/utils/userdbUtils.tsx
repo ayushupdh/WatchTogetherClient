@@ -76,7 +76,7 @@ export const getLikedMovies = async () => {
     response = res.data;
     return { response, error };
   } catch (e) {
-    error = e;
+    error = e.message;
     return { response, error };
   }
 };

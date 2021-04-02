@@ -6,9 +6,9 @@ import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
-import { initListeners } from "./components/io/initListeners";
+import { initListeners } from "./components/io/io.listeners";
 import { socketClient } from "./components/io/io";
-import { emitter } from "./components/io/session.emit";
+import { emitter } from "./components/io/io.emit";
 
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
