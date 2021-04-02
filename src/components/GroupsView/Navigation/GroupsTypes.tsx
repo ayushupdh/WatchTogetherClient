@@ -7,6 +7,7 @@ export type GroupsParamList = {
     | {
         groupName: string;
         groupId: string;
+        sessionID: string | null;
       }
     | undefined;
   "Add a Friend": {

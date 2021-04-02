@@ -9,7 +9,7 @@ export type SessionType = {
   sessionRunning: boolean;
   sessionID?: string | null;
   groupID: string | null;
-
+  admin: string | null;
   sessionParams: {
     genres?: string[];
     lang?: string[];
@@ -21,6 +21,7 @@ const initialState: SessionType = {
   sessionRunning: false,
   groupID: null,
   sessionID: null,
+  admin: null,
   sessionParams: {
     genres: [],
     providers: [],
@@ -42,6 +43,7 @@ export default (
         sessionRunning: true,
         groupID: payload?.groupID,
         sessionID: payload?.sessionID,
+        admin: payload?.admin,
         sessionParams: {
           genres: payload?.genres,
           providers: payload?.providers,

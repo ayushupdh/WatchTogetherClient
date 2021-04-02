@@ -17,7 +17,8 @@ export const startGroupSession = async (
   dispatch: Dispatch<any>
 ) => {
   try {
-    let session = await emitter.startSession(
+    console.log("1");
+    let { session, admin } = await emitter.startSession(
       payload.groupID,
       0,
       payload.genres,
@@ -32,6 +33,7 @@ export const startGroupSession = async (
       payload: {
         sessionType: "Group",
         sessionID: session,
+        admin,
         ...payload,
       },
     });
@@ -53,6 +55,24 @@ export const startSingleSession = (
     },
   });
 };
+
+export const joinSessionPopulate = (
+  payload: {
+    groupID: string;
+    sessionID: string;
+  },
+  dispatch: Dispatch<any>
+) => {
+  dispatch({
+    type: START_SESSION,
+    payload: {
+      sessionType: "Group",
+      sessionRunning: true,
+      ...payload,
+    },
+  });
+};
+
 export const updateParams = (
   payload: { genres: string[]; providers: string[]; lang: string[] },
   dispatch: Dispatch<any>

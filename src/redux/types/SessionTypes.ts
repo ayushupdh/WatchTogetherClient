@@ -15,4 +15,5 @@ export type START_SESSION_PAYLOADTYPE = {
   lang?: string[];
   groupID?: string;
   sessionID?: string;
+  admin?: string;
 };

@@ -12,6 +12,7 @@ type GroupType = {
   name: string;
   _id: string;
   session_active: boolean;
+  current_session?: string;
 };
 type GetGroupsType = {
   groups: GroupType[] | [];

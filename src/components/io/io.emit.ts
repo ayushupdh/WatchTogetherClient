@@ -15,7 +15,7 @@ export const emitter = {
           if (args.error) {
             reject(args.error);
           }
-          resolve(args.session);
+          resolve({ session: args.session, admin: args.admin });
         }
       );
     });
