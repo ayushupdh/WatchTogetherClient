@@ -8,15 +8,14 @@ import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
-  // const user = useSelector(
-  //   (state: { user: UserType; token: string }) => state.user
-  // );
-  const user = useSelector(
-    ({ auth }: { auth: { user: UserType } }) => auth.user
-  );
-  const token = useSelector(
-    ({ auth }: { auth: { user: UserType; userToken: string } }) =>
-      auth.userToken
+  const [
+    user,
+    token,
+  ] = useSelector(
+    ({ auth }: { auth: { user: UserType; userToken: string } }) => [
+      auth.user,
+      auth.userToken,
+    ]
   );
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -42,16 +41,31 @@ export const AppEntry = () => {
       // If the user is unauthorised first time, remove the authtoken to reduce api calls
       if (error.response && error.response.status === 401) {
         await AsyncStorage.removeItem("userToken");
+        await AsyncStorage.removeItem("user");
         return false;
       }
     }
-    dispatch({
-      type: LOAD_USER,
-      payload: {
-        user: response.data,
-        token: fetchedtoken,
-      },
-    });
+    if (response) {
+      dispatch({
+        type: LOAD_USER,
+        payload: {
+          user: response.data,
+          token: fetchedtoken,
+        },
+      });
+      AsyncStorage.setItem("user", JSON.stringify(response.data));
+    } else {
+      let usr = await AsyncStorage.getItem("user");
+      usr = JSON.parse(usr ? usr : "");
+
+      dispatch({
+        type: LOAD_USER,
+        payload: {
+          user: usr,
+          token: fetchedtoken,
+        },
+      });
+    }
   };
 
   useEffect(() => {
