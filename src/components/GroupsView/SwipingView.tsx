@@ -8,10 +8,7 @@ import { styles } from "./styles";
 import { SwipeCard } from "../SwipeCard/SwipeCard";
 import { useDispatch } from "react-redux";
 import { END_SESSION } from "../../redux/types/SessionTypes";
-import {
-  endGroupSession,
-  endSingleSession,
-} from "../../redux/actions/sessionAction";
+import { endSingleSession } from "../../redux/actions/sessionAction";
 
 export const SwipingView = ({
   route,

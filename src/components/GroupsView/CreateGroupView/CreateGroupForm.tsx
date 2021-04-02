@@ -14,11 +14,7 @@ import {
   updateParams,
 } from "../../../redux/actions/sessionAction";
 import { store } from "../../../redux/store";
-import {
-  END_SESSION,
-  START_SESSION,
-  UPDATE_PARAMS,
-} from "../../../redux/types/SessionTypes";
+
 export const CreateGroupForm = ({
   navigation,
   route,
@@ -67,9 +63,9 @@ export const CreateGroupForm = ({
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-      if (sessionRunning) {
-        endGroupSession(dispatch);
-      }
+      // if (sessionRunning) {
+      //   endGroupSession(dispatch);
+      // }
     });
     return unsubscribe;
   }, [sessionRunning, navigation]);
@@ -118,6 +114,7 @@ export const CreateGroupForm = ({
           },
           dispatch
         );
+
         // If session is running: user went back and wants to update params
       } else {
         updateParams(
