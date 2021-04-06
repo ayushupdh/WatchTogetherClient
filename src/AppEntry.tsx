@@ -60,8 +60,9 @@ export const AppEntry = () => {
       AsyncStorage.setItem("user", JSON.stringify(response.data));
     } else {
       let usr = await AsyncStorage.getItem("user");
-      usr = JSON.parse(usr ? usr : "");
+      console.log(usr);
 
+      usr = JSON.parse(usr ? usr : "");
       dispatch({
         type: LOAD_USER,
         payload: {
@@ -74,8 +75,9 @@ export const AppEntry = () => {
 
   useEffect(() => {
     setLoading(true);
-    loadUser().then(() => setLoading(false));
-    // setLoading(false);
+    loadUser().then(() => {
+      setLoading(false);
+    });
   }, []);
   useEffect(() => {
     initListeners(socketClient);

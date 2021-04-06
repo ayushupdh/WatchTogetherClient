@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useRef, useState } from "react";
-import { Image, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Image, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
 import { SIGN_UP } from "../../redux/types/Authtypes";
@@ -17,7 +17,6 @@ type UserData = {
 };
 
 //! TO DO: Build a modal that pops up for error messages
-//! Figure out a better way to handle these many state(handle password hide)
 const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   // States for user, password hide/show, error
   const [userData, setUserData] = useState<UserData>({
@@ -30,6 +29,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   const [passwordVerify, setPassword] = useState({ password: "", hide: true });
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Reducers dispatch
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
         },
       });
     } catch (e) {
+      console.log(e);
       if (e.response && e.response.data.error) {
         return setError(e.response.data.error);
       }
@@ -67,12 +68,20 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   const passwordRef: any = useRef();
   const secondPasswordRef: any = useRef();
 
-  const onSignUp = () => {
+  const onSignUp = async () => {
+    if (userData.username.length < 3) {
+      return setError("Username must have atleast three letters");
+    }
+    if (userData.password.length < 6) {
+      return setError("Password must have atleast six letters");
+    }
     setError("");
     if (userData.password !== passwordVerify.password) {
       return setError("Passwords do not match");
     }
-    signup();
+    setLoading(true);
+    await signup();
+    setLoading(false);
   };
 
   return (
@@ -181,26 +190,32 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
         )}
       </View>
       {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
-      <CustomButton
-        onPressHandler={onSignUp}
-        text={"Signup"}
-        style={
-          userData.username === "" ||
-          userData.password === "" ||
-          userData.email === "" ||
-          userData.name === "" ||
-          passwordVerify.password === ""
-            ? Styles.disabledButton
-            : Styles.button
-        }
-        disabled={
-          userData.username === "" ||
-          userData.password === "" ||
-          userData.email === "" ||
-          userData.name === "" ||
-          passwordVerify.password === ""
-        }
-      />
+      {loading ? (
+        <View style={{ ...Styles.button, padding: 25 }}>
+          <ActivityIndicator style={{ flex: 1 }} color="#fff" />
+        </View>
+      ) : (
+        <CustomButton
+          onPressHandler={onSignUp}
+          text={"Signup"}
+          style={
+            userData.username === "" ||
+            userData.password === "" ||
+            userData.email === "" ||
+            userData.name === "" ||
+            passwordVerify.password === ""
+              ? Styles.disabledButton
+              : Styles.button
+          }
+          disabled={
+            userData.username === "" ||
+            userData.password === "" ||
+            userData.email === "" ||
+            userData.name === "" ||
+            passwordVerify.password === ""
+          }
+        />
+      )}
       <View style={Styles.bottomTextContainer}>
         <Text style={Styles.bottomPlainText}>I have an account!</Text>
         <Text

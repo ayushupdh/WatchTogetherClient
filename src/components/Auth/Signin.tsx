@@ -1,6 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createRef, useState } from "react";
-import { Image, Switch, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
 import { SIGN_IN } from "../../redux/types/Authtypes";
@@ -19,6 +26,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
 
   const [error, setError] = useState("");
   const [hidePassword, setHidePassword] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Reducer dispatch
   const dispatch = useDispatch();
@@ -45,15 +53,17 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         },
       });
     } catch (e) {
-      if (e && e.message === "Network Error") {
-        return setError("Internet is unavailable");
+      if (e.response && e.response.data) {
+        return setError(e.response.data.error);
       }
       setError("Invalid username or password");
     }
   };
   // For future if ever need to add more checks before login
   const onSigninPress = async () => {
+    setLoading(true);
     await login();
+    setLoading(false);
   };
 
   // Password refs for next on
@@ -105,18 +115,22 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         )}
       </View>
       {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
-
-      <CustomButton
-        onPressHandler={onSigninPress}
-        text={"Login"}
-        style={
-          userData.username === "" || userData.password === ""
-            ? Styles.disabledButton
-            : Styles.button
-        }
-        disabled={userData.username === "" || userData.password === ""}
-      />
-
+      {loading ? (
+        <View style={{ ...Styles.button, padding: 25 }}>
+          <ActivityIndicator style={{ flex: 1 }} color="#fff" />
+        </View>
+      ) : (
+        <CustomButton
+          onPressHandler={onSigninPress}
+          text={"Login"}
+          style={
+            userData.username === "" || userData.password === ""
+              ? Styles.disabledButton
+              : Styles.button
+          }
+          disabled={userData.username === "" || userData.password === ""}
+        />
+      )}
       <View style={Styles.bottomTextContainer}>
         <Text style={Styles.bottomPlainText}>I am a new user!</Text>
         <Text
