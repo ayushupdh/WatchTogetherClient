@@ -25,6 +25,7 @@ export const SwipingView = ({
       endSingleSession(dispatch);
     }
   };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,
@@ -71,10 +72,9 @@ export const SwipingView = ({
     });
     return unsubsribe;
   }, [navigation, movieFinish]);
-
   return (
     <View style={styles.container}>
-      {route.params.groupName === "Single Session" ? null : (
+      {route.params.groupName === "Single" ? null : (
         <View
           style={{
             paddingHorizontal: 10,
@@ -85,8 +85,8 @@ export const SwipingView = ({
             alignItems: "center",
           }}
         >
-          {/* <Ionicons name="time-outline" size={20} color="white" /> */}
-          {/* <Text
+          <Ionicons name="time-outline" size={20} color="white" />
+          <Text
             style={{
               fontSize: 20,
               color: "white",
@@ -94,13 +94,14 @@ export const SwipingView = ({
             }}
           >
             5:00
-          </Text> */}
+          </Text>
         </View>
       )}
 
       <SwipeCard
         onMovieFinish={handleMovieFinish}
         navigateBack={navigateBack}
+        groupType={route.params.groupName === "Single" ? "Single" : "Group"}
       />
     </View>
   );

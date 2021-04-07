@@ -57,6 +57,20 @@ export const emitter = {
       });
     });
   },
+  getMoviesForSession: (sessionID: string, currentIndex: number) => {
+    return new Promise<any>((resolve, reject) => {
+      socket.emit(
+        "get-movies",
+        { sessionID, currentIndex },
+        ({ movies, error }: any) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(movies);
+        }
+      );
+    });
+  },
 
   setID: (_id: string) => {
     socket.emit("set-id", { _id });

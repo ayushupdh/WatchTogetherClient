@@ -115,7 +115,12 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
         )}
       </View>
 
-      <Modalize ref={modalizeRef} adjustToContentHeight={true}>
+      <Modalize
+        ref={modalizeRef}
+        modalStyle={{ backgroundColor: "#E2EAF4" }}
+        // adjustToContentHeight={true}
+        modalHeight={190}
+      >
         <GroupOptionModal
           nav={navigation}
           group={groupSelected}

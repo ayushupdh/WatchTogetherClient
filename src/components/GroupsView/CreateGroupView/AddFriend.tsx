@@ -85,11 +85,14 @@ export const AddFriend = ({
     socketClient.on("user-left", (joinedID) => {
       changeUserList(joinedID, "left");
     });
+    socketClient.on("session-started", (joinedID) => {
+      navigation.navigate("SwipingView", { groupName: route.params.groupName });
+    });
     return () => {
       socketClient.off("user-joined");
       socketClient.off("user-left");
     };
-  }, [displayedFriends]);
+  }, [navigation, displayedFriends]);
   // For userModals
   const modalRef = useRef<Modalize>();
 

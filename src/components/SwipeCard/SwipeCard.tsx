@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  useWindowDimensions,
   View,
   Text,
+  StyleSheet,
+  useWindowDimensions,
 } from "react-native";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import Swiper from "react-native-deck-swiper";
 import { Card } from "./Card";
 import { Modalize } from "react-native-modalize";
 import { MovieInfoModal } from "./MovieInfoModal";
-import { useHeaderHeight } from "@react-navigation/stack";
+
 import { OverlayLabel } from "./Overlay";
 import {
   addDislikedMovie,
@@ -21,6 +22,9 @@ import { server } from "../../api/server";
 import { useSelector } from "react-redux";
 import { SessionType } from "../../redux/reducers/sessionReducers";
 import { CustomButton } from "../UtilComponents/CustomButton";
+import { socketClient } from "../io/io";
+import { emitter } from "../io/io.emit";
+import { useHeaderHeight } from "@react-navigation/stack";
 
 type Movies = {
   _id: string;
@@ -31,12 +35,17 @@ type Movies = {
 export const SwipeCard = ({
   onMovieFinish,
   navigateBack,
+  groupType,
 }: {
   onMovieFinish: () => void;
   navigateBack: () => void;
+  groupType: "Single" | "Group";
 }) => {
   // Store array of movies
   const [movies, setMovies] = useState<Movies[]>([]);
+  const sessionID = useSelector(
+    ({ session }: { session: { sessionID: string } }) => session.sessionID
+  );
   // Store card index
   const [cardIndex, setIndex] = useState(0);
   // Ref for movie info modal
@@ -56,28 +65,48 @@ export const SwipeCard = ({
     swipedRight: false,
     swipedLeft: false,
   });
+  let currentIndex = 0;
+  // useEffect(() => {
+  //   if (groupType === "Group") {
+  //     reloadCards();
+
+  //   }
+  // }, [sessionID, groupType, currentIndex]);
+
   useEffect(() => {
     reloadCards();
-  }, []);
+  }, [sessionID, groupType, currentIndex]);
 
   const reloadCards = async () => {
-    const { response, error } = await getMoviesForUser(
-      15,
-      params?.genres,
-      params?.lang,
-      params?.providers
-    );
-    if (response.length === 0) {
-      onMovieFinish();
-    }
-    // This worked previously, but can be memory drain
-    // setMovies((prev: any) => prev.concat(m));
-    setMovies(response); //THis works with setindex to zero
-    setTimeout(() => {
+    if (groupType === "Single") {
+      const { response, error } = await getMoviesForUser(
+        15,
+        params?.genres,
+        params?.lang,
+        params?.providers
+      );
+      if (response.length === 0) {
+        onMovieFinish();
+      }
+      // This worked previously, but can be memory drain
+      // setMovies((prev: any) => prev.concat(m));
+      setMovies(response); //THis works with setindex to zero
+      setTimeout(() => {
+        setLoading(false);
+      }, 200);
+    } else {
+      setLoading(true);
+      if (sessionID) {
+        const movies = await emitter.getMoviesForSession(
+          sessionID,
+          currentIndex
+        );
+        setMovies(movies);
+        currentIndex += movies.length;
+      }
       setLoading(false);
-    }, 200);
+    }
   };
-
   // Open modal to display movie info
   const onPressHandler = (movieID: string) => {
     // Set the movie index of the clicked card
@@ -86,9 +115,8 @@ export const SwipeCard = ({
   };
 
   // Get window dimensions for swiping card
-  const windowHeight = useWindowDimensions().height;
+  const windowHeight = useWindowDimensions();
   const headerHeight = useHeaderHeight();
-
   // Functions to handle liked and disliked movie cards
   const handleLike = async (index: any) => {
     const movieID = movies[index]["_id"];
@@ -171,21 +199,9 @@ export const SwipeCard = ({
             style={{
               position: "absolute",
               right: 10,
-              top: (windowHeight - headerHeight) / 2.5,
             }}
           >
-            <View
-              style={{
-                padding: 10,
-                backgroundColor: "white",
-                borderRadius: 50,
-                shadowOffset: { width: 5, height: 4 },
-                shadowColor: "#000",
-                shadowOpacity: 0.4,
-                marginBottom: 20,
-                elevation: 5,
-              }}
-            >
+            <View style={styles.likeButton}>
               <FontAwesome name="heart" size={30} color="red" />
             </View>
           </View>
@@ -195,21 +211,9 @@ export const SwipeCard = ({
             style={{
               position: "absolute",
               left: 10,
-              top: (windowHeight - headerHeight) / 2.5,
             }}
           >
-            <View
-              style={{
-                padding: 10,
-                backgroundColor: "white",
-                borderRadius: 50,
-                shadowOffset: { width: 5, height: 4 },
-                shadowColor: "#000",
-                shadowOpacity: 0.4,
-                marginBottom: 20,
-                elevation: 5,
-              }}
-            >
+            <View style={styles.dislikeButton}>
               <AntDesign name="dislike1" size={30} color="#313B68" />
             </View>
           </View>
@@ -218,7 +222,7 @@ export const SwipeCard = ({
         <Modalize
           ref={modalizeRef}
           snapPoint={500}
-          modalHeight={windowHeight - headerHeight - 100}
+          // modalHeight={windowHeight.height - headerHeight - 100}
         >
           <MovieInfoModal info={state} />
         </Modalize>
@@ -226,37 +230,68 @@ export const SwipeCard = ({
     );
   } else if (movies.length === 0 && !loading) {
     return (
-      <View
-        style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}
-      >
-        <Text style={{ fontSize: 20, textAlign: "center" }}>
+      <View style={styles.noMoviesContainer}>
+        <Text style={styles.noMoviesText}>
           No more movies to present for the selected options. You might want to
           go back and select different options!
         </Text>
         <CustomButton
           text="Go Back"
-          style={{
-            marginTop: 10,
-            borderWidth: 1,
-            borderColor: "#313B68",
-            borderRadius: 10,
-            padding: 10,
-            alignSelf: "center",
-            backgroundColor: "transparent",
-          }}
+          style={styles.goBackButton}
           onPressHandler={() => {
             navigateBack();
           }}
-          textStyle={{ color: "#313B68" }}
+          textStyle={styles.goBackButtonText}
         />
       </View>
     );
   } else {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text style={{ padding: 20, fontSize: 20 }}>Getting movies...</Text>
+      <View style={styles.loadingMovies}>
+        <Text style={styles.gettingMovies}>Getting movies...</Text>
         <ActivityIndicator />
       </View>
     );
   }
 };
+
+const styles = StyleSheet.create({
+  likeButton: {
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 50,
+    shadowOffset: { width: 5, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    marginBottom: 20,
+    elevation: 5,
+  },
+  dislikeButton: {
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 50,
+    shadowOffset: { width: 5, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    marginBottom: 20,
+    elevation: 5,
+  },
+  noMoviesContainer: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  noMoviesText: { fontSize: 20, textAlign: "center" },
+  goBackButton: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#313B68",
+    borderRadius: 10,
+    padding: 10,
+    alignSelf: "center",
+    backgroundColor: "transparent",
+  },
+  goBackButtonText: { color: "#313B68" },
+  loadingMovies: { flex: 1, justifyContent: "center" },
+  gettingMovies: { padding: 20, fontSize: 20 },
+});

@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ImageBackground,
-  ActivityIndicator,
-  Pressable,
-} from "react-native";
-import { styles } from "../GroupsView/styles";
-import { MovieInfoModal } from "./MovieInfoModal";
+import { View, Text, ImageBackground, Pressable } from "react-native";
 
 type Movies = {
   _id: string;
