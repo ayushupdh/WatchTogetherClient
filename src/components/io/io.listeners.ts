@@ -1,9 +1,13 @@
-import {Socket,} from "socket.io-client"
-export const initListeners= (socket:Socket
-    )=>{
-socket.on("User Connected", ()=>{
-    console.log('Connected');
-})
+import { socketClient } from "./io";
+export const initListeners = () => {
+  socketClient.on("connect", () => {});
+  // socketClient.onAny((...args) => {
+  //   console.log(args);
+  // });
+};
 
-
-}
+export const listenforUsers = () => {
+  socketClient.on("user-joined", (userID) => {
+    console.log(userID);
+  });
+};

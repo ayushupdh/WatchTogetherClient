@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Pressable, Text, View, ScrollView } from "react-native";
 import { FormField } from "../FormField";
@@ -17,8 +17,10 @@ import { useSelector } from "react-redux";
 import { Modalize } from "react-native-modalize";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
+import { socketClient } from "../../io/io";
 
 type UserType = { name: string; _id: string; avatar: string };
+type DisplayUser = { online?: boolean } & UserType;
 
 export const AddFriend = ({
   route,
@@ -36,7 +38,7 @@ export const AddFriend = ({
   const [fetchedFriendList, setFetchedFriendsList] = useState<
     UserType[] | null
   >(null);
-  const [displayedFriends, setDisplayedFriends] = useState<UserType[]>([]);
+  const [displayedFriends, setDisplayedFriends] = useState<DisplayUser[]>([]);
 
   useLayoutEffect(() => {
     if (groupID) {
@@ -52,9 +54,28 @@ export const AddFriend = ({
     }
   }, [groupID]);
 
+  useEffect(() => {
+    socketClient.on("user-joined", (joinedID) => {
+      changeUserList(joinedID);
+    });
+    return () => {
+      socketClient.off("user-joined");
+    };
+  }, [displayedFriends]);
   // For userModals
   const modalRef = useRef<Modalize>();
 
+  const changeUserList = (joinedID: string) => {
+    let newList: DisplayUser[] = displayedFriends.map((friend) => {
+      if (friend._id === joinedID) {
+        friend.online = true;
+      }
+      return friend;
+    });
+    setDisplayedFriends((prev: DisplayUser[]) => {
+      return prev === newList ? prev : newList;
+    });
+  };
   const showUserModal = (id: string) => {
     setUser(id);
     modalRef.current?.open();
@@ -106,7 +127,7 @@ export const AddFriend = ({
         <Pressable
           onPress={() => showUserModal(friend._id)}
           key={friend._id}
-          style={styles.friendsNotjoined}
+          style={friend.online ? styles.friendsjoined : styles.friendsNotjoined}
         >
           <UserAvatar avatar={friend.avatar} size={30} borderRadius={20} />
           <Text style={styles.friendsName}>{friend.name}</Text>
