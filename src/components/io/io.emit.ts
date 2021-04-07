@@ -20,28 +20,36 @@ export const emitter = {
       );
     });
   },
-  joinSession: (
-    sessionID: string,
-    genres: string[],
-    lang: string[],
-    providers: string[]
-  ) => {
+  joinSession: (sessionID: string) => {
     return new Promise<any>((resolve, reject) => {
-      socket.emit(
-        "join-session",
-        { sessionID, genres, lang, providers },
-        (args: any) => {
-          if (args.error) {
-            reject(args.error);
-          }
-          resolve(args.session);
+      socket.emit("join-session", { sessionID }, (args: any) => {
+        if (!args) {
+          reject(args);
         }
-      );
+        resolve(args);
+      });
     });
   },
   endSession: () => {
     socket.emit("end-session");
   },
+  updateParams: (
+    sessionID: string,
+    genre: string[],
+    lang: string[],
+    providers: string[]
+  ) => {
+    return new Promise<any>((resolve, reject) => {
+      const params = { genre, lang, providers };
+      socket.emit("update-params", { sessionID, params }, (args: any) => {
+        if (!args) {
+          reject(args);
+        }
+        resolve(args);
+      });
+    });
+  },
+
   setID: (_id: string) => {
     socket.emit("set-id", { _id });
   },

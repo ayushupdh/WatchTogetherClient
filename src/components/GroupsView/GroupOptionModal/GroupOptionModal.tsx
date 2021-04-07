@@ -1,8 +1,12 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { View, Text } from "react-native";
-import { useSelector } from "react-redux";
-import { removeUserFromGroup } from "../../../utils/userdbUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { joinSessionPopulate } from "../../../redux/actions/sessionAction";
+import {
+  getSessionInfo,
+  removeUserFromGroup,
+} from "../../../utils/userdbUtils";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { GroupsParamList } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
@@ -12,6 +16,7 @@ type GroupOptionModalProps = {
     name: string;
     _id: string;
     session_active: boolean;
+    current_session?: string;
   };
   nav: StackNavigationProp<GroupsParamList, "Your Groups">;
   close: () => void;
@@ -24,17 +29,28 @@ export const GroupOptionModal = ({
   const userID = useSelector(
     ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
   );
-
+  const dispatch = useDispatch();
   const handleRemove = async () => {
     await removeUserFromGroup(group._id, userID);
     close();
   };
 
-  const handleStart = () => {
+  const handleStart = async () => {
+    if (group.current_session) {
+      const { response, error } = await getSessionInfo(group.current_session);
+      joinSessionPopulate(
+        {
+          groupID: response.groupID,
+          sessionID: response._id,
+        },
+        dispatch
+      );
+    }
     close();
     nav.navigate("Create a Group", {
       groupName: group.name,
       groupId: group._id,
+      sessionID: group.current_session ? group.current_session : null,
     });
   };
   return (
@@ -52,7 +68,6 @@ export const GroupOptionModal = ({
         textStyle={{ fontSize: 22, color: "black" }}
         onPressHandler={handleStart}
       />
-
       <CustomButton
         text="Rename Group"
         style={styles.optionModalButton}

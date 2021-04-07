@@ -28,18 +28,20 @@ export const UserViewModal = (props: UserViewModalProps) => {
   const [user, setUser] = useState<UserType>();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true);
-    if (props.userID === self._id) {
-      setUser(self);
-      setLoading(false);
-    } else {
-      (async () => {
-        const { user, error } = await getOtherUsersInfo(props.userID);
-        setUser(user);
+    if (props.userID) {
+      setLoading(true);
+      if (props.userID === self._id) {
+        setUser(self);
         setLoading(false);
-      })();
+      } else {
+        (async () => {
+          const { user, error } = await getOtherUsersInfo(props.userID);
+          setUser(user);
+          setLoading(false);
+        })();
+      }
     }
-  }, [props]);
+  }, [props.userID]);
   return (
     <Modalize ref={props.modalRef} adjustToContentHeight>
       {!user || loading ? (

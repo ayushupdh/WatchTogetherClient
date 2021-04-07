@@ -3,6 +3,7 @@ import {
   END_SESSION,
   START_SESSION_PAYLOADTYPE,
   UPDATE_PARAMS,
+  JOIN_SESSION,
 } from "../types/SessionTypes";
 export type SessionType = {
   sessionType: string | null;
@@ -38,6 +39,19 @@ export default (
 ) => {
   switch (type) {
     case START_SESSION:
+      return {
+        sessionType: payload?.sessionType,
+        sessionRunning: true,
+        groupID: payload?.groupID,
+        sessionID: payload?.sessionID,
+        admin: payload?.admin,
+        sessionParams: {
+          genres: payload?.genres,
+          providers: payload?.providers,
+          lang: payload?.lang,
+        },
+      };
+    case JOIN_SESSION:
       return {
         sessionType: payload?.sessionType,
         sessionRunning: true,

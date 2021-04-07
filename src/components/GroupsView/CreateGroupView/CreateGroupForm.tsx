@@ -7,13 +7,14 @@ import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Timer } from "../../UtilComponents/Timer";
 import { showAlert } from "../../UtilComponents/Alert";
 import { createGroup } from "../../../utils/userdbUtils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   endGroupSession,
   startGroupSession,
   updateParams,
 } from "../../../redux/actions/sessionAction";
 import { store } from "../../../redux/store";
+import { emitter } from "../../io/io.emit";
 
 export const CreateGroupForm = ({
   navigation,
@@ -34,8 +35,11 @@ export const CreateGroupForm = ({
     time: "",
     providers: ["Netflix", "Hulu", "Amazon Prime"],
   };
-
-  const [sessionRunning, setSession] = useState<boolean>();
+  const sessionRunning = useSelector(
+    ({ session }: { session: { sessionRunning: boolean } }) =>
+      session.sessionRunning
+  );
+  // const [sessionRunning, setSession] = useState<boolean>();
   const dispatch = useDispatch();
   const [name, setName] = useState<string>("");
   const [time, setTime] = useState<{ min: string; sec: string }>({
@@ -47,13 +51,13 @@ export const CreateGroupForm = ({
   const [provider, setProvider] = useState<string[]>([]);
   const [error, seterror] = useState<string>("");
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", async () => {
-      const session: any = store.getState().session;
-      setSession(session.sessionRunning);
-    });
-    return unsubscribe;
-  }, [navigation]);
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", async () => {
+  //     // const session: any = store.getState().session;
+  //     // setSession(session.sessionRunning);
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   useLayoutEffect(() => {
     if (route.params?.groupName) {
@@ -93,10 +97,15 @@ export const CreateGroupForm = ({
   };
 
   const handleNext = async () => {
+    // If the groupname is set
     if (name !== "") {
-      // If session is not running: on first start
+      // If session is not running i.e. on first start
       if (!sessionRunning) {
+        // Get groupId from routes
         let groupId = route.params?.groupId;
+        // If the component does not get groupID from GroupOptionModal i.e: Creating a Group
+        // ->Create a Group
+
         if (!groupId) {
           const { response, error } = await createGroup(
             name,
@@ -104,6 +113,7 @@ export const CreateGroupForm = ({
           );
           groupId = response;
         }
+        // Call startGroupSession action creator that changes redux and emits with io
         startGroupSession(
           {
             groupID: groupId ? groupId : "",
@@ -114,10 +124,15 @@ export const CreateGroupForm = ({
           },
           dispatch
         );
-
         // If session is running: user went back and wants to update params
       } else {
+        // !Need to change this
+        if (route.params?.sessionID) {
+          emitter.joinSession(route.params?.sessionID);
+        }
+
         updateParams(
+          route.params?.sessionID || "",
           {
             genres: genres,
             providers: provider,

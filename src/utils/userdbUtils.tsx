@@ -465,4 +465,22 @@ export const getActiveSessionUsers = async (sessionID: string) => {
   }
 };
 
+export const getSessionInfo = async (sessionID: string) => {
+  let response = null;
+  let error = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+    const res = await server.get("/groups/session/", {
+      params: {
+        sessionID,
+      },
+    });
+    return { response: res.data, error };
+  } catch (error) {
+    error = error.message;
+    return { response, error };
+  }
+};
+
 // ---------------------Group routes  end------------------------

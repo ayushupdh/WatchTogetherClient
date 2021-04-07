@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import { emitter } from "../../components/io/io.emit";
 import {
   END_SESSION,
+  JOIN_SESSION,
   START_SESSION,
   UPDATE_PARAMS,
 } from "../types/SessionTypes";
@@ -17,7 +18,6 @@ export const startGroupSession = async (
   dispatch: Dispatch<any>
 ) => {
   try {
-    console.log("1");
     let { session, admin } = await emitter.startSession(
       payload.groupID,
       0,
@@ -25,8 +25,6 @@ export const startGroupSession = async (
       payload.lang,
       payload.providers
     );
-    console.log(session);
-    console.log("Dispatching");
 
     dispatch({
       type: START_SESSION,
@@ -37,8 +35,6 @@ export const startGroupSession = async (
         ...payload,
       },
     });
-
-    console.log("Dispatched");
   } catch (error) {
     console.log(error);
   }
@@ -56,15 +52,16 @@ export const startSingleSession = (
   });
 };
 
-export const joinSessionPopulate = (
+export const joinSessionPopulate = async (
   payload: {
     groupID: string;
     sessionID: string;
   },
   dispatch: Dispatch<any>
 ) => {
+  await emitter.joinSession(payload.sessionID);
   dispatch({
-    type: START_SESSION,
+    type: JOIN_SESSION,
     payload: {
       sessionType: "Group",
       sessionRunning: true,
@@ -73,10 +70,17 @@ export const joinSessionPopulate = (
   });
 };
 
-export const updateParams = (
+export const updateParams = async (
+  sessionID: string,
   payload: { genres: string[]; providers: string[]; lang: string[] },
   dispatch: Dispatch<any>
 ) => {
+  await emitter.updateParams(
+    sessionID,
+    payload.genres,
+    payload.lang,
+    payload.providers
+  );
   dispatch({
     type: UPDATE_PARAMS,
     payload,
