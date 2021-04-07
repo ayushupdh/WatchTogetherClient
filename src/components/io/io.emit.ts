@@ -71,6 +71,19 @@ export const emitter = {
       );
     });
   },
+  addToLikedMovies: (sessionID: string, movieID: string) => {
+    return new Promise<any>((resolve) => {
+      socket.emit(
+        "add-liked-movies",
+        { sessionID, movieID },
+        (result: boolean) => {
+          if (result) {
+            resolve(1);
+          }
+        }
+      );
+    });
+  },
 
   setID: (_id: string) => {
     socket.emit("set-id", { _id });

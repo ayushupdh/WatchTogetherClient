@@ -48,6 +48,8 @@ export const SwipeCard = ({
   );
   // Store card index
   const [cardIndex, setIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   // Ref for movie info modal
   const modalizeRef = useRef<Modalize>(null);
   // Sets the activity indicator for when the data is loading
@@ -65,7 +67,6 @@ export const SwipeCard = ({
     swipedRight: false,
     swipedLeft: false,
   });
-  let currentIndex = 0;
   // useEffect(() => {
   //   if (groupType === "Group") {
   //     reloadCards();
@@ -74,8 +75,10 @@ export const SwipeCard = ({
   // }, [sessionID, groupType, currentIndex]);
 
   useEffect(() => {
-    reloadCards();
-  }, [sessionID, groupType, currentIndex]);
+    if (movies.length === 0) {
+      reloadCards();
+    }
+  }, [sessionID, groupType, movies, currentIndex]);
 
   const reloadCards = async () => {
     if (groupType === "Single") {
@@ -97,12 +100,12 @@ export const SwipeCard = ({
     } else {
       setLoading(true);
       if (sessionID) {
-        const movies = await emitter.getMoviesForSession(
+        const fetched_movies = await emitter.getMoviesForSession(
           sessionID,
           currentIndex
         );
-        setMovies(movies);
-        currentIndex += movies.length;
+        setMovies(fetched_movies);
+        setCurrentIndex((prev) => fetched_movies.length + prev);
       }
       setLoading(false);
     }
@@ -119,18 +122,26 @@ export const SwipeCard = ({
   const headerHeight = useHeaderHeight();
   // Functions to handle liked and disliked movie cards
   const handleLike = async (index: any) => {
-    const movieID = movies[index]["_id"];
-    const { response, error } = await addLikedMovie(movieID);
-    if (error) {
-      console.log(error);
+    if (groupType === "Single") {
+      const movieID = movies[index]["_id"];
+      const { response, error } = await addLikedMovie(movieID);
+      if (error) {
+        console.log(error);
+      }
+    } else {
+      emitter.addToLikedMovies(sessionID, movies[index]["_id"]);
     }
   };
 
   const handleDislike = async (index: any) => {
-    const movieID = movies[index]["_id"];
-    const { response, error } = await addDislikedMovie(movieID);
-    if (error) {
-      console.log(error);
+    if (groupType === "Single") {
+      const movieID = movies[index]["_id"];
+      const { response, error } = await addDislikedMovie(movieID);
+      if (error) {
+        console.log(error);
+      }
+    } else {
+      console.log("");
     }
   };
   const swiped = (index: number) => {
