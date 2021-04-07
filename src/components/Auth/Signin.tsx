@@ -35,9 +35,12 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
   // !Maybe add more custom login error texts
   const login = async () => {
     try {
+      setLoading(true);
       const res = await server.post("/users/login", userData);
       const userToken = res.data.token;
       await AsyncStorage.setItem("userToken", userToken);
+      setLoading(false);
+
       dispatch({
         type: SIGN_IN,
         payload: {
@@ -61,9 +64,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
   };
   // For future if ever need to add more checks before login
   const onSigninPress = async () => {
-    setLoading(true);
     await login();
-    setLoading(false);
   };
 
   // Password refs for next on

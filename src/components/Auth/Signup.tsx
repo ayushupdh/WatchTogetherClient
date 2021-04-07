@@ -36,6 +36,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
 
   const signup = async () => {
     try {
+      setLoading(true);
       const res = await server.post("/users/signup", userData);
       const userToken = res.data.token;
       await AsyncStorage.setItem("userToken", userToken);
@@ -53,11 +54,14 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           token: res.data.token,
         },
       });
+      setLoading(false);
     } catch (e) {
       console.log(e);
       if (e.response && e.response.data.error) {
+        setLoading(false);
         return setError(e.response.data.error);
       }
+      setLoading(false);
       return setError(e.message);
     }
   };
@@ -79,9 +83,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
     if (userData.password !== passwordVerify.password) {
       return setError("Passwords do not match");
     }
-    setLoading(true);
     await signup();
-    setLoading(false);
   };
 
   return (
