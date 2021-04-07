@@ -155,6 +155,7 @@ const SelectionButtons = (props: any) => {
           shadowOffset: { width: 5, height: 4 },
           shadowColor: "#000",
           shadowOpacity: 0.4,
+          elevation: 5,
         }}
         onPressHandler={handler}
         textStyle={{ color: state ? "white" : "black" }}

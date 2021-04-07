@@ -28,6 +28,7 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+    elevation: 5,
   },
   singleButton: {
     width: "70%",
@@ -38,6 +39,7 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+    elevation: 5,
   },
   buttonText: {
     fontSize: 30,

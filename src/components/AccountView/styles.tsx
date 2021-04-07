@@ -53,6 +53,7 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+    elevation: 5,
   },
   editprofileButtonText: {
     color: "black",
@@ -75,6 +76,7 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+    elevation: 5,
   },
   buttonText: {
     color: "#4a4a4a",
@@ -100,6 +102,7 @@ export const Styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.4,
     alignSelf: "center",
+    elevation: 5,
   },
   avatar: {
     width: 118,
@@ -116,6 +119,7 @@ export const Styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: "#000",
     shadowOpacity: 0.4,
+    // elevation: 5,
   },
   customText: {
     fontSize: 20,
@@ -125,6 +129,7 @@ export const Styles = StyleSheet.create({
     fontWeight: "500",
     borderColor: "#ccc",
     borderBottomWidth: 1,
+    color: "#000",
     // borderTopWidth: 1,
   },
 
