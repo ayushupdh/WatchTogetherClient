@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { server } from "../api/server";
 import { setAuthToken } from "./authToken";
-type UserType = { name: string; _id: string; avatar: string };
+type UserType = { name: string; _id: string; avatar: string; online?: boolean };
 
 // Removes typescript error for Formdate on changeUserProfile function
 declare global {
@@ -448,8 +448,8 @@ export const removeUserFromSession = async (
   }
 };
 export const getActiveSessionUsers = async (sessionID: string) => {
-  let response = null;
-  let error = null;
+  let users: string[] | null = null;
+  let error: string | null = null;
   try {
     const token = await AsyncStorage.getItem("userToken");
     setAuthToken(token);
@@ -458,10 +458,10 @@ export const getActiveSessionUsers = async (sessionID: string) => {
         sessionID,
       },
     });
-    return { response: res.data.users, error };
+    return { users: res.data.users, error };
   } catch (error) {
     error = error.message;
-    return { response, error };
+    return { users, error };
   }
 };
 

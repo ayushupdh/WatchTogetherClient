@@ -8,6 +8,7 @@ import { GroupsNavProps } from "../Navigation/GroupsTypes";
 import { ModalDropDown } from "../../UtilComponents/ModalDropDown";
 import {
   addUserToGroup,
+  getActiveSessionUsers,
   getGroupUsers,
   removeUserFromGroup,
   searchFriends,
@@ -29,8 +30,10 @@ export const AddFriend = ({
   const [modal, showModal] = useState(false);
   const [input, setInput] = useState<string>("");
   const [clickedUser, setUser] = useState<string>("");
-  const groupID = useSelector(
-    ({ session }: { session: { groupID: string } }) => session.groupID
+  const { sessionID, groupID } = useSelector(
+    ({ session }: { session: { sessionID: string; groupID: string } }) => {
+      return { sessionID: session.sessionID, groupID: session.groupID };
+    }
   );
   const userID = useSelector(
     ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
@@ -43,16 +46,28 @@ export const AddFriend = ({
   useLayoutEffect(() => {
     if (groupID) {
       (async () => {
+        let userList: DisplayUser[] = [];
         const { response, error } = await getGroupUsers(groupID);
         if (response && response.length > 0) {
-          let users = response.filter((user) => {
+          userList = response.filter((user) => {
             return user._id !== userID;
           });
-          setDisplayedFriends(users);
+          if (sessionID) {
+            const { users, error } = await getActiveSessionUsers(sessionID);
+            if (users && response.length > 0) {
+              userList = userList.map((eachUser) => {
+                if (users.includes(eachUser._id)) {
+                  eachUser.online = true;
+                }
+                return eachUser;
+              });
+            }
+          }
+          setDisplayedFriends(userList);
         }
       })();
     }
-  }, [groupID]);
+  }, [groupID, sessionID]);
 
   useEffect(() => {
     socketClient.on("user-joined", (joinedID) => {
