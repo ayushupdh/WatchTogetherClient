@@ -1,11 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, ImageBackground, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ImageBackground,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import { styles } from "../GroupsView/styles";
 import { MovieInfoModal } from "./MovieInfoModal";
 
+type Movies = {
+  _id: string;
+  genres: string[];
+  poster_path: string;
+  title: string;
+};
+
 type CardProps = {
-  card: any;
-  onModalOpen: (card: any) => void;
+  card: Movies;
+  onModalOpen: (cardID: string) => void;
 };
 export const Card = ({ card, onModalOpen }: CardProps) => {
   return (
@@ -28,7 +41,12 @@ export const Card = ({ card, onModalOpen }: CardProps) => {
         }}
         style={{ height: "100%" }}
       ></ImageBackground>
-      <View style={{ position: "absolute", left: 15, bottom: 20 }}>
+      <Pressable
+        onPress={() => {
+          onModalOpen(card._id);
+        }}
+        style={{ position: "absolute", left: 15, bottom: 20 }}
+      >
         <Text
           style={{
             color: "#fff",
@@ -62,7 +80,7 @@ export const Card = ({ card, onModalOpen }: CardProps) => {
             return genreBox(genre);
           })}
         </View>
-      </View>
+      </Pressable>
     </View>
   );
 };

@@ -22,7 +22,12 @@ import { useSelector } from "react-redux";
 import { SessionType } from "../../redux/reducers/sessionReducers";
 import { CustomButton } from "../UtilComponents/CustomButton";
 
-type SwipeCardProps = {};
+type Movies = {
+  _id: string;
+  genres: string[];
+  poster_path: string;
+  title: string;
+};
 export const SwipeCard = ({
   onMovieFinish,
   navigateBack,
@@ -31,7 +36,7 @@ export const SwipeCard = ({
   navigateBack: () => void;
 }) => {
   // Store array of movies
-  const [movies, setMovies] = useState<any>([]);
+  const [movies, setMovies] = useState<Movies[]>([]);
   // Store card index
   const [cardIndex, setIndex] = useState(0);
   // Ref for movie info modal
@@ -74,9 +79,9 @@ export const SwipeCard = ({
   };
 
   // Open modal to display movie info
-  const onPressHandler = (movieIndex: any) => {
+  const onPressHandler = (movieID: string) => {
     // Set the movie index of the clicked card
-    setstate(movies[movieIndex]._id);
+    setstate(movieID);
     modalizeRef.current?.open();
   };
 
@@ -115,7 +120,7 @@ export const SwipeCard = ({
     return (
       <>
         <Swiper
-          cards={movies ? movies : [{ title: "Loading" }]}
+          cards={movies}
           containerStyle={{
             marginTop: "10%",
             backgroundColor: "#E2EAF4",
@@ -123,7 +128,6 @@ export const SwipeCard = ({
           renderCard={(card) => {
             return <Card onModalOpen={onPressHandler} card={card} />;
           }}
-          onTapCard={(index) => onPressHandler(index)}
           cardIndex={cardIndex}
           backgroundColor={"#fff"}
           stackSize={10}
