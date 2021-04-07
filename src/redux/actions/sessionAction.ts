@@ -18,13 +18,16 @@ export const startGroupSession = async (
   dispatch: Dispatch<any>
 ) => {
   try {
-    let { session, admin } = await emitter.startSession(
+    let { session, admin, error } = await emitter.startSession(
       payload.groupID,
       0,
       payload.genres,
       payload.lang,
       payload.providers
     );
+    if (error) {
+      console.log(error);
+    }
 
     dispatch({
       type: START_SESSION,
@@ -59,15 +62,20 @@ export const joinSessionPopulate = async (
   },
   dispatch: Dispatch<any>
 ) => {
-  await emitter.joinSession(payload.sessionID);
-  dispatch({
-    type: JOIN_SESSION,
-    payload: {
-      sessionType: "Group",
-      sessionRunning: true,
-      ...payload,
-    },
-  });
+  try {
+    const admin = await emitter.joinSession(payload.sessionID);
+    dispatch({
+      type: JOIN_SESSION,
+      payload: {
+        sessionType: "Group",
+        sessionRunning: true,
+        admin: admin,
+        ...payload,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const updateParams = async (

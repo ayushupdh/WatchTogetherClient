@@ -35,9 +35,18 @@ export const AddFriend = ({
       return { sessionID: session.sessionID, groupID: session.groupID };
     }
   );
-  const userID = useSelector(
-    ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
+  const { userID, admin } = useSelector(
+    ({
+      auth,
+      session,
+    }: {
+      auth: { user: { _id: string } };
+      session: { admin: string };
+    }) => {
+      return { userID: auth.user._id, admin: session.admin };
+    }
   );
+
   const [fetchedFriendList, setFetchedFriendsList] = useState<
     UserType[] | null
   >(null);
@@ -71,25 +80,34 @@ export const AddFriend = ({
 
   useEffect(() => {
     socketClient.on("user-joined", (joinedID) => {
-      changeUserList(joinedID);
+      changeUserList(joinedID, "joined");
+    });
+    socketClient.on("user-left", (joinedID) => {
+      changeUserList(joinedID, "left");
     });
     return () => {
       socketClient.off("user-joined");
+      socketClient.off("user-left");
     };
   }, [displayedFriends]);
   // For userModals
   const modalRef = useRef<Modalize>();
 
-  const changeUserList = (joinedID: string) => {
-    let newList: DisplayUser[] = displayedFriends.map((friend) => {
-      if (friend._id === joinedID) {
-        friend.online = true;
-      }
-      return friend;
-    });
-    setDisplayedFriends((prev: DisplayUser[]) => {
-      return prev === newList ? prev : newList;
-    });
+  const changeUserList = (joinedID: string, action: "joined" | "left") => {
+    if (action === "joined") {
+      let newList: DisplayUser[] = displayedFriends.map((friend) => {
+        if (friend._id === joinedID) {
+          friend.online = true;
+        }
+        return friend;
+      });
+      setDisplayedFriends((prev: DisplayUser[]) => {
+        return prev === newList ? prev : newList;
+      });
+    }
+    if (action === "left") {
+      console.log(joinedID);
+    }
   };
   const showUserModal = (id: string) => {
     setUser(id);
@@ -203,25 +221,28 @@ export const AddFriend = ({
             /> */}
             {displayFriendsList()}
           </View>
-          <CustomButton
-            text="Start"
-            style={[
-              styles.unsubmittedButton,
-              displayedFriends.length > 0 ? { opacity: 1 } : null,
-            ]}
-            onPressHandler={() => {
-              if (displayedFriends.length > 0) {
-                navigation.navigate("SwipingView", {
-                  groupName: route.params?.groupName,
-                });
-              } else {
-                showAlert({
-                  firstText: "Need atleast one friend to start a group session",
-                  firstButtonText: "ok",
-                });
-              }
-            }}
-          />
+          {userID === admin && (
+            <CustomButton
+              text="Start"
+              style={[
+                styles.unsubmittedButton,
+                displayedFriends.length > 0 ? { opacity: 1 } : null,
+              ]}
+              onPressHandler={() => {
+                if (displayedFriends.length > 0) {
+                  navigation.navigate("SwipingView", {
+                    groupName: route.params?.groupName,
+                  });
+                } else {
+                  showAlert({
+                    firstText:
+                      "Need atleast one friend to start a group session",
+                    firstButtonText: "ok",
+                  });
+                }
+              }}
+            />
+          )}
         </View>
       </ScrollView>
       <UserViewModal

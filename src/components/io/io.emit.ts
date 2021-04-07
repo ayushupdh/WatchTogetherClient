@@ -11,22 +11,30 @@ export const emitter = {
       socket.emit(
         "start-session",
         { groupID, current_session_time, genres, lang, providers },
-        (args: any) => {
-          if (args.error) {
-            reject(args.error);
+        ({
+          session,
+          admin,
+          error,
+        }: {
+          session: string;
+          admin: string;
+          error: string;
+        }) => {
+          if (error) {
+            reject(error);
           }
-          resolve({ session: args.session, admin: args.admin });
+          resolve({ session, admin });
         }
       );
     });
   },
   joinSession: (sessionID: string) => {
     return new Promise<any>((resolve, reject) => {
-      socket.emit("join-session", { sessionID }, (args: any) => {
-        if (!args) {
-          reject(args);
+      socket.emit("join-session", { sessionID }, ({ admin, error }: any) => {
+        if (error) {
+          reject(error);
         }
-        resolve(args);
+        resolve(admin);
       });
     });
   },
