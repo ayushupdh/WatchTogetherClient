@@ -30,6 +30,8 @@ export const AddFriend = ({
   const [modal, showModal] = useState(false);
   const [input, setInput] = useState<string>("");
   const [clickedUser, setUser] = useState<string>("");
+  const [anyOneOnline, setAnyOneOnline] = useState<boolean>(false);
+
   const { sessionID, groupID } = useSelector(
     ({ session }: { session: { sessionID: string; groupID: string } }) => {
       return { sessionID: session.sessionID, groupID: session.groupID };
@@ -66,6 +68,7 @@ export const AddFriend = ({
             if (users && response.length > 0) {
               userList = userList.map((eachUser) => {
                 if (users.includes(eachUser._id)) {
+                  setAnyOneOnline(true);
                   eachUser.online = true;
                 }
                 return eachUser;
@@ -100,6 +103,7 @@ export const AddFriend = ({
     if (action === "joined") {
       let newList: DisplayUser[] = displayedFriends.map((friend) => {
         if (friend._id === joinedID) {
+          setAnyOneOnline(true);
           friend.online = true;
         }
         return friend;
@@ -232,14 +236,15 @@ export const AddFriend = ({
                 displayedFriends.length > 0 ? { opacity: 1 } : null,
               ]}
               onPressHandler={() => {
-                if (displayedFriends.length > 0) {
+                if (displayedFriends.length > 0 && anyOneOnline) {
                   navigation.navigate("SwipingView", {
                     groupName: route.params?.groupName,
                   });
                 } else {
                   showAlert({
-                    firstText:
-                      "Need atleast one friend to start a group session",
+                    firstText: anyOneOnline
+                      ? "Need atleast one friend to start a group session"
+                      : "None of the friends in the group are online",
                     firstButtonText: "ok",
                   });
                 }
