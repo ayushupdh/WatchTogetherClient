@@ -14,11 +14,13 @@ import {
   searchFriends,
 } from "../../../utils/userdbUtils";
 import { showAlert } from "../../UtilComponents/Alert";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Modalize } from "react-native-modalize";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
 import { socketClient } from "../../io/io";
+import { END_SESSION } from "../../../redux/types/SessionTypes";
+import { emitter } from "../../io/io.emit";
 
 type UserType = { name: string; _id: string; avatar: string };
 type DisplayUser = { online?: boolean } & UserType;
@@ -30,13 +32,13 @@ export const AddFriend = ({
   const [modal, showModal] = useState(false);
   const [input, setInput] = useState<string>("");
   const [clickedUser, setUser] = useState<string>("");
-  const [anyOneOnline, setAnyOneOnline] = useState<boolean>(false);
-
+  const dispatch = useDispatch();
   const { sessionID, groupID } = useSelector(
     ({ session }: { session: { sessionID: string; groupID: string } }) => {
       return { sessionID: session.sessionID, groupID: session.groupID };
     }
   );
+
   const { userID, admin } = useSelector(
     ({
       auth,
@@ -68,7 +70,6 @@ export const AddFriend = ({
             if (users && response.length > 0) {
               userList = userList.map((eachUser) => {
                 if (users.includes(eachUser._id)) {
-                  setAnyOneOnline(true);
                   eachUser.online = true;
                 }
                 return eachUser;
@@ -91,9 +92,20 @@ export const AddFriend = ({
     socketClient.on("session-started", (joinedID) => {
       navigation.navigate("SwipingView", { groupName: route.params.groupName });
     });
+    socketClient.on("user-left", (userID) => {
+      changeUserList(userID, "left");
+    });
+    socketClient.on("session-ended", () => {
+      dispatch({
+        type: END_SESSION,
+      });
+      navigation.popToTop();
+    });
     return () => {
       socketClient.off("user-joined");
       socketClient.off("user-left");
+      socketClient.off("session-started");
+      socketClient.off("session-ended");
     };
   }, [navigation, displayedFriends]);
   // For userModals
@@ -103,7 +115,6 @@ export const AddFriend = ({
     if (action === "joined") {
       let newList: DisplayUser[] = displayedFriends.map((friend) => {
         if (friend._id === joinedID) {
-          setAnyOneOnline(true);
           friend.online = true;
         }
         return friend;
@@ -113,8 +124,21 @@ export const AddFriend = ({
       });
     }
     if (action === "left") {
-      console.log(joinedID);
+      let newList: DisplayUser[] = displayedFriends.map((friend) => {
+        if (friend._id === joinedID) {
+          friend.online = false;
+        }
+        return friend;
+      });
+
+      setDisplayedFriends((prev: DisplayUser[]) => {
+        return prev === newList ? prev : newList;
+      });
     }
+  };
+  const countOnlineUsers = () => {
+    const k = displayedFriends.filter((friend) => friend.online);
+    return k.length;
   };
   const showUserModal = (id: string) => {
     setUser(id);
@@ -182,7 +206,6 @@ export const AddFriend = ({
       );
     });
   };
-
   return (
     <Pressable style={{ flex: 1 }} onPress={() => showModal(false)}>
       <ScrollView
@@ -236,15 +259,17 @@ export const AddFriend = ({
                 displayedFriends.length > 0 ? { opacity: 1 } : null,
               ]}
               onPressHandler={() => {
-                if (displayedFriends.length > 0 && anyOneOnline) {
+                if (displayedFriends.length > 0 && countOnlineUsers() !== 0) {
+                  emitter.startSession(sessionID);
                   navigation.navigate("SwipingView", {
                     groupName: route.params?.groupName,
                   });
                 } else {
                   showAlert({
-                    firstText: anyOneOnline
-                      ? "Need atleast one friend to start a group session"
-                      : "None of the friends in the group are online",
+                    firstText:
+                      countOnlineUsers() !== 0
+                        ? "Need atleast one friend to start a group session"
+                        : "None of the friends in the group are online",
                     firstButtonText: "ok",
                   });
                 }
