@@ -24,7 +24,11 @@ const BottomNavTabs = () => {
     //   ? route.state.routes[route.state.index].name
     //   : "";
 
-    if (state === "SwipingView") {
+    if (
+      state === "SwipingView" ||
+      state === "Add a Friend" ||
+      state === "Create a Group"
+    ) {
       return false;
     }
 
