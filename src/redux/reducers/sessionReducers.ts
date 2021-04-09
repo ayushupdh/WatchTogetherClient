@@ -1,9 +1,11 @@
 import {
-  START_SESSION,
+  CREATE_SESSION,
   END_SESSION,
-  START_SESSION_PAYLOADTYPE,
+  CREATE_SESSION_PAYLOADTYPE,
   UPDATE_PARAMS,
   JOIN_SESSION,
+  LEAVE_SESSION,
+  START_SESSION,
 } from "../types/SessionTypes";
 export type SessionType = {
   sessionType: string | null;
@@ -11,6 +13,7 @@ export type SessionType = {
   sessionID?: string | null;
   groupID: string | null;
   admin: string | null;
+  swipingActive: boolean;
   sessionParams: {
     genres?: string[];
     lang?: string[];
@@ -23,6 +26,7 @@ const initialState: SessionType = {
   groupID: null,
   sessionID: null,
   admin: null,
+  swipingActive: false,
   sessionParams: {
     genres: [],
     providers: [],
@@ -35,16 +39,17 @@ export default (
   {
     type,
     payload,
-  }: { type: string; payload: START_SESSION_PAYLOADTYPE | undefined }
+  }: { type: string; payload: CREATE_SESSION_PAYLOADTYPE | undefined }
 ) => {
   switch (type) {
-    case START_SESSION:
+    case CREATE_SESSION:
       return {
         sessionType: payload?.sessionType,
         sessionRunning: true,
         groupID: payload?.groupID,
         sessionID: payload?.sessionID,
         admin: payload?.admin,
+        swipingActive: false,
         sessionParams: {
           genres: payload?.genres,
           providers: payload?.providers,
@@ -58,11 +63,17 @@ export default (
         groupID: payload?.groupID,
         sessionID: payload?.sessionID,
         admin: payload?.admin,
+        swipingActive: false,
         sessionParams: {
           genres: payload?.genres,
           providers: payload?.providers,
           lang: payload?.lang,
         },
+      };
+    case START_SESSION:
+      return {
+        ...state,
+        swipingActive: true,
       };
     case UPDATE_PARAMS:
       return {
@@ -74,6 +85,10 @@ export default (
         },
       };
     case END_SESSION:
+      return {
+        ...initialState,
+      };
+    case LEAVE_SESSION:
       return {
         ...initialState,
       };

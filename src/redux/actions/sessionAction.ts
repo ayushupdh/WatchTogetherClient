@@ -3,7 +3,8 @@ import { emitter } from "../../components/io/io.emit";
 import {
   END_SESSION,
   JOIN_SESSION,
-  START_SESSION,
+  LEAVE_SESSION,
+  CREATE_SESSION,
   UPDATE_PARAMS,
 } from "../types/SessionTypes";
 
@@ -18,7 +19,7 @@ export const startGroupSession = async (
   dispatch: Dispatch<any>
 ) => {
   try {
-    let { session, admin, error } = await emitter.startSession(
+    let { session, admin, error } = await emitter.createSession(
       payload.groupID,
       0,
       payload.genres,
@@ -30,7 +31,7 @@ export const startGroupSession = async (
     }
 
     dispatch({
-      type: START_SESSION,
+      type: CREATE_SESSION,
       payload: {
         sessionType: "Group",
         sessionID: session,
@@ -47,7 +48,7 @@ export const startSingleSession = (
   dispatch: Dispatch<any>
 ) => {
   dispatch({
-    type: START_SESSION,
+    type: CREATE_SESSION,
     payload: {
       sessionType: "Single",
       ...payload,
@@ -94,11 +95,24 @@ export const updateParams = async (
     payload,
   });
 };
-export const endGroupSession = (dispatch: Dispatch<any>) => {
+export const endGroupSession = (
+  groupId: string,
+  sessionID: string,
+  dispatch: Dispatch<any>
+) => {
   dispatch({
     type: END_SESSION,
   });
-  emitter.endSession();
+  emitter.endSession(groupId, sessionID);
+};
+export const leaveGroupSession = (
+  sessionID: string,
+  dispatch: Dispatch<any>
+) => {
+  dispatch({
+    type: LEAVE_SESSION,
+  });
+  emitter.leaveSession(sessionID);
 };
 export const endSingleSession = (dispatch: Dispatch<any>) => {
   dispatch({

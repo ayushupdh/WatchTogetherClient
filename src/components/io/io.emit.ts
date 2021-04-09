@@ -1,6 +1,6 @@
 import { socketClient as socket } from "./io";
 export const emitter = {
-  startSession: (
+  createSession: (
     groupID: string,
     current_session_time: number | undefined = 0,
     genres: string[],
@@ -9,7 +9,7 @@ export const emitter = {
   ) => {
     return new Promise<any>((resolve, reject) => {
       socket.emit(
-        "start-session",
+        "create-session",
         { groupID, current_session_time, genres, lang, providers },
         ({
           session,
@@ -38,8 +38,11 @@ export const emitter = {
       });
     });
   },
-  endSession: () => {
-    socket.emit("end-session");
+  startSession: (sessionID: string) => {
+    socket.emit("start-session", { sessionID });
+  },
+  endSession: (groupID: string, sessionID: string) => {
+    socket.emit("end-session", { groupID, sessionID });
   },
   updateParams: (
     sessionID: string,
@@ -83,6 +86,9 @@ export const emitter = {
         }
       );
     });
+  },
+  leaveSession: (sessionID: string) => {
+    socket.emit("leave-session", { sessionID });
   },
 
   setID: (_id: string) => {

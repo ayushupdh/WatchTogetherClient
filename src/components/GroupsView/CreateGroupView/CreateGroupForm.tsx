@@ -10,11 +10,14 @@ import { createGroup } from "../../../utils/userdbUtils";
 import { useDispatch, useSelector } from "react-redux";
 import {
   endGroupSession,
+  leaveGroupSession,
   startGroupSession,
   updateParams,
 } from "../../../redux/actions/sessionAction";
 import { store } from "../../../redux/store";
 import { emitter } from "../../io/io.emit";
+import { socketClient } from "../../io/io";
+import { END_SESSION } from "../../../redux/types/SessionTypes";
 
 export const CreateGroupForm = ({
   navigation,
@@ -35,9 +38,27 @@ export const CreateGroupForm = ({
     time: "",
     providers: ["Netflix", "Hulu", "Amazon Prime"],
   };
-  const sessionRunning = useSelector(
-    ({ session }: { session: { sessionRunning: boolean } }) =>
-      session.sessionRunning
+  const { sessionRunning, sessionID, admin, groupID } = useSelector(
+    ({
+      session,
+    }: {
+      session: {
+        sessionRunning: boolean;
+        sessionID: string;
+        admin: string;
+        groupID: string;
+      };
+    }) => {
+      return {
+        sessionRunning: session.sessionRunning,
+        sessionID: session.sessionID,
+        admin: session.admin,
+        groupID: session.groupID,
+      };
+    }
+  );
+  const userID = useSelector(
+    ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
   );
   // const [sessionRunning, setSession] = useState<boolean>();
   const dispatch = useDispatch();
@@ -64,12 +85,42 @@ export const CreateGroupForm = ({
       setName(route.params?.groupName);
     }
   }, []);
+  useEffect(() => {
+    socketClient.on("session-ended", () => {
+      dispatch({
+        type: END_SESSION,
+      });
+      navigation.popToTop();
+    });
+    return () => {
+      socketClient.off("session-ended");
+    };
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-      // if (sessionRunning) {
-      //   endGroupSession(dispatch);
-      // }
+      if (sessionRunning && admin == userID) {
+        e.preventDefault();
+        showAlert({
+          firstText: "This will end the session",
+          secondText: "Exit?",
+          firstButtonText: "OK",
+          secondButtonText: "Cancel",
+          firstButtonHandleClose: () => {
+            navigation.dispatch(e.data.action);
+            endGroupSession(
+              route.params?.groupId ? route.params?.groupId : groupID,
+              route.params?.sessionID ? route.params?.sessionID : sessionID,
+              dispatch
+            );
+          },
+        });
+      } else if (sessionRunning) {
+        leaveGroupSession(
+          route.params?.sessionID ? route.params?.sessionID : sessionID,
+          dispatch
+        );
+      }
     });
     return unsubscribe;
   }, [sessionRunning, navigation]);
@@ -130,9 +181,8 @@ export const CreateGroupForm = ({
         if (route.params?.sessionID) {
           emitter.joinSession(route.params?.sessionID);
         }
-
         updateParams(
-          route.params?.sessionID || "",
+          route.params?.sessionID ? route.params?.sessionID : sessionID,
           {
             genres: genres,
             providers: provider,
@@ -217,7 +267,7 @@ export const CreateGroupForm = ({
             </View>
             <View
               style={{
-                paddingTop: 30,
+                paddingTop: 10,
                 marginLeft: 20,
                 marginRight: 20,
                 flex: 1,
@@ -241,9 +291,9 @@ export const CreateGroupForm = ({
 
 type SelectionButtonPropType = {
   text: string;
-  onSelect?: (text: string, value: boolean) => void;
+  onSelect: (text: string, value: boolean) => void;
 };
-const SelectionButtons = (props: any) => {
+const SelectionButtons = (props: SelectionButtonPropType) => {
   const [state, setstate] = useState(false);
   const handler = () => {
     setstate((prev) => !prev);
