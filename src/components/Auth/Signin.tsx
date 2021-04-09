@@ -56,6 +56,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
         },
       });
     } catch (e) {
+      setLoading(false);
       if (e.response && e.response.data) {
         return setError(e.response.data.error);
       }
