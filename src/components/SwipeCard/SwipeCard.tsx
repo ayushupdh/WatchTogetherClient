@@ -67,6 +67,7 @@ export const SwipeCard = ({
     swipedRight: false,
     swipedLeft: false,
   });
+  const [firstMount, setFirstMount] = useState<boolean>(false);
   // useEffect(() => {
   //   if (groupType === "Group") {
   //     reloadCards();
@@ -75,10 +76,12 @@ export const SwipeCard = ({
   // }, [sessionID, groupType, currentIndex]);
 
   useEffect(() => {
-    if (movies.length === 0) {
+    console.log({ firstMount });
+    if (!firstMount) {
+      setFirstMount(true);
       reloadCards();
     }
-  }, [sessionID, groupType, movies, currentIndex]);
+  }, [firstMount, sessionID, groupType, movies, currentIndex]);
 
   const reloadCards = async () => {
     if (groupType === "Single") {
@@ -94,9 +97,7 @@ export const SwipeCard = ({
       // This worked previously, but can be memory drain
       // setMovies((prev: any) => prev.concat(m));
       setMovies(response); //THis works with setindex to zero
-      setTimeout(() => {
-        setLoading(false);
-      }, 200);
+      setLoading(false);
     } else {
       setLoading(true);
       if (sessionID) {
