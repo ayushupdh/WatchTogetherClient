@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { styles } from "./styles";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { CustomButton } from "../UtilComponents/CustomButton";
@@ -7,6 +7,7 @@ import { GroupsNavProps } from "./Navigation/GroupsTypes";
 import { Modalize } from "react-native-modalize";
 import { GroupOptionModal } from "./GroupOptionModal/GroupOptionModal";
 import { getUserGroups } from "../../utils/userdbUtils";
+import { socketClient } from "../io/io";
 
 type GroupType = {
   name: string;
@@ -26,18 +27,33 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     _id: "",
     session_active: false,
   });
+  const [loading, setLoading] = useState<boolean>(false);
   const modalizeRef = useRef<Modalize>();
 
   // Refresh groups list on focus
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
+      setLoading(true);
       const { groups, error }: GetGroupsType = await getUserGroups();
       setGroups(groups);
+      setLoading(false);
     });
 
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    const groupslist = groups && groups.map((group: GroupType) => group._id);
+    socketClient.on("group-status-changed", async (groupID) => {
+      if (groupslist && groupslist.includes(groupID)) {
+        const { groups, error }: GetGroupsType = await getUserGroups();
+        setGroups(groups);
+      }
+    });
+    return () => {
+      socketClient.off("group-status-changed");
+    };
+  }, [groups]);
   const renderGroupList = ({ item }: { item: GroupType }) => {
     const randomColor: string =
       "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -78,7 +94,25 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     const { groups, error }: GetGroupsType = await getUserGroups();
     setGroups(groups);
   };
-
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.hundredpercenContainer}>
+          <ActivityIndicator style={{ padding: 20 }} size="large" />
+          <View style={styles.item}>
+            <View
+              style={{ backgroundColor: "#eee", padding: 15, width: "80%" }}
+            ></View>
+          </View>
+          <View style={styles.item}>
+            <View
+              style={{ backgroundColor: "#eee", padding: 15, width: "80%" }}
+            ></View>
+          </View>
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.hundredpercenContainer}>
