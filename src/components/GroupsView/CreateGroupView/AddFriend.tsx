@@ -55,7 +55,6 @@ export const AddFriend = ({
     UserType[] | null
   >(null);
   const [displayedFriends, setDisplayedFriends] = useState<DisplayUser[]>([]);
-
   useLayoutEffect(() => {
     if (groupID) {
       (async () => {
@@ -91,9 +90,6 @@ export const AddFriend = ({
     });
     socketClient.on("session-started", (joinedID) => {
       navigation.navigate("SwipingView", { groupName: route.params.groupName });
-    });
-    socketClient.on("user-left", (userID) => {
-      changeUserList(userID, "left");
     });
     socketClient.on("session-ended", () => {
       dispatch({

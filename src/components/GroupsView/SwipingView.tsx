@@ -15,29 +15,89 @@ import { GroupsNavProps } from "./Navigation/GroupsTypes";
 
 import { styles } from "./styles";
 import { SwipeCard } from "../SwipeCard/SwipeCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { END_SESSION } from "../../redux/types/SessionTypes";
-import { endSingleSession } from "../../redux/actions/sessionAction";
+import {
+  endGroupSession,
+  endSingleSession,
+  leaveGroupSession,
+} from "../../redux/actions/sessionAction";
 import { socketClient } from "../io/io";
 import { Modalize } from "react-native-modalize";
 import { CustomButton } from "../UtilComponents/CustomButton";
+import { showAlert } from "../UtilComponents/Alert";
 
 export const SwipingView = ({
   route,
   navigation,
 }: GroupsNavProps<"SwipingView">) => {
   const dispatch = useDispatch();
+  const { userID, sessionID, groupID, admin } = useSelector(
+    ({
+      session,
+      auth,
+    }: {
+      session: { sessionID: string; groupID: string; admin: string };
+      auth: { user: { _id: string } };
+    }) => {
+      return {
+        userID: auth.user._id,
+        sessionID: session.sessionID,
+        groupID: session.groupID,
+        admin: session.admin,
+      };
+    }
+  );
   const [movieFinish, setMovieFinish] = useState(false);
   const modalizeRef = useRef<Modalize>();
   const handleMovieFinish = () => {
     setMovieFinish(true);
   };
   const navigateBack = () => {
-    navigation.goBack();
     if (route.params.groupName === "Single") {
-      endSingleSession(dispatch);
+      navigation.popToTop();
+    } else {
+      if (admin && userID && sessionID && groupID) {
+        console.log("clickedc");
+
+        if (userID === admin) {
+          showAlert({
+            firstText: "This will end the session",
+            secondText: "Exit?",
+            firstButtonText: "OK",
+            secondButtonText: "Cancel",
+            firstButtonHandleClose: () => {
+              if (groupID && sessionID) {
+                endGroupSession(groupID, sessionID, dispatch);
+              }
+              setTimeout(() => {
+                navigation.popToTop();
+              }, 200);
+            },
+          });
+        } else {
+          showAlert({
+            firstText: "Are you sure you want to leave this session?",
+            firstButtonText: "Yes",
+            secondButtonText: "Cancel",
+            firstButtonHandleClose: async () => {
+              if (groupID && sessionID) {
+                leaveGroupSession(sessionID, dispatch);
+                setTimeout(() => {
+                  navigation.popToTop();
+                }, 200);
+              }
+            },
+          });
+        }
+      }
     }
   };
+
+  const showOptionModal = () => {
+    modalizeRef.current?.open();
+  };
+  // for top header button
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,
@@ -51,7 +111,7 @@ export const SwipingView = ({
           </Text>
         ) : (
           <Entypo
-            onPress={() => navigation.goBack()}
+            onPress={showOptionModal}
             style={{
               alignSelf: "center",
               paddingRight: 10,
@@ -111,7 +171,7 @@ export const SwipingView = ({
   useEffect(() => {
     const unsubsribe = navigation.addListener("beforeRemove", (e) => {
       // Prevent default behavior of leaving the screen
-      if (!movieFinish) {
+      if (!movieFinish && route.params.groupName === "Single") {
         e.preventDefault();
         // Prompt the user before leaving the screen
         Alert.alert("Do you wanna exit?", "This will end the session", [
@@ -123,9 +183,7 @@ export const SwipingView = ({
             // This will continue the action that had triggered the removal of the screen
             onPress: () => {
               navigation.dispatch(e.data.action);
-              navigation.popToTop();
-
-              if (!route.params.groupName) {
+              if (route.params.groupName) {
                 endSingleSession(dispatch);
               }
             },
@@ -190,7 +248,9 @@ export const SwipingView = ({
           <CustomButton
             text={"Leave Group"}
             textStyle={{ fontSize: 20 }}
-            onPressHandler={navigateBack}
+            onPressHandler={() => {
+              navigateBack();
+            }}
             style={{
               marginVertical: 5,
               padding: 10,

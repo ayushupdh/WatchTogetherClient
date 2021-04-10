@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import { startSingleSession } from "../../redux/actions/sessionAction";
-import { START_SESSION } from "../../redux/types/SessionTypes";
+import { CREATE_SESSION } from "../../redux/types/SessionTypes";
 import { Styles } from "../AccountView/styles";
 import { ColorChangeField } from "../UtilComponents/ColorChangeField";
 import { CustomButton } from "../UtilComponents/CustomButton";
@@ -62,7 +62,7 @@ export const SelectOptions = ({
   const handleStart = () => {
     startSingleSession({ genres, providers, lang }, dispatch);
     // dispatch({
-    //   type: START_SESSION,
+    //   type: CREATE_SESSION,
     //   payload: {
     //     sessionType: "Single",
     //     genres,

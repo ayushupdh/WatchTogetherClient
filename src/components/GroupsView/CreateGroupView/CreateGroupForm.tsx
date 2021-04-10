@@ -99,27 +99,30 @@ export const CreateGroupForm = ({
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-      if (sessionRunning && admin == userID) {
-        e.preventDefault();
-        showAlert({
-          firstText: "This will end the session",
-          secondText: "Exit?",
-          firstButtonText: "OK",
-          secondButtonText: "Cancel",
-          firstButtonHandleClose: () => {
-            navigation.dispatch(e.data.action);
-            endGroupSession(
-              route.params?.groupId ? route.params?.groupId : groupID,
-              route.params?.sessionID ? route.params?.sessionID : sessionID,
-              dispatch
-            );
-          },
-        });
-      } else if (sessionRunning) {
-        leaveGroupSession(
-          route.params?.sessionID ? route.params?.sessionID : sessionID,
-          dispatch
-        );
+      if (sessionRunning) {
+        if (admin == userID) {
+          console.log("here in create");
+          e.preventDefault();
+          showAlert({
+            firstText: "This will end the session",
+            secondText: "Exit?",
+            firstButtonText: "OK",
+            secondButtonText: "Cancel",
+            firstButtonHandleClose: () => {
+              navigation.dispatch(e.data.action);
+              endGroupSession(
+                route.params?.groupId ? route.params?.groupId : groupID,
+                route.params?.sessionID ? route.params?.sessionID : sessionID,
+                dispatch
+              );
+            },
+          });
+        } else {
+          leaveGroupSession(
+            route.params?.sessionID ? route.params?.sessionID : sessionID,
+            dispatch
+          );
+        }
       }
     });
     return unsubscribe;

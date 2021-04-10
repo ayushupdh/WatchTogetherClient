@@ -56,15 +56,6 @@ export const addGroupsStack = (
         component={SwipingView}
         options={({ route }: GroupsNavProps<"SwipingView">) => ({
           headerLeft: null,
-          // headerRight: () => (
-
-          // <Ionicons
-          //   name={"menu"}
-          //   style={{ paddingRight: 15 }}
-          //   size={32}
-          //   color={"#313B68"}
-          // />
-          // ),
           title:
             route.params && route.params.groupName
               ? route.params.groupName
