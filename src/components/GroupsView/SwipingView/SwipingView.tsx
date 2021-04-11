@@ -11,21 +11,21 @@ import {
   Alert,
   Pressable,
 } from "react-native";
-import { GroupsNavProps } from "./Navigation/GroupsTypes";
+import { GroupsNavProps } from "../Navigation/GroupsTypes";
 
-import { styles } from "./styles";
-import { SwipeCard } from "../SwipeCard/SwipeCard";
+import { styles } from "../styles";
+import { SwipeCard } from "../../SwipeCard/SwipeCard";
 import { useDispatch, useSelector } from "react-redux";
-import { END_SESSION } from "../../redux/types/SessionTypes";
+import { END_SESSION } from "../../../redux/types/SessionTypes";
 import {
   endGroupSession,
   endSingleSession,
   leaveGroupSession,
-} from "../../redux/actions/sessionAction";
-import { socketClient } from "../io/io";
+} from "../../../redux/actions/sessionAction";
+import { socketClient } from "../../io/io";
 import { Modalize } from "react-native-modalize";
-import { CustomButton } from "../UtilComponents/CustomButton";
-import { showAlert } from "../UtilComponents/Alert";
+import { CustomButton } from "../../UtilComponents/CustomButton";
+import { showAlert } from "../../UtilComponents/Alert";
 
 export const SwipingView = ({
   route,
@@ -48,6 +48,7 @@ export const SwipingView = ({
       };
     }
   );
+  const [movieMatched, setMovieMatched] = useState(false);
   const [movieFinish, setMovieFinish] = useState(false);
   const modalizeRef = useRef<Modalize>();
   const handleMovieFinish = () => {
@@ -58,11 +59,9 @@ export const SwipingView = ({
       navigation.popToTop();
     } else {
       if (admin && userID && sessionID && groupID) {
-        console.log("clickedc");
-
         if (userID === admin) {
           showAlert({
-            firstText: "This will end the session",
+            firstText: "This will end the session for everyone",
             secondText: "Exit?",
             firstButtonText: "OK",
             secondButtonText: "Cancel",
@@ -71,7 +70,7 @@ export const SwipingView = ({
                 endGroupSession(groupID, sessionID, dispatch);
               }
               setTimeout(() => {
-                navigation.popToTop();
+                navigation.navigate("ResultsView", { sessionID: sessionID });
               }, 200);
             },
           });
@@ -123,13 +122,17 @@ export const SwipingView = ({
         ),
     });
   }, [navigation]);
+
   // Socket listeners
   useEffect(() => {
+    // Remove any previous listeners if the comp is not mounted
+    socketClient.off("session-ended");
     socketClient.on("one-movie-liked-by-all", () => {
+      !movieMatched ? setMovieMatched(true) : null;
       navigation.setOptions({
         headerRight: () => (
           <Pressable
-            onPress={() => navigation.goBack()}
+            onPress={showOptionModal}
             style={({ pressed }) => [
               {
                 marginRight: 10,
@@ -163,8 +166,15 @@ export const SwipingView = ({
         ),
       });
     });
+    socketClient.on("session-ended", () => {
+      dispatch({
+        type: END_SESSION,
+      });
+      navigation.navigate("ResultsView", { sessionID: sessionID });
+    });
     return () => {
       socketClient.off("one-movie-liked-by-all");
+      socketClient.off("session-ended");
     };
   }, [socketClient]);
 
@@ -231,8 +241,27 @@ export const SwipingView = ({
         // modalHeight={windowHeight.height - headerHeight - 100}
       >
         <View style={{ padding: 20, marginBottom: 20 }}>
+          {movieMatched && (
+            <CustomButton
+              text={"View Results"}
+              textStyle={{ fontSize: 20, color: "#000" }}
+              style={{
+                marginVertical: 5,
+                padding: 10,
+                backgroundColor: "#FAFAFA",
+                borderRadius: 20,
+                shadowOffset: { width: 5, height: 4 },
+                shadowColor: "#000",
+                shadowOpacity: 0.4,
+                elevation: 5,
+              }}
+              onPressHandler={() => {
+                navigation.navigate("ResultsView", { sessionID: sessionID });
+              }}
+            />
+          )}
           <CustomButton
-            text={"Add a user"}
+            text={"Add an user"}
             textStyle={{ fontSize: 20, color: "#000" }}
             style={{
               marginVertical: 5,
@@ -245,8 +274,9 @@ export const SwipingView = ({
               elevation: 5,
             }}
           />
+
           <CustomButton
-            text={"Leave Group"}
+            text={admin === userID ? "End Session" : "Leave Group"}
             textStyle={{ fontSize: 20 }}
             onPressHandler={() => {
               navigateBack();
@@ -254,7 +284,7 @@ export const SwipingView = ({
             style={{
               marginVertical: 5,
               padding: 10,
-              backgroundColor: "red",
+              backgroundColor: "#850000",
               borderRadius: 20,
               shadowOffset: { width: 5, height: 4 },
               shadowColor: "#000",
