@@ -24,6 +24,9 @@ export type GroupsParamList = {
     groupId: string | undefined;
     groupName: string | undefined;
   };
+  ResultsView: {
+    sessionID: string;
+  };
 };
 
 export type GroupsDataType = {

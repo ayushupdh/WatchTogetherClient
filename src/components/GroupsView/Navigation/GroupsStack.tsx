@@ -7,9 +7,10 @@ import { AddFriend } from "../CreateGroupView/AddFriend";
 import { CreateGroupForm } from "../CreateGroupView/CreateGroupForm";
 import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
-import { SwipingView } from "../SwipingView";
+import { SwipingView } from "../SwipingView/SwipingView";
 import { GroupInfo } from "../GroupInfo";
 import { Text } from "react-native";
+import { ResultsView } from "../SwipingView/ResultsView";
 /* TypedNavigator<
     HomeViewParamList | GroupsParamList,
     StackNavigationState<Record<string, object | undefined>>,
@@ -49,6 +50,11 @@ export const addGroupsStack = (
       <Stack.Screen
         name="Add a Friend"
         component={AddFriend}
+        options={{ headerBackTitleVisible: false }}
+      />
+      <Stack.Screen
+        name="ResultsView"
+        component={ResultsView}
         options={{ headerBackTitleVisible: false }}
       />
       <Stack.Screen

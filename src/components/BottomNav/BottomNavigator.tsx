@@ -27,7 +27,8 @@ const BottomNavTabs = () => {
     if (
       state === "SwipingView" ||
       state === "Add a Friend" ||
-      state === "Create a Group"
+      state === "Create a Group" ||
+      state === "ResultsView"
     ) {
       return false;
     }
