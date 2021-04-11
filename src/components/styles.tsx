@@ -1,15 +1,13 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 const theme = {
   mainColor: "#313B68",
   blueBackgroundCOlor: "#E2EAF4",
 };
-
 const AuthStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E2EAF4",
     alignItems: "center",
-    marginTop: StatusBar.currentHeight || 0,
   },
   title: {
     fontSize: 30,

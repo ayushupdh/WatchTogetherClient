@@ -63,11 +63,14 @@ export const Styles = StyleSheet.create({
     fontWeight: "500",
   },
   avatar: {
-    width: 118,
+    flexShrink: 1,
+    width: 130,
     height: 130,
     borderRadius: 40,
   },
   imageContainer: {
     alignItems: "center",
+    marginTop: 20,
+    flexShrink: 1,
   },
 });

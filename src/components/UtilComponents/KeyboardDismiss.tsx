@@ -4,24 +4,24 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { AuthStyles as Styles } from "../styles";
 
 export const KeyboardDismiss = ({ children }: any) => {
   const ViewContainer = Platform.OS === "ios" ? SafeAreaView : View;
-
   return (
-    <ViewContainer style={{ flex: 1, backgroundColor: "#E2EAF4" }}>
+    <ViewContainer style={styles.main}>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
         }}
       >
         <KeyboardAvoidingView
-          style={Styles.container}
+          style={styles.container}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
           enabled
         >
           {children}
@@ -30,3 +30,13 @@ export const KeyboardDismiss = ({ children }: any) => {
     </ViewContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  main: { flex: 1, backgroundColor: "#E2EAF4" },
+  container: {
+    flex: 1,
+    backgroundColor: "#E2EAF4",
+    alignItems: "center",
+    // paddingBottom: 100,
+  },
+});

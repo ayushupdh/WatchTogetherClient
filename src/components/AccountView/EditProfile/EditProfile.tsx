@@ -16,6 +16,7 @@ import { showAlert } from "../../UtilComponents/Alert";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Styles } from "./EditProfile.styles";
 import { AccountNavProps } from "../Navigation/AccountTypes";
+import { KeyboardDismiss } from "../../UtilComponents/KeyboardDismiss";
 
 export const EditProfile = ({
   navigation,
@@ -54,6 +55,7 @@ export const EditProfile = ({
   useEffect(() => {
     setUserState(user);
   }, [user]);
+
   const goBack = async () => {
     const { user, error } = await loadUser();
     if (user) {
@@ -97,13 +99,13 @@ export const EditProfile = ({
     }
   };
 
-  const setUserInfo = async () => {
+  const setUserInfo = async (
+    email: string | undefined,
+    username: string | undefined,
+    name: string | undefined
+  ) => {
     setLoading(true);
     // Check if anything has changed
-    let name = userState.name === user.name ? undefined : userState.name;
-    let username =
-      userState.username === user.username ? undefined : userState.username;
-    let email = userState.email === user.email ? undefined : userState.email;
 
     // Send to backend
     const { response, error } = await changeUserInfo(name, username, email);
@@ -140,17 +142,29 @@ export const EditProfile = ({
     if (userState.username === "") {
       return setError({ ...error, usernameError: "Username is Required" });
     }
-    showAlert({
-      firstText: "Are you sure?",
-      secondText: "This will update your profile.",
-      firstButtonText: "Yes",
-      secondButtonText: "Cancel",
-      secondButtonHandleClose: () => null,
-      firstButtonHandleClose: setUserInfo,
-    });
+    let name = userState.name === user.name ? undefined : userState.name;
+    let username =
+      userState.username === user.username ? undefined : userState.username;
+    let email = userState.email === user.email ? undefined : userState.email;
+    if (!email && !username && !name) {
+      showAlert({
+        firstText: "No change was made",
+        firstButtonText: "Ok",
+      });
+    } else {
+      showAlert({
+        firstText: "Are you sure?",
+        secondText: "This will update your profile.",
+        firstButtonText: "Yes",
+        secondButtonText: "Cancel",
+        secondButtonHandleClose: () => null,
+        firstButtonHandleClose: () => setUserInfo(email, username, name),
+      });
+    }
   };
   return (
-    <View style={Styles.container}>
+    <KeyboardDismiss>
+      {/* <View style={Styles.container}> */}
       {loading && (
         <View style={Styles.spinnerConatiner}>
           <ActivityIndicator size="large" color="#000" style={Styles.spinner} />
@@ -158,7 +172,11 @@ export const EditProfile = ({
       )}
       <Pressable style={Styles.imageContainer} onPress={pickImage}>
         {user && user.avatar ? (
-          <Image style={Styles.avatar} source={{ uri: user.avatar }} />
+          <Image
+            resizeMode="contain"
+            style={Styles.avatar}
+            source={{ uri: user.avatar }}
+          />
         ) : (
           <FontAwesome
             name="user-circle-o"
@@ -184,6 +202,7 @@ export const EditProfile = ({
         }}
         error={error.nameError}
       />
+
       <FormField
         containerStyle={{ width: "80%" }}
         textInputStyle={Styles.textInput}
@@ -211,10 +230,10 @@ export const EditProfile = ({
         error={error.usernameError}
       />
       <CustomButton
-        style={Styles.button}
+        style={{ ...Styles.button, paddingBottom: 15 }}
         text="Update"
         onPressHandler={onUpdate}
       />
-    </View>
+    </KeyboardDismiss>
   );
 };
