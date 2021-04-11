@@ -63,7 +63,7 @@ export default (
         groupID: payload?.groupID,
         sessionID: payload?.sessionID,
         admin: payload?.admin,
-        swipingActive: false,
+        swipingActive: payload?.swipingActive,
         sessionParams: {
           genres: payload?.genres,
           providers: payload?.providers,

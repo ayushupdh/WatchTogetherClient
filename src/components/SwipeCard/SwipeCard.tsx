@@ -76,7 +76,6 @@ export const SwipeCard = ({
   // }, [sessionID, groupType, currentIndex]);
 
   useEffect(() => {
-    console.log({ firstMount });
     if (!firstMount) {
       setFirstMount(true);
       reloadCards();

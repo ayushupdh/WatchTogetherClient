@@ -90,7 +90,6 @@ export const emitter = {
   leaveSession: (sessionID: string) => {
     socket.emit("leave-session", { sessionID });
   },
-
   setID: (_id: string) => {
     socket.emit("set-id", { _id });
   },

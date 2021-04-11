@@ -42,6 +42,7 @@ export const GroupOptionModal = ({
         {
           groupID: response.groupID,
           sessionID: response._id,
+          swipingActive: response.swiping_active,
         },
         dispatch
       );

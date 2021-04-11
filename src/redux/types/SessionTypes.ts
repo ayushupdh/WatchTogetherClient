@@ -20,4 +20,5 @@ export type CREATE_SESSION_PAYLOADTYPE = {
   groupID?: string;
   sessionID?: string;
   admin?: string;
+  swipingActive?: boolean;
 };

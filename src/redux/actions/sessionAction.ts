@@ -6,6 +6,7 @@ import {
   LEAVE_SESSION,
   CREATE_SESSION,
   UPDATE_PARAMS,
+  START_SESSION,
 } from "../types/SessionTypes";
 
 export const startGroupSession = async (
@@ -43,6 +44,11 @@ export const startGroupSession = async (
     console.log(error);
   }
 };
+export const swipingStarted = (dispatch: Dispatch<any>) => {
+  dispatch({
+    type: START_SESSION,
+  });
+};
 export const startSingleSession = (
   payload: { genres: string[]; providers: string[]; lang: string[] },
   dispatch: Dispatch<any>
@@ -60,6 +66,7 @@ export const joinSessionPopulate = async (
   payload: {
     groupID: string;
     sessionID: string;
+    swipingActive: boolean;
   },
   dispatch: Dispatch<any>
 ) => {

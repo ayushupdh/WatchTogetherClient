@@ -6,7 +6,6 @@ import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
-import { initListeners } from "./components/io/io.listeners";
 import { socketClient } from "./components/io/io";
 import { emitter } from "./components/io/io.emit";
 
@@ -24,7 +23,6 @@ export const AppEntry = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   //TODO:  Work on opening login only when the server says unauthorized
-
   const loadUser = async () => {
     let fetchedtoken: string | null = null;
     let response: any;
@@ -36,12 +34,14 @@ export const AppEntry = () => {
         },
       };
       fetchedtoken = await AsyncStorage.getItem("userToken");
+
       if (!fetchedtoken) {
         return;
       }
       config.headers["Authorization"] = `Bearer ${fetchedtoken}`;
       response = await server.get("/users/me", config);
     } catch (error) {
+      console.log(error);
       // If the user is unauthorised first time, remove the authtoken to reduce api calls
       if (error.response && error.response.status === 401) {
         await AsyncStorage.removeItem("userToken");
@@ -73,8 +73,6 @@ export const AppEntry = () => {
   };
 
   useEffect(() => {
-    initListeners();
-
     setLoading(true);
     loadUser().then(() => {
       setLoading(false);

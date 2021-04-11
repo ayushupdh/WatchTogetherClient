@@ -82,6 +82,7 @@ export const AddFriend = ({
   }, [groupID, sessionID]);
 
   useEffect(() => {
+    socketClient.off("session-ended");
     socketClient.on("user-joined", (joinedID) => {
       changeUserList(joinedID, "joined");
     });

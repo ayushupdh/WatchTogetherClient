@@ -38,7 +38,13 @@ export const CreateGroupForm = ({
     time: "",
     providers: ["Netflix", "Hulu", "Amazon Prime"],
   };
-  const { sessionRunning, sessionID, admin, groupID } = useSelector(
+  const {
+    sessionRunning,
+    sessionID,
+    admin,
+    groupID,
+    swipingActive,
+  } = useSelector(
     ({
       session,
     }: {
@@ -47,6 +53,7 @@ export const CreateGroupForm = ({
         sessionID: string;
         admin: string;
         groupID: string;
+        swipingActive: string;
       };
     }) => {
       return {
@@ -54,6 +61,7 @@ export const CreateGroupForm = ({
         sessionID: session.sessionID,
         admin: session.admin,
         groupID: session.groupID,
+        swipingActive: session.swipingActive,
       };
     }
   );
@@ -92,16 +100,16 @@ export const CreateGroupForm = ({
       });
       navigation.popToTop();
     });
+
     return () => {
       socketClient.off("session-ended");
     };
-  }, []);
+  }, [socketClient]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       if (sessionRunning) {
         if (admin == userID) {
-          console.log("here in create");
           e.preventDefault();
           showAlert({
             firstText: "This will end the session",
@@ -178,12 +186,11 @@ export const CreateGroupForm = ({
           },
           dispatch
         );
+        navigation.navigate("Add a Friend", {
+          groupName: name,
+        });
         // If session is running: user went back and wants to update params
       } else {
-        // !Need to change this
-        if (route.params?.sessionID) {
-          emitter.joinSession(route.params?.sessionID);
-        }
         updateParams(
           route.params?.sessionID ? route.params?.sessionID : sessionID,
           {
@@ -193,11 +200,18 @@ export const CreateGroupForm = ({
           },
           dispatch
         );
+        if (swipingActive) {
+          navigation.navigate("SwipingView", {
+            groupName: route.params?.groupName,
+          });
+        } else {
+          navigation.navigate("Add a Friend", {
+            groupName: name,
+          });
+        }
       }
       // Navigate to Add a friend regardless
-      navigation.navigate("Add a Friend", {
-        groupName: name,
-      });
+
       // If the name input is empty, show the alert
     } else {
       showAlert({
