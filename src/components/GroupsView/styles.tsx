@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
   },
   friendsListContainer: {
     flex: 1,
-    width: "90%",
+    width: "100%",
     marginVertical: 20,
   },
   createButton: {
@@ -196,9 +196,10 @@ export const styles = StyleSheet.create({
     fontSize: 20,
   },
   friends: {
-    width: "95%",
+    width: "90%",
+    alignSelf: "center",
     flexDirection: "row",
-    paddingVertical: 8,
+    paddingVertical: 5,
     paddingHorizontal: 12,
     borderRadius: 50,
     borderColor: "#000",

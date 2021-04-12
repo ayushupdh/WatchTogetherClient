@@ -240,22 +240,41 @@ export const SwipeCard = ({
       </>
     );
   } else if (movies.length === 0 && !loading) {
-    return (
-      <View style={styles.noMoviesContainer}>
-        <Text style={styles.noMoviesText}>
-          No more movies to present for the selected options. You might want to
-          go back and select different options!
-        </Text>
-        <CustomButton
-          text="Go Back"
-          style={styles.goBackButton}
-          onPressHandler={() => {
-            navigateBack();
-          }}
-          textStyle={styles.goBackButtonText}
-        />
-      </View>
-    );
+    if (groupType === "Single") {
+      return (
+        <View style={styles.noMoviesContainer}>
+          <Text style={styles.noMoviesText}>
+            No more movies to present for the selected options. You might want
+            to go back and select different options!
+          </Text>
+          <CustomButton
+            text="Go Back"
+            style={styles.goBackButton}
+            onPressHandler={() => {
+              navigateBack();
+            }}
+            textStyle={styles.goBackButtonText}
+          />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.noMoviesContainer}>
+          <Text style={styles.noMoviesText}>
+            No more movies to present for the selected options. You can wait for
+            other users to finish swiping.
+          </Text>
+          <CustomButton
+            text="Exit"
+            style={styles.goBackButton}
+            onPressHandler={() => {
+              navigateBack();
+            }}
+            textStyle={styles.goBackButtonText}
+          />
+        </View>
+      );
+    }
   } else {
     return (
       <View style={styles.loadingMovies}>

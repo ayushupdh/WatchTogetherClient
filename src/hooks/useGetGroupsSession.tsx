@@ -4,10 +4,9 @@ import { setAuthToken } from "../utils/authToken";
 
 import { server } from "../api/server";
 
-export const useGroupsInfo = (groupId: string) => {
-  const [groupInfo, setGroupInfo] = useState<any>();
-  const [groupsLoading, setLoading] = useState<boolean>(false);
-
+export const useGetGroupsSession = (groupId: string) => {
+  const [sessionList, setSessionList] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     (async () => {
@@ -15,18 +14,18 @@ export const useGroupsInfo = (groupId: string) => {
         setLoading(true);
         const token = await AsyncStorage.getItem("userToken");
         setAuthToken(token);
-        const response = await server.get(`/groups/${groupId}`);
+        const response = await server.get(`/groups/${groupId}/session`);
         const g = response.data;
-        setGroupInfo(g);
+        setSessionList(g);
         setError(null);
         setLoading(false);
       } catch (e) {
         setError(e.message);
-        setGroupInfo(null);
+        setSessionList(null);
         setLoading(false);
       }
     })();
   }, [groupId]);
 
-  return { groupInfo, groupsLoading, error };
+  return { sessionList, loading, error };
 };

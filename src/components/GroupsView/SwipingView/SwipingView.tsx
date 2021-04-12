@@ -2,15 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
-import {
-  Text,
-  View,
-  StyleSheet,
-  Button,
-  StatusBar,
-  Alert,
-  Pressable,
-} from "react-native";
+import { Text, View, Alert, Pressable } from "react-native";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
 
 import { styles } from "../styles";

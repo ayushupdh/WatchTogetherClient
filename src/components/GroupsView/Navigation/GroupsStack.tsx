@@ -8,16 +8,8 @@ import { CreateGroupForm } from "../CreateGroupView/CreateGroupForm";
 import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
 import { SwipingView } from "../SwipingView/SwipingView";
-import { GroupInfo } from "../GroupInfo";
-import { Text } from "react-native";
+import { GroupInfo } from "../GroupInfo/GroupInfo";
 import { ResultsView } from "../SwipingView/ResultsView";
-/* TypedNavigator<
-    HomeViewParamList | GroupsParamList,
-    StackNavigationState<Record<string, object | undefined>>,
-    any,
-    any,
-    any
-  >*/
 
 export const addGroupsStack = (
   Stack: TypedNavigator<
