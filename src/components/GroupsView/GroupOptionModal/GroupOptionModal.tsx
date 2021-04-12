@@ -21,11 +21,13 @@ type GroupOptionModalProps = {
   };
   nav: StackNavigationProp<GroupsParamList, "Your Groups">;
   close: () => void;
+  handleRename: (groupName: string, groupID: string) => void;
 };
 export const GroupOptionModal = ({
   group,
   nav,
   close,
+  handleRename,
 }: GroupOptionModalProps) => {
   const userID = useSelector(
     ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
@@ -38,7 +40,6 @@ export const GroupOptionModal = ({
     }
     close();
   };
-
   const handleStart = async () => {
     if (group.current_session) {
       const { response, error } = await getSessionInfo(group.current_session);
@@ -75,6 +76,7 @@ export const GroupOptionModal = ({
       />
       <CustomButton
         text="Rename Group"
+        onPressHandler={() => handleRename(group.name, group._id)}
         style={styles.optionModalButton}
         textStyle={{ fontSize: 22, color: "black" }}
       />

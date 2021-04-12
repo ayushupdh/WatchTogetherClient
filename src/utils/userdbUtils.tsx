@@ -322,6 +322,23 @@ export const createGroup = async (groupName: string, time: string) => {
     return { response, error };
   }
 };
+export const renameGroup = async (groupID: string, groupName: string) => {
+  let error = null;
+  let response = null;
+  try {
+    const token = await AsyncStorage.getItem("userToken");
+    setAuthToken(token);
+
+    await server.post("/groups/rename", {
+      groupID: groupID,
+      name: groupName,
+    });
+    return { response: true, error };
+  } catch (e) {
+    error = e.message;
+    return { response, error };
+  }
+};
 
 export const getGroupUsers = async (groupID: string) => {
   let response: UserType[] | null = null;
