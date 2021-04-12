@@ -26,6 +26,7 @@ export type GroupsParamList = {
   };
   ResultsView: {
     sessionID: string;
+    sessionView?: boolean;
   };
 };
 

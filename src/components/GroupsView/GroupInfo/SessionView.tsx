@@ -13,7 +13,6 @@ export const SessionView = ({ nav, groupID }: SessionViewProps) => {
   const { sessionList, loading, error } = useGetGroupsSession(groupID);
 
   const renderSessions = ({ item }: { item: any }) => {
-    console.log(item);
     let dateObj = new Date(item.createdAt);
     let timeObj = dateObj.toLocaleTimeString().split(" ");
     let dateArr = dateObj.toDateString().split(" ");
@@ -23,7 +22,12 @@ export const SessionView = ({ nav, groupID }: SessionViewProps) => {
     let date = `${dateArr[1]} ${dateArr[2]}`;
     return (
       <Pressable
-        onPress={() => nav.navigate("ResultsView", { sessionID: item._id })}
+        onPress={() =>
+          nav.navigate("ResultsView", {
+            sessionID: item._id,
+            sessionView: true,
+          })
+        }
         style={{
           flexDirection: "row",
           backgroundColor: "#fff",

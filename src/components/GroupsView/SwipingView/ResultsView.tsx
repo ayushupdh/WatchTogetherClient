@@ -57,7 +57,11 @@ export const ResultsView = ({
         headerLeft: () => null,
         headerRight: () => (
           <Text
-            onPress={() => navigation.popToTop()}
+            onPress={() =>
+              route.params.sessionView
+                ? navigation.goBack()
+                : navigation.popToTop()
+            }
             style={{ color: "blue", fontSize: 20, marginRight: 10 }}
           >
             Done
@@ -69,7 +73,6 @@ export const ResultsView = ({
   useEffect(() => {
     setLoading(true);
     if (route.params.sessionID) {
-      console.log(route.params.sessionID);
       getSessionResults(route.params.sessionID).then(({ response, error }) => {
         if (error) {
           setError(error);
@@ -163,27 +166,40 @@ export const ResultsView = ({
 
   return (
     <View style={style.container}>
-      <Text style={style.active}>Active Users</Text>
-      <View>
-        <FlatList
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderUsers}
-          data={activeUsers}
-          keyExtractor={(item: UserType) => item._id}
-          horizontal
-        />
-      </View>
+      {!route.params.sessionView && (
+        <View>
+          <Text style={style.active}>Active Users</Text>
+          <FlatList
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderUsers}
+            data={activeUsers}
+            keyExtractor={(item: UserType) => item._id}
+            horizontal
+          />
+        </View>
+      )}
 
-      <Text style={style.movieslikedText}>Top 5 movies liked</Text>
-      <VirtualizedList
-        contentContainerStyle={{ paddingBottom: 20 }}
-        renderItem={renderMovies}
-        data={movieLists}
-        getItem={(data, index) => data[index]}
-        getItemCount={(data) => data.length}
-        keyExtractor={(item: MovieType) => item._id}
-      />
+      <Text style={style.movieslikedText}>
+        {route.params.sessionView ? "Movies Liked" : "Top 5 movies liked"}
+      </Text>
+      {movieLists.length !== 0 ? (
+        <VirtualizedList
+          contentContainerStyle={{ paddingBottom: 20 }}
+          renderItem={renderMovies}
+          data={movieLists}
+          getItem={(data, index) => data[index]}
+          getItemCount={(data) => data.length}
+          keyExtractor={(item: MovieType) => item._id}
+        />
+      ) : (
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ color: "red", fontSize: 20 }}>
+            No movies were liked in this session
+          </Text>
+        </View>
+      )}
+
       <Modalize
         rootStyle={{ zIndex: 10 }}
         ref={modalizeRef}
