@@ -20,8 +20,23 @@ export const styles = StyleSheet.create({
   },
   createGroupContainer: {
     flex: 1,
+    backgroundColor: "#E2EAF4",
+  },
+  textinputformField: {
     width: "80%",
-    // marginTop: 20,
+    alignSelf: "center",
+    padding: 10,
+    paddingHorizontal: 25,
+    borderRadius: 50,
+    borderColor: "#000",
+    backgroundColor: "#fafafa",
+    shadowOffset: { width: 5, height: 4 },
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    marginVertical: 5,
+    elevation: 5,
+    fontSize: 20,
+    fontWeight: "bold",
   },
   groupInfoContainer: {
     width: "90%",
@@ -132,6 +147,8 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   unsubmittedButton: {
+    width: "80%",
+    alignSelf: "center",
     padding: 15,
     borderRadius: 50,
     borderColor: "#000",
@@ -140,7 +157,7 @@ export const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.4,
     opacity: 0.6,
-    marginTop: "10%",
+    marginTop: 50,
     elevation: 5,
   },
   friendsNotjoined: {

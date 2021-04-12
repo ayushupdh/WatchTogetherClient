@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import { startSingleSession } from "../../redux/actions/sessionAction";
 import { CREATE_SESSION } from "../../redux/types/SessionTypes";
@@ -18,24 +18,38 @@ export const SelectOptions = ({
   const [providers, setProvider] = useState<string[]>([]);
   const dispatch = useDispatch();
   const genreList = [
-    { text: "Action", _id: "123754 " },
-    { text: "Adventure", _id: "12324 " },
-    { text: "Fantasy", _id: "134 " },
-    { text: "Documentary", _id: "143234 " },
-    { text: "Comedy", _id: "12354 " },
-    { text: "Drama", _id: "1234234 " },
-    { text: "Thriller", _id: "1265734 " },
-    { text: "Horror", _id: "198234 " },
+    { text: "Action", _id: "123754" },
+    { text: "Adventure", _id: "13asc4" },
+    { text: "Comedy", _id: "123vwev54" },
+    { text: "Crime", _id: "wevc" },
+    { text: "Documentary", _id: "scasc" },
+    { text: "Drama", _id: "ever" },
+    { text: "Fantasy", _id: "13XCA4" },
+    { text: "Horror", _id: "198234" },
+    { text: "Mystery", _id: "13ZXC4" },
+    { text: "Romance", _id: "134ssdv" },
+    { text: "Science Fiction", _id: "dsv" },
+    { text: "Thriller", _id: "1265734" },
   ];
   const langList = [
-    { text: "English", _id: "12324 " },
-    { text: "Finnish", _id: "134 " },
-    { text: "Arabic", _id: "12344 " },
+    { text: "English", _id: "12324" },
+    { text: "German", _id: "134" },
+    { text: "French", _id: "44" },
+    { text: "Spanish", _id: "75" },
+    { text: "Italian", _id: "87" },
+    { text: "Russian", _id: "345" },
+    { text: "Japanese", _id: "654" },
   ];
   const providerList = [
-    { text: "Netflix", _id: "1" },
-    { text: "Hulu", _id: "00012" },
-    { text: "Amazon Prime", _id: "00112" },
+    { text: "DIRECTV", _id: "1" },
+    { text: "HBO Max", _id: "00012" },
+    { text: "fuboTV", _id: "were" },
+    { text: "Amazon Prime Video", _id: "tebrt" },
+    { text: "HBO Now", _id: "asdqw" },
+    { text: "Pluto TV", _id: "scvsd" },
+    { text: "Hulu", _id: "sdv" },
+    { text: "Netflix", _id: "dvsd" },
+    { text: "Disney Plus", _id: "8776" },
   ];
 
   const handleGenre = (text: string, value: boolean) => {
@@ -74,12 +88,51 @@ export const SelectOptions = ({
     navigation.navigate("SwipingView", { groupName: "Single" });
   };
   return (
-    <ScrollView
-      style={Styles.container}
-      contentContainerStyle={{ alignItems: "center" }}
-    >
-      <Text style={Styles.selectionTitleText}>Select genres</Text>
-      <View
+    <View style={{ ...Styles.container, alignItems: "center" }}>
+      <View style={{ flexBasis: 100, width: "100%" }}>
+        <Text style={Styles.selectionTitleText}>Select genres</Text>
+
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 20 }}
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <SelectionButtons text={item.text} onSelect={handleGenre} />
+          )}
+          data={genreList}
+          keyExtractor={(item) => item._id}
+          horizontal
+        />
+      </View>
+      <View style={{ flexBasis: 100, width: "100%" }}>
+        <Text style={Styles.selectionTitleText}>Select Languages</Text>
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 20 }}
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <SelectionButtons text={item.text} onSelect={handleLang} />
+          )}
+          data={langList}
+          keyExtractor={(item) => item._id}
+          horizontal
+        />
+      </View>
+      <View style={{ flexBasis: 100, width: "100%" }}>
+        <Text style={Styles.selectionTitleText}>Select Platform</Text>
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 20 }}
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <SelectionButtons text={item.text} onSelect={handleProvider} />
+          )}
+          data={providerList}
+          keyExtractor={(item) => item._id}
+          horizontal
+        />
+      </View>
+      {/* <View
         style={{
           flexDirection: "row",
           flexWrap: "wrap",
@@ -91,8 +144,8 @@ export const SelectOptions = ({
         {genreList.map((p) => (
           <SelectionButtons key={p._id} text={p.text} onSelect={handleGenre} />
         ))}
-      </View>
-      <Text style={Styles.selectionTitleText}>Select Languages</Text>
+      </View> */}
+      {/* <Text style={Styles.selectionTitleText}>Select Languages</Text>
       <View
         style={{
           flexDirection: "row",
@@ -107,7 +160,7 @@ export const SelectOptions = ({
         ))}
       </View>
       <Text style={Styles.selectionTitleText}>Select Providers</Text>
-      <View
+      <View 
         style={{
           flexDirection: "row",
           flexWrap: "wrap",
@@ -124,19 +177,24 @@ export const SelectOptions = ({
           />
         ))}
       </View>
+      */}
       <CustomButton
         text="Start"
-        style={Styles.nextButton}
+        style={{ ...Styles.nextButton, marginTop: 50 }}
         onPressHandler={() => {
           handleStart();
         }}
       />
-    </ScrollView>
+    </View>
   );
 };
 
-const SelectionButtons = (props: any) => {
-  const [state, setstate] = useState(false);
+type SelectButtonProps = {
+  text: string;
+  onSelect: (text: string, state: boolean) => void;
+};
+const SelectionButtons = (props: SelectButtonProps) => {
+  const [state, setstate] = useState<boolean>(false);
   const handler = () => {
     setstate((prev) => !prev);
     props.onSelect(props.text, !state);

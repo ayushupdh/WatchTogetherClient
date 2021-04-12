@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, FlatList } from "react-native";
 import { FormField } from "../FormField";
 import { GroupsDataType, GroupsNavProps } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
@@ -25,18 +25,41 @@ export const CreateGroupForm = ({
 }: GroupsNavProps<"Create a Group">) => {
   const groupData: GroupsDataType = {
     genres: [
-      "Drama",
-      "Crime",
-      "Comedy",
       "Action",
-      "Thriller",
-      "Documentary",
       "Adventure",
+      "Comedy",
+      "Crime",
+      "Documentary",
+      "Drama",
+      "Fantasy",
       "Horror",
+      "Mystery",
+      "Romance",
+      "Science Fiction",
+      "Thriller",
     ],
-    languages: ["English", "German", "Spanish", "French", "Arabic"],
+    languages: [
+      "English",
+      "German",
+      "French",
+      "Spanish",
+      "Italian",
+      "Russian",
+      "Japanese",
+    ],
     time: "",
-    providers: ["Netflix", "Hulu", "Amazon Prime"],
+    providers: [
+      "DIRECTV",
+      "HBO Max",
+      "fuboTV",
+      "Amazon Prime Video",
+      "HBO Now",
+      "Pluto TV",
+      "Hulu",
+      "Netflix",
+      "Amazon Prime",
+      "Disney Plus",
+    ],
   };
   const {
     sessionRunning,
@@ -79,15 +102,6 @@ export const CreateGroupForm = ({
   const [lang, setLang] = useState<string[]>([]);
   const [provider, setProvider] = useState<string[]>([]);
   const [error, seterror] = useState<string>("");
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener("focus", async () => {
-  //     // const session: any = store.getState().session;
-  //     // setSession(session.sessionRunning);
-  //   });
-  //   return unsubscribe;
-  // }, [navigation]);
-
   useLayoutEffect(() => {
     if (route.params?.groupName) {
       setName(route.params?.groupName);
@@ -222,86 +236,72 @@ export const CreateGroupForm = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={{ width: "100%", flex: 1, paddingTop: 10 }}>
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{
-            alignItems: "center",
-            paddingBottom: 20,
-          }}
-        >
-          <View style={styles.createGroupContainer}>
-            {!route.params?.groupName && (
-              <FormField
-                placeholder="Name"
-                title="Group Name"
-                value={name}
-                onChangeHandler={(name: string) => setName(name)}
-                error={error}
-                autoFocus={true}
-              />
-            )}
-            <Timer time={time} setTime={setTime} />
-
-            <Text style={styles.groupTitle}>Select Genres</Text>
-            <View style={styles.selectionContainer}>
-              {groupData.genres.map((p) => (
-                <SelectionButtons key={p} text={p} onSelect={handleGenre} />
-              ))}
-            </View>
-            <View
-              style={{
-                paddingTop: 30,
-                marginLeft: 20,
-                marginRight: 20,
-                flex: 1,
-              }}
-            ></View>
-            <Text style={styles.groupTitle}>Select Languages</Text>
-
-            <View style={styles.selectionContainer}>
-              {groupData.languages.map((p) => (
-                <SelectionButtons key={p} text={p} onSelect={handleLang} />
-              ))}
-            </View>
-            <View
-              style={{
-                paddingTop: 30,
-                marginLeft: 20,
-                marginRight: 20,
-                flex: 1,
-              }}
-            ></View>
-
-            {/* select providers */}
-            <Text style={styles.groupTitle}>Select Providers</Text>
-
-            <View style={styles.selectionContainer}>
-              {groupData.providers.map((p) => (
-                <SelectionButtons key={p} text={p} onSelect={handleProvider} />
-              ))}
-            </View>
-            <View
-              style={{
-                paddingTop: 10,
-                marginLeft: 20,
-                marginRight: 20,
-                flex: 1,
-              }}
-            ></View>
-            <CustomButton
-              text={"Next"}
-              style={
-                name === ""
-                  ? styles.unsubmittedButton
-                  : { ...styles.unsubmittedButton, opacity: 1 }
-              }
-              onPressHandler={handleNext}
-            />
-          </View>
-        </ScrollView>
+    <View style={styles.createGroupContainer}>
+      {!route.params?.groupName && (
+        <FormField
+          textInputStyle={styles.textinputformField}
+          placeholder="Name"
+          title="Group Name"
+          value={name}
+          onChangeHandler={(name: string) => setName(name)}
+          error={error}
+          autoFocus={true}
+        />
+      )}
+      <Timer time={time} setTime={setTime} />
+      <View style={{ flexBasis: 100, width: "100%" }}>
+        <Text style={styles.groupTitle}>Select Genres</Text>
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 20 }}
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }: { item: string }) => (
+            <SelectionButtons text={item} onSelect={handleGenre} />
+          )}
+          data={groupData.genres}
+          keyExtractor={(item: string) => item}
+          horizontal
+        />
       </View>
+      <View style={{ flexBasis: 100, width: "100%" }}>
+        <Text style={styles.groupTitle}>Select Languages</Text>
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 20 }}
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }: { item: string }) => (
+            <SelectionButtons text={item} onSelect={handleLang} />
+          )}
+          data={groupData.languages}
+          keyExtractor={(item: string) => item}
+          horizontal
+        />
+      </View>
+      {/* select providers */}
+      <View style={{ flexBasis: 100, width: "100%" }}>
+        <Text style={styles.groupTitle}>Select Providers</Text>
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 20 }}
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }: { item: string }) => (
+            <SelectionButtons text={item} onSelect={handleProvider} />
+          )}
+          data={groupData.providers}
+          keyExtractor={(item: string) => item}
+          horizontal
+        />
+      </View>
+
+      <CustomButton
+        text={"Next"}
+        style={
+          name === ""
+            ? styles.unsubmittedButton
+            : { ...styles.unsubmittedButton, opacity: 1 }
+        }
+        onPressHandler={handleNext}
+      />
     </View>
   );
 };
@@ -317,22 +317,24 @@ const SelectionButtons = (props: SelectionButtonPropType) => {
     props.onSelect(props.text, !state);
   };
   return (
-    <CustomButton
-      text={props.text}
-      style={{
-        paddingHorizontal: 15,
-        paddingVertical: 5,
-        backgroundColor: state ? "#37BEB0" : "#f4f4f4",
-        marginHorizontal: 8,
-        marginVertical: 8,
-        borderRadius: 20,
-        shadowOffset: { width: 5, height: 4 },
-        shadowColor: "#000",
-        shadowOpacity: 0.4,
-        elevation: 5,
-      }}
-      onPressHandler={handler}
-      textStyle={{ color: state ? "white" : "black" }}
-    />
+    <View>
+      <CustomButton
+        text={props.text}
+        style={{
+          paddingHorizontal: 15,
+          paddingVertical: 5,
+          backgroundColor: state ? "#37BEB0" : "#f4f4f4",
+          marginHorizontal: 8,
+          marginVertical: 8,
+          borderRadius: 20,
+          shadowOffset: { width: 5, height: 4 },
+          shadowColor: "#000",
+          shadowOpacity: 0.4,
+          elevation: 5,
+        }}
+        onPressHandler={handler}
+        textStyle={{ color: state ? "white" : "black" }}
+      />
+    </View>
   );
 };
