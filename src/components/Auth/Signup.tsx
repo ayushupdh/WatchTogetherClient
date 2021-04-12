@@ -30,6 +30,11 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  // Refs for next button on keyboard
+  const usernameRef: any = useRef();
+  const emailRef: any = useRef();
+  const passwordRef: any = useRef();
+  const secondPasswordRef: any = useRef();
 
   // Reducers dispatch
   const dispatch = useDispatch();
@@ -40,6 +45,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       const res = await server.post("/users/signup", userData);
       const userToken = res.data.token;
       await AsyncStorage.setItem("userToken", userToken);
+      setLoading(false);
       dispatch({
         type: SIGN_UP,
         payload: {
@@ -54,7 +60,6 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
           token: res.data.token,
         },
       });
-      setLoading(false);
     } catch (e) {
       console.log(e);
       if (e.response && e.response.data.error) {
@@ -65,12 +70,6 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       return setError(e.message);
     }
   };
-
-  // Refs for next button on keyboard
-  const usernameRef: any = useRef();
-  const emailRef: any = useRef();
-  const passwordRef: any = useRef();
-  const secondPasswordRef: any = useRef();
 
   const onSignUp = async () => {
     if (userData.username.length < 3) {
