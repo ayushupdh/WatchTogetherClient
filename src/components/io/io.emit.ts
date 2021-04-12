@@ -87,6 +87,12 @@ export const emitter = {
       );
     });
   },
+  friendAddedToGroup: (sessionID: string) => {
+    socket.emit("friend-added-to-group", sessionID);
+  },
+  friendRemovedFromGroup: (sessionID: string) => {
+    socket.emit("friend-removed-from-group", sessionID);
+  },
   leaveSession: (sessionID: string) => {
     socket.emit("leave-session", { sessionID });
   },

@@ -1,6 +1,12 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Pressable, Text, View, ScrollView } from "react-native";
+import {
+  Pressable,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { FormField } from "../FormField";
 import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
@@ -21,6 +27,7 @@ import { UserAvatar } from "../../UserViewModal/UserAvatar";
 import { socketClient } from "../../io/io";
 import { END_SESSION } from "../../../redux/types/SessionTypes";
 import { emitter } from "../../io/io.emit";
+import { Loading } from "../../UtilComponents/Loading";
 
 type UserType = { name: string; _id: string; avatar: string };
 type DisplayUser = { online?: boolean } & UserType;
@@ -32,6 +39,7 @@ export const AddFriend = ({
   const [modal, showModal] = useState(false);
   const [input, setInput] = useState<string>("");
   const [clickedUser, setUser] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { sessionID, groupID } = useSelector(
     ({ session }: { session: { sessionID: string; groupID: string } }) => {
@@ -57,37 +65,20 @@ export const AddFriend = ({
   const [displayedFriends, setDisplayedFriends] = useState<DisplayUser[]>([]);
   useLayoutEffect(() => {
     if (groupID) {
-      (async () => {
-        let userList: DisplayUser[] = [];
-        const { response, error } = await getGroupUsers(groupID);
-        if (response && response.length > 0) {
-          userList = response.filter((user) => {
-            return user._id !== userID;
-          });
-          if (sessionID) {
-            const { users, error } = await getActiveSessionUsers(sessionID);
-            if (users && response.length > 0) {
-              userList = userList.map((eachUser) => {
-                if (users.includes(eachUser._id)) {
-                  eachUser.online = true;
-                }
-                return eachUser;
-              });
-            }
-          }
-          setDisplayedFriends(userList);
-        }
-      })();
+      updateUsers();
     }
   }, [groupID, sessionID]);
 
   useEffect(() => {
     socketClient.off("session-ended");
     socketClient.on("user-joined", (joinedID) => {
-      changeUserList(joinedID, "joined");
+      changeUserList("joined", joinedID);
+    });
+    socketClient.on("update-friendList", () => {
+      changeUserList("update_list");
     });
     socketClient.on("user-left", (joinedID) => {
-      changeUserList(joinedID, "left");
+      changeUserList("left", joinedID);
     });
     socketClient.on("session-started", (joinedID) => {
       navigation.navigate("SwipingView", { groupName: route.params.groupName });
@@ -103,12 +94,41 @@ export const AddFriend = ({
       socketClient.off("user-left");
       socketClient.off("session-started");
       socketClient.off("session-ended");
+      socketClient.off("friend-added-to-group");
     };
   }, [navigation, displayedFriends]);
   // For userModals
   const modalRef = useRef<Modalize>();
 
-  const changeUserList = (joinedID: string, action: "joined" | "left") => {
+  const updateUsers = async () => {
+    setLoading(true);
+    let userList: DisplayUser[] = [];
+
+    const { response, error } = await getGroupUsers(groupID);
+    if (response && response.length > 0) {
+      userList = response.filter((user) => {
+        return user._id !== userID;
+      });
+      if (sessionID) {
+        const { users, error } = await getActiveSessionUsers(sessionID);
+        if (users && response.length > 0) {
+          userList = userList.map((eachUser) => {
+            if (users.includes(eachUser._id)) {
+              eachUser.online = true;
+            }
+            return eachUser;
+          });
+        }
+      }
+      setDisplayedFriends(userList);
+      setLoading(false);
+    }
+  };
+
+  const changeUserList = (
+    action: "joined" | "left" | "update_list",
+    joinedID?: string
+  ) => {
     if (action === "joined") {
       let newList: DisplayUser[] = displayedFriends.map((friend) => {
         if (friend._id === joinedID) {
@@ -131,6 +151,9 @@ export const AddFriend = ({
       setDisplayedFriends((prev: DisplayUser[]) => {
         return prev === newList ? prev : newList;
       });
+    }
+    if (action === "update_list") {
+      updateUsers();
     }
   };
   const countOnlineUsers = () => {
@@ -164,6 +187,7 @@ export const AddFriend = ({
       setDisplayedFriends((oldList) => [...oldList, selectedUser]);
       // add in DB
       await addUserToGroup(groupID, selectedUser._id);
+      emitter.friendAddedToGroup(sessionID);
     }
   };
 
@@ -192,13 +216,6 @@ export const AddFriend = ({
         >
           <UserAvatar avatar={friend.avatar} size={30} borderRadius={20} />
           <Text style={styles.friendsName}>{friend.name}</Text>
-          <MaterialIcons
-            style={{ alignSelf: "center" }}
-            onPress={() => handleRemoveFriends(friend._id)}
-            name="cancel"
-            size={24}
-            color="#aaa"
-          />
         </Pressable>
       );
     });
@@ -246,7 +263,7 @@ export const AddFriend = ({
               renderItem={renderItem}
               keyExtractor={(item) => item._id}
             /> */}
-            {displayFriendsList()}
+            {loading ? <Loading /> : displayFriendsList()}
           </View>
           {userID === admin && (
             <CustomButton

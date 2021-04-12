@@ -7,6 +7,7 @@ import {
   getSessionInfo,
   removeUserFromGroup,
 } from "../../../utils/userdbUtils";
+import { emitter } from "../../io/io.emit";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { GroupsParamList } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";
@@ -32,6 +33,9 @@ export const GroupOptionModal = ({
   const dispatch = useDispatch();
   const handleRemove = async () => {
     await removeUserFromGroup(group._id, userID);
+    if (group.current_session) {
+      emitter.friendRemovedFromGroup(group.current_session);
+    }
     close();
   };
 
