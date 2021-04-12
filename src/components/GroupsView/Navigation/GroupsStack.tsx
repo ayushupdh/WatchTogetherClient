@@ -30,7 +30,11 @@ export const addGroupsStack = (
 ) => {
   return (
     <>
-      <Stack.Screen name="Your Groups" component={GroupsMain} />
+      <Stack.Screen
+        name="Your Groups"
+        component={GroupsMain}
+        options={() => ({ headerBackTitleVisible: false })}
+      />
       <Stack.Screen
         name="Create a Group"
         component={CreateGroupForm}
