@@ -9,7 +9,7 @@ import { GroupsMain } from "../GroupsMain";
 import { GroupsNavProps, GroupsParamList } from "./GroupsTypes";
 import { SwipingView } from "../SwipingView/SwipingView";
 import { GroupInfo } from "../GroupInfo/GroupInfo";
-import { ResultsView } from "../SwipingView/ResultsView";
+import { Results } from "../SwipingView/Results";
 
 export const addGroupsStack = (
   Stack: TypedNavigator<
@@ -49,8 +49,8 @@ export const addGroupsStack = (
         options={{ headerBackTitleVisible: false }}
       />
       <Stack.Screen
-        name="ResultsView"
-        component={ResultsView}
+        name="Results"
+        component={Results}
         options={{ headerBackTitleVisible: false }}
       />
       <Stack.Screen

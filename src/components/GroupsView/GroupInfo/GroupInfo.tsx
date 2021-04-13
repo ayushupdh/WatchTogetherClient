@@ -1,5 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { View, Pressable, Text } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from "../styles";
 import { useGroupsInfo } from "../../../hooks/useGroupsInfo";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
@@ -52,7 +54,7 @@ export const GroupInfo = ({
               paddingHorizontal: 20,
             }}
           >
-            Started By:{" "}
+            Created By:{" "}
             {groupInfo && groupInfo.created_by
               ? groupInfo.created_by.name
               : "Loading.."}
@@ -71,6 +73,31 @@ export const GroupInfo = ({
               : "Loading.."}
           </Text>
         </View>
+        {/* <View
+          style={{
+            flexDirection: "row",
+            marginVertical: 10,
+            marginHorizontal: 30,
+          }}
+        >
+          <View
+            style={{
+              marginHorizontal: 20,
+            }}
+          >
+            <Feather name="arrow-right-circle" size={40} color="#313B68" />
+            <Text>Start</Text>
+          </View>
+          <View
+            style={{
+              marginHorizontal: 20,
+            }}
+          >
+            <MaterialCommunityIcons name="exit-to-app" size={40} color="red" />
+            <Text>Leave</Text>
+          </View>
+        </View> */}
+
         <View style={styles.groupsSelectorContainer}>
           <Pressable
             style={({ pressed }) => [
@@ -152,7 +179,7 @@ export const GroupInfo = ({
                 marginTop: 10,
               }}
             >
-              Started By:{" "}
+              Created By By:{" "}
             </Text>
             <View
               style={{

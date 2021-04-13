@@ -15,6 +15,7 @@ import { Modalize } from "react-native-modalize";
 import { useSelector } from "react-redux";
 import { getSessionResults } from "../../../utils/userdbUtils";
 import { MovieInfoModal } from "../../SwipeCard/MovieInfoModal";
+import { UserAvatar } from "../../UserViewModal/UserAvatar";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
 
 type UserType = {
@@ -34,10 +35,7 @@ type MovieType = {
     overview: string;
   };
 };
-export const ResultsView = ({
-  navigation,
-  route,
-}: GroupsNavProps<"ResultsView">) => {
+export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [activeUsers, setUsers] = useState<UserType[] | undefined>([]);
   const [movieLists, setMovies] = useState<MovieType[]>([]);
@@ -97,8 +95,9 @@ export const ResultsView = ({
 
   const renderUsers = ({ item }: { item: UserType }) => {
     return (
-      <View>
-        <Image style={style.activeUserAvatar} source={{ uri: item.avatar }} />
+      <View style={{ marginHorizontal: 4 }}>
+        <UserAvatar avatar={item.avatar} borderRadius={50} size={50} />
+        {/* <Image style={style.activeUserAvatar} source={{ uri: item.avatar }} /> */}
         <Text style={style.activeUserName}>{item.name.split(" ")[0]}</Text>
       </View>
     );
@@ -147,11 +146,19 @@ export const ResultsView = ({
             <View style={style.movieUserAvatarContainer}>
               {item.liked_by.map((item: UserType) => {
                 return (
-                  <Image
-                    key={item._id}
-                    style={style.movieUserAvatar}
-                    source={{ uri: item.avatar }}
-                  />
+                  <View key={item._id} style={{ marginHorizontal: 2 }}>
+                    <UserAvatar
+                      avatar={item.avatar}
+                      borderRadius={50}
+                      size={25}
+                    />
+                  </View>
+
+                  // <Image
+                  //   key={item._id}
+                  //   style={style.movieUserAvatar}
+                  //   source={{ uri: item.avatar }}
+                  // />
                 );
               })}
             </View>
@@ -170,6 +177,7 @@ export const ResultsView = ({
         <View>
           <Text style={style.active}>Active Users</Text>
           <FlatList
+            contentContainerStyle={{ marginLeft: 15 }}
             scrollEnabled
             showsHorizontalScrollIndicator={false}
             renderItem={renderUsers}
@@ -213,7 +221,12 @@ export const ResultsView = ({
 };
 
 const style = StyleSheet.create({
-  container: { flex: 1, width: "100%", height: "100%" },
+  container: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#E2EAF4",
+  },
   active: {
     color: "#555",
     fontSize: 20,

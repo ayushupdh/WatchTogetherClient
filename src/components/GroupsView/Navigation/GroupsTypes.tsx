@@ -24,7 +24,7 @@ export type GroupsParamList = {
     groupId: string | undefined;
     groupName: string | undefined;
   };
-  ResultsView: {
+  Results: {
     sessionID: string;
     sessionView?: boolean;
   };
