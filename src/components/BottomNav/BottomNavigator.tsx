@@ -14,6 +14,7 @@ import { NotificationMain } from "../NotificationView/NotificationMain";
 import GroupsNavigator from "../GroupsView/Navigation/GroupsNavigator";
 import HomeViewNavigator from "../HomeView/Navigation/HomeNavigation";
 import AccountNavigator from "../AccountView/Navigation/AccountNavigator";
+import { View } from "react-native";
 const Tab = createBottomTabNavigator<BottomNavParamList>();
 
 // ctrl + cmd + z
@@ -28,7 +29,7 @@ const BottomNavTabs = () => {
       state === "SwipingView" ||
       state === "Add a Friend" ||
       state === "Create a Group" ||
-      state === "ResultsView"
+      state === "Results"
     ) {
       return false;
     }
@@ -43,22 +44,17 @@ const BottomNavTabs = () => {
           title: "",
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-
             if (route.name === "HomeScreen") {
-              return <Ionicons name={"home"} size={size} color={"#313B68"} />;
+              return <Icon name="home" color="#313B68" focused={focused} />;
             } else if (route.name === "AccountScreen") {
               return (
-                <Ionicons name={"person-circle"} size={30} color={"red"} />
+                <Icon name="person-circle" color="red" focused={focused} />
               );
             } else if (route.name === "GroupsScreen") {
-              return <Ionicons name={"people"} size={size} color={"green"} />;
+              return <Icon name="people" color="green" focused={focused} />;
             } else if (route.name === "LikesScreen") {
               return (
-                <Ionicons
-                  name={"notifications"}
-                  size={size}
-                  color={"#FAA286"}
-                />
+                <Icon name="notifications" color="#FAA286" focused={focused} />
               );
             }
 
@@ -84,6 +80,24 @@ const BottomNavTabs = () => {
         <Tab.Screen name="AccountScreen" component={AccountNavigator} />
       </Tab.Navigator>
     </NavigationContainer>
+  );
+};
+type IconProps = {
+  focused: boolean;
+  name: React.ComponentProps<typeof Ionicons>["name"];
+  color: string;
+};
+
+const Icon = ({ focused, name, color }: IconProps) => {
+  return (
+    <View
+      style={{
+        backgroundColor: focused ? "#fff" : "transparent",
+        borderRadius: 20,
+      }}
+    >
+      <Ionicons name={name} size={focused ? 35 : 30} color={color} />
+    </View>
   );
 };
 export default BottomNavTabs;
