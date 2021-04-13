@@ -63,7 +63,7 @@ export const AccountMain = ({
           onPressHandler={() => navigation.navigate("Likes")}
         />
         <CustomButton
-          text="Submit Feedback"
+          text="About"
           style={Styles.button}
           textStyle={Styles.buttonText}
         />

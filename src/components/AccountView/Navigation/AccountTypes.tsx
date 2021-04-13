@@ -5,6 +5,7 @@ export type AccountParamList = {
   "Edit Profile": undefined;
   Likes: undefined;
   Friends: undefined;
+  About: undefined;
   "Add a Friend": undefined;
 };
 

@@ -8,6 +8,7 @@ import { EditProfile } from "../EditProfile/EditProfile";
 import { Likes } from "../LikesView/Likes";
 import { Friends } from "../FriendsView/Friends";
 import { AddFreind } from "../FriendsView/AddFriend";
+import { About } from "../About/About";
 
 type AccountNavigatorProps = {};
 
@@ -25,6 +26,7 @@ const AccountNavigator = (props: AccountNavigatorProps) => {
       <Stack.Screen name="Edit Profile" component={EditProfile} />
       <Stack.Screen name="Likes" component={Likes} />
       <Stack.Screen name="Friends" component={Friends} />
+      <Stack.Screen name="About" component={About} />
       <Stack.Screen name="Add a Friend" component={AddFreind} />
     </Stack.Navigator>
   );
