@@ -23,7 +23,7 @@ export const SessionView = ({ nav, groupID }: SessionViewProps) => {
     return (
       <Pressable
         onPress={() =>
-          nav.navigate("ResultsView", {
+          nav.navigate("Results", {
             sessionID: item._id,
             sessionView: true,
           })

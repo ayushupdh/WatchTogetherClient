@@ -7,7 +7,10 @@ type LoadingProps = {
 export const Loading = (props: LoadingProps) => {
   return (
     <View style={{ flex: 1, alignItems: "center", padding: 20 }}>
-      <ActivityIndicator size={props.size ? props.size : "large"} />
+      <ActivityIndicator
+        style={{ flex: 1 }}
+        size={props.size ? props.size : "large"}
+      />
       <Text style={{ color: "#313B68", fontSize: 20 }}>LOADING</Text>
     </View>
   );

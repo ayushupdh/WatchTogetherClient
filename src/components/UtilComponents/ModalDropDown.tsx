@@ -10,10 +10,12 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
   if (props.data) {
     if (props.data.length > 0) {
       return (
-        <View
+        <Pressable
           style={{
+            zIndex: 2,
+            flex: 1,
             position: "absolute",
-            top: 0,
+            top: 110,
             padding: 5,
             backgroundColor: "white",
             width: "100%",
@@ -21,7 +23,7 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
             shadowOffset: { width: 5, height: 4 },
             shadowColor: "#000",
             shadowOpacity: 0.4,
-            elevation: 5,
+            elevation: 6,
           }}
         >
           {props.data &&
@@ -29,6 +31,7 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
               return (
                 <Pressable
                   onPress={() => {
+                    console.log("presed");
                     props.onClick(datas);
                   }}
                   key={datas._id}
@@ -68,14 +71,16 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
                 </Pressable>
               );
             })}
-        </View>
+        </Pressable>
       );
     } else {
       return (
         <View
           style={{
+            flex: 1,
+            zIndex: 2,
             position: "absolute",
-            top: 0,
+            top: 110,
             padding: 15,
             backgroundColor: "white",
             width: "100%",
@@ -103,8 +108,10 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
     return (
       <View
         style={{
+          flex: 1,
+          zIndex: 2,
           position: "absolute",
-          top: 0,
+          top: 110,
           padding: 15,
           backgroundColor: "white",
           width: "100%",

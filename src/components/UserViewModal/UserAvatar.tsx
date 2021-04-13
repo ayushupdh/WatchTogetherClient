@@ -6,6 +6,7 @@ type UserAvatarProps = {
   avatar: string | undefined;
   size?: number;
   borderRadius?: number;
+  style?: any;
 };
 export const UserAvatar = ({
   avatar,
@@ -27,12 +28,7 @@ export const UserAvatar = ({
         backgroundColor: "#e9e9e9",
       }}
     >
-      <FontAwesome
-        //   style={Styles.avatar}
-        name="user"
-        size={size}
-        color="black"
-      />
+      <FontAwesome name="user" size={size} color="black" />
     </View>
   );
 };

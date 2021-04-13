@@ -199,12 +199,12 @@ export const AddFriend = ({
       showModal(true);
     }
   };
-  const handleRemoveFriends = async (friendsID: string) => {
-    setDisplayedFriends((oldList) =>
-      oldList.filter((list) => list._id !== friendsID)
-    );
-    await removeUserFromGroup(groupID, friendsID);
-  };
+  // const handleRemoveFriends = async (friendsID: string) => {
+  //   setDisplayedFriends((oldList) =>
+  //     oldList.filter((list) => list._id !== friendsID)
+  //   );
+  //   await removeUserFromGroup(groupID, friendsID);
+  // };
 
   const displayFriendsList = () => {
     return displayedFriends.map((friend) => {
@@ -240,16 +240,24 @@ export const AddFriend = ({
             onSubmitEditing={(e) => showUsers()}
             error=""
             returnKeyType="search"
-            autoFocus={true}
+            autoFocus={groupID ? false : true}
           />
 
           {modal && (
-            <View style={{ zIndex: 1 }}>
-              <ModalDropDown
-                data={fetchedFriendList}
-                onClick={addFriendsToGroup}
-              />
-            </View>
+            // <View
+            //   style={{
+            //     zIndex: 5,
+            //     flex: 1,
+            //     elevation: 6,
+            //     backgroundColor: "red",
+            //     padding: 10,
+            //   }}
+            // >
+            <ModalDropDown
+              data={fetchedFriendList}
+              onClick={addFriendsToGroup}
+            />
+            // </View>
           )}
 
           <Text style={{ fontSize: 15, color: "#767676", paddingVertical: 5 }}>
@@ -258,18 +266,13 @@ export const AddFriend = ({
               : "Waiting for friends to join..."}
           </Text>
           <View style={styles.hundredpercenContainer}>
-            {/* <FlatList
-              data={addedFriends}
-              renderItem={renderItem}
-              keyExtractor={(item) => item._id}
-            /> */}
             {loading ? <Loading /> : displayFriendsList()}
           </View>
           {userID === admin && (
             <CustomButton
               text="Start"
               style={[
-                styles.unsubmittedButton,
+                { ...styles.unsubmittedButton, width: "100%" },
                 displayedFriends.length > 0 ? { opacity: 1 } : null,
               ]}
               onPressHandler={() => {

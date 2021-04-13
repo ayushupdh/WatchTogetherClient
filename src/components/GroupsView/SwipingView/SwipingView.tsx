@@ -62,7 +62,7 @@ export const SwipingView = ({
                 endGroupSession(groupID, sessionID, dispatch);
               }
               setTimeout(() => {
-                navigation.navigate("ResultsView", { sessionID: sessionID });
+                navigation.navigate("Results", { sessionID: sessionID });
               }, 200);
             },
           });
@@ -162,7 +162,7 @@ export const SwipingView = ({
       dispatch({
         type: END_SESSION,
       });
-      navigation.navigate("ResultsView", { sessionID: sessionID });
+      navigation.navigate("Results", { sessionID: sessionID });
     });
     return () => {
       socketClient.off("one-movie-liked-by-all");
@@ -248,7 +248,7 @@ export const SwipingView = ({
                 elevation: 5,
               }}
               onPressHandler={() => {
-                navigation.navigate("ResultsView", { sessionID: sessionID });
+                navigation.navigate("Results", { sessionID: sessionID });
               }}
             />
           )}
