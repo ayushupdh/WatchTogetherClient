@@ -4,6 +4,9 @@ export const JOIN_SESSION = "joiningsession";
 export const UPDATE_PARAMS = "updatingparams";
 export const LEAVE_SESSION = "leftsession";
 export const START_SESSION = "startingswiping";
+export const UPDATE_SESSION_START_TIME = "updatingstarttime";
+export const UPDATE_SWIPING = "updatingswiping";
+export const UPDATE_TIME = "updatingtime";
 
 // export const ADD_TO_GENRE = "addinggenre";
 // export const ADD_TO_LANG = "addingLang";
@@ -21,4 +24,6 @@ export type CREATE_SESSION_PAYLOADTYPE = {
   sessionID?: string;
   admin?: string;
   swipingActive?: boolean;
+  time?: number | null;
+  started_time?: number | null;
 };

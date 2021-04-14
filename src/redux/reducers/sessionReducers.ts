@@ -6,6 +6,9 @@ import {
   JOIN_SESSION,
   LEAVE_SESSION,
   START_SESSION,
+  UPDATE_SESSION_START_TIME,
+  UPDATE_SWIPING,
+  UPDATE_TIME,
 } from "../types/SessionTypes";
 export type SessionType = {
   sessionType: string | null;
@@ -15,6 +18,8 @@ export type SessionType = {
   admin: string | null;
   swipingActive: boolean;
   sessionParams: {
+    time: number | null;
+    started_time: number | null;
     genres?: string[];
     lang?: string[];
     providers?: string[];
@@ -28,6 +33,8 @@ const initialState: SessionType = {
   admin: null,
   swipingActive: false,
   sessionParams: {
+    started_time: null,
+    time: null,
     genres: [],
     providers: [],
     lang: [],
@@ -51,6 +58,8 @@ export default (
         admin: payload?.admin,
         swipingActive: false,
         sessionParams: {
+          started_time: null,
+          time: payload?.time,
           genres: payload?.genres,
           providers: payload?.providers,
           lang: payload?.lang,
@@ -65,6 +74,9 @@ export default (
         admin: payload?.admin,
         swipingActive: payload?.swipingActive,
         sessionParams: {
+          ...state.sessionParams,
+          started_time: payload?.started_time,
+          time: payload?.time,
           genres: payload?.genres,
           providers: payload?.providers,
           lang: payload?.lang,
@@ -79,11 +91,39 @@ export default (
       return {
         ...state,
         sessionParams: {
+          ...state.sessionParams,
+          time: payload?.time,
           genres: payload?.genres,
           providers: payload?.providers,
           lang: payload?.lang,
         },
       };
+    case UPDATE_SESSION_START_TIME:
+      return {
+        ...state,
+        sessionParams: {
+          ...state.sessionParams,
+          started_time: payload?.started_time,
+        },
+      };
+    case UPDATE_SWIPING:
+      return {
+        ...state,
+        swipingActive: payload?.swipingActive,
+        sessionParams: {
+          ...state.sessionParams,
+          started_time: payload?.started_time,
+        },
+      };
+    case UPDATE_TIME:
+      return {
+        ...state,
+        sessionParams: {
+          ...state.sessionParams,
+          time: payload?.time,
+        },
+      };
+
     case END_SESSION:
       return {
         ...initialState,
