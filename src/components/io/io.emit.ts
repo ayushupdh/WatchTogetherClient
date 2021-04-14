@@ -10,7 +10,13 @@ export const emitter = {
     return new Promise<any>((resolve, reject) => {
       socket.emit(
         "create-session",
-        { groupID, current_session_time, genres, lang, providers },
+        {
+          groupID,
+          current_session_time,
+          genres,
+          lang,
+          providers,
+        },
         ({
           session,
           admin,
@@ -39,7 +45,11 @@ export const emitter = {
     });
   },
   startSession: (sessionID: string) => {
-    socket.emit("start-session", { sessionID });
+    return new Promise<any>((resolve) => {
+      socket.emit("start-session", { sessionID }, (time: number) => {
+        resolve(time);
+      });
+    });
   },
   endSession: (groupID: string, sessionID: string) => {
     socket.emit("end-session", { groupID, sessionID });
@@ -48,10 +58,11 @@ export const emitter = {
     sessionID: string,
     genre: string[],
     lang: string[],
-    providers: string[]
+    providers: string[],
+    time: number
   ) => {
     return new Promise<any>((resolve, reject) => {
-      const params = { genre, lang, providers };
+      const params = { genre, lang, providers, time };
       socket.emit("update-params", { sessionID, params }, (args: any) => {
         if (!args) {
           reject(args);

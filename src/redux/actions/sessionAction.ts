@@ -16,13 +16,14 @@ export const startGroupSession = async (
     genres: string[];
     providers: string[];
     lang: string[];
+    time: number;
   },
   dispatch: Dispatch<any>
 ) => {
   try {
     let { session, admin, error } = await emitter.createSession(
       payload.groupID,
-      0,
+      payload.time,
       payload.genres,
       payload.lang,
       payload.providers
@@ -67,6 +68,8 @@ export const joinSessionPopulate = async (
     groupID: string;
     sessionID: string;
     swipingActive: boolean;
+    time: number;
+    started_time: number;
   },
   dispatch: Dispatch<any>
 ) => {
@@ -88,14 +91,20 @@ export const joinSessionPopulate = async (
 
 export const updateParams = async (
   sessionID: string,
-  payload: { genres: string[]; providers: string[]; lang: string[] },
+  payload: {
+    genres: string[];
+    providers: string[];
+    lang: string[];
+    time: number;
+  },
   dispatch: Dispatch<any>
 ) => {
   await emitter.updateParams(
     sessionID,
     payload.genres,
     payload.lang,
-    payload.providers
+    payload.providers,
+    payload.time
   );
   dispatch({
     type: UPDATE_PARAMS,

@@ -18,6 +18,7 @@ import { socketClient } from "../../io/io";
 import { Modalize } from "react-native-modalize";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { showAlert } from "../../UtilComponents/Alert";
+import { CountDown } from "../../UtilComponents/CountDown";
 
 export const SwipingView = ({
   route,
@@ -197,29 +198,7 @@ export const SwipingView = ({
   }, [navigation, movieFinish]);
   return (
     <View style={styles.container}>
-      {route.params.groupName === "Single" ? null : (
-        <View
-          style={{
-            paddingHorizontal: 10,
-            marginTop: 10,
-            backgroundColor: "#37BEB0",
-            borderRadius: 20,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Ionicons name="time-outline" size={20} color="white" />
-          <Text
-            style={{
-              fontSize: 20,
-              color: "white",
-              paddingLeft: 5,
-            }}
-          >
-            5:00
-          </Text>
-        </View>
-      )}
+      {route.params.groupName === "Single" ? null : <CountDown />}
 
       <SwipeCard
         onMovieFinish={handleMovieFinish}
