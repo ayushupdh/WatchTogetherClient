@@ -66,6 +66,7 @@ export const AccountMain = ({
           text="About"
           style={Styles.button}
           textStyle={Styles.buttonText}
+          onPressHandler={() => navigation.navigate("About")}
         />
         <CustomButton
           onPressHandler={onLogoutPress}
