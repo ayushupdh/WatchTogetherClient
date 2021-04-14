@@ -302,17 +302,15 @@ export const getOtherUsersInfo = async (userId: string) => {
 // ---------------------User routes  end------------------------
 
 // ---------------------Group routes------------------------
-export const createGroup = async (groupName: string, time: string) => {
+export const createGroup = async (groupName: string, time: number) => {
   let error = null;
   let response = null;
   try {
-    const t = time.split(" ");
-    const sessiontime = parseInt(t[0], 10) * 60 + parseInt(t[1], 10);
     const token = await AsyncStorage.getItem("userToken");
     setAuthToken(token);
     const res = await server.post("/groups/create", {
       name: groupName,
-      current_session_time: sessiontime,
+      current_session_time: time,
     });
 
     response = res.data._id;
