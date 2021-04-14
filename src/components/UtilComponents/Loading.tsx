@@ -11,7 +11,7 @@ export const Loading = (props: LoadingProps) => {
         style={{ flex: 1 }}
         size={props.size ? props.size : "large"}
       />
-      <Text style={{ color: "#313B68", fontSize: 20 }}>LOADING</Text>
+      <Text style={{ flex: 1, color: "#313B68", fontSize: 20 }}>LOADING</Text>
     </View>
   );
 };

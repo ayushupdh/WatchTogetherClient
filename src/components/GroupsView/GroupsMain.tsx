@@ -48,6 +48,9 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     const unsubscribe = navigation.addListener("focus", async () => {
       setLoading(true);
       const { groups, error }: GetGroupsType = await getUserGroups();
+      if (error) {
+        return;
+      }
       setGroups(groups);
       setLoading(false);
     });

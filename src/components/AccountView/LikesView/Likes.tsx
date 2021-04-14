@@ -3,17 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
-  FlatList,
-  Image,
   useWindowDimensions,
-  TouchableWithoutFeedback,
-  Pressable,
   ActivityIndicator,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { getLikedMovies } from "../../../utils/userdbUtils";
 import { MovieInfoModal } from "../../SwipeCard/MovieInfoModal";
-import { Center } from "../../UtilComponents/Center";
+import { ErrorPopup } from "../../UtilComponents/ErrorPopup";
+import { Loading } from "../../UtilComponents/Loading";
 import { Styles } from "../styles";
 import { GenreList } from "./GenreList";
 import { MovieList } from "./MovieList";
@@ -32,14 +29,20 @@ export const Likes = () => {
   const [selectedGenre, setselectedGenre] = useState("");
   const [generatedMovieList, setMovieList] = useState<MovieType[]>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const modalizeRef = useRef<Modalize>();
   useEffect(() => {
+    let s1 = 1;
     (async () => {
       setLoading(true);
       const { response, error } = await getLikedMovies();
       if (error) {
-        return console.log(error);
+        setError(error);
+        s1 = setTimeout(() => {
+          setError("");
+        }, 2000);
+        return;
       }
       setMovies(response);
       const s: Set<string> = new Set();
@@ -51,6 +54,7 @@ export const Likes = () => {
       setGenreList(Array.from(s));
       setLoading(false);
     })();
+    return clearTimeout(s1);
   }, [setMovies]);
 
   const windowHeight = useWindowDimensions().height;
@@ -74,8 +78,80 @@ export const Likes = () => {
     modalizeRef.current?.open();
   };
 
+  const showLoadingComponent = () => (
+    <View
+      style={{
+        flex: 1,
+        width: "100%",
+        height: "100%",
+        paddingTop: 20,
+        backgroundColor: "#E2EAF4",
+      }}
+    >
+      {["random", "c"].map((r) => (
+        <View
+          key={r}
+          style={{
+            flexDirection: "row",
+            padding: 10,
+            backgroundColor: "white",
+            marginVertical: 5,
+            width: "90%",
+            alignSelf: "center",
+            borderRadius: 10,
+            overflow: "hidden",
+          }}
+        >
+          <View
+            style={{
+              padding: 40,
+              backgroundColor: "grey",
+              marginHorizontal: 5,
+              alignSelf: "flex-start",
+              borderRadius: 10,
+            }}
+          />
+          <View style={{ width: "80%" }}>
+            <View
+              style={{
+                padding: 10,
+                backgroundColor: "grey",
+                width: "60%",
+                borderRadius: 10,
+                marginBottom: 10,
+                marginHorizontal: 10,
+              }}
+            />
+            <View
+              style={{
+                marginVertical: 5,
+                marginHorizontal: 10,
+                padding: 4,
+                backgroundColor: "grey",
+                width: "80%",
+                borderRadius: 10,
+              }}
+            />
+            <View
+              style={{
+                marginVertical: 5,
+                marginHorizontal: 10,
+                padding: 4,
+                backgroundColor: "grey",
+                width: "80%",
+                borderRadius: 10,
+              }}
+            />
+          </View>
+        </View>
+      ))}
+      <Loading />
+      {error !== "" && <ErrorPopup error={error} />}
+    </View>
+  );
+
   if (loading) {
-    return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+    return showLoadingComponent();
   } else {
     if (movies.length === 0) {
       return (

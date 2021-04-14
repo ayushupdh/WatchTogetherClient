@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { View, Text, FlatList, Image, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FormField } from "../../GroupsView/FormField";
 import { Styles } from "../styles";
@@ -8,12 +15,17 @@ import { Modalize } from "react-native-modalize";
 import { AddFriendModal } from "../../UserViewModal/AddFriendModal";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
+import { Loading } from "../../UtilComponents/Loading";
 
 type AddFreindProps = {};
 export const AddFreind = (props: AddFreindProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setUser] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [serverError, setServerError] = useState("");
+
   const [first, setFirst] = useState(true);
   const [foundUsers, setUserList] = useState([]);
 
@@ -28,6 +40,7 @@ export const AddFreind = (props: AddFreindProps) => {
     if (searchTerm.length < 3) {
       setError("Need atleast three characters to start searching.");
     } else {
+      setLoading(true);
       if (first) {
         setFirst(false);
       }
@@ -35,8 +48,9 @@ export const AddFreind = (props: AddFreindProps) => {
       if (!error) {
         setUserList(response);
       } else {
-        setError(error);
+        setServerError(error);
       }
+      setLoading(false);
     }
   };
   const closeModal = () => {
@@ -70,12 +84,16 @@ export const AddFreind = (props: AddFreindProps) => {
           <TextInput editable={false} style={Styles.customText}>
             Users
           </TextInput>
-          <FlatList
-            contentContainerStyle={{ paddingVertical: 20 }}
-            data={foundUsers}
-            renderItem={renderItem}
-            keyExtractor={(item: any) => item._id}
-          />
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <FlatList
+              contentContainerStyle={{ paddingVertical: 20 }}
+              data={foundUsers}
+              renderItem={renderItem}
+              keyExtractor={(item: any) => item._id}
+            />
+          )}
         </View>
       );
     } else {
@@ -85,9 +103,11 @@ export const AddFreind = (props: AddFreindProps) => {
           <TextInput editable={false} style={Styles.customText}>
             Users
           </TextInput>
-          <Text style={Styles.errorText}>
-            No user found with matching username or email
-          </Text>
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <Text style={Styles.errorText}>{serverError}</Text>
+          )}
         </>
       );
     }
@@ -113,14 +133,6 @@ export const AddFreind = (props: AddFreindProps) => {
         userID={selectedUser}
         closeModal={closeModal}
       />
-      {/* <Modalize ref={modalizeRef} adjustToContentHeight>
-        <AddFriendModal
-          user={selectedUser}
-          handleClose={() => {
-            closeModal();
-          }}
-        />
-      </Modalize> */}
     </View>
   );
 };

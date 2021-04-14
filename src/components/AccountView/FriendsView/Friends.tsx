@@ -15,6 +15,8 @@ import { Modalize } from "react-native-modalize";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
 import { getFriends } from "../../../utils/userdbUtils";
+import { Loading } from "../../UtilComponents/Loading";
+import { ErrorPopup } from "../../UtilComponents/ErrorPopup";
 
 type FriendsType = {
   _id: string;
@@ -23,18 +25,31 @@ type FriendsType = {
   avatar: string;
 };
 export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
-  const [friends, setFriends] = useState<readonly FriendsType[] | null>();
+  const [friends, setFriends] = useState<FriendsType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
 
   const [selectedUser, setUser] = useState("");
   useEffect(() => {
+    let s = 1;
     const unsubscribe = navigation.addListener("focus", async () => {
       setLoading(true);
       const { friends, error } = await getFriends();
-      setFriends(friends);
-      setLoading(false);
+      if (error) {
+        console.log("yes");
+        setError(error);
+        s = setTimeout(() => {
+          setError("");
+        }, 2000);
+      } else {
+        setFriends(friends);
+        setLoading(false);
+      }
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      clearTimeout(s);
+    };
   }, [navigation]);
 
   const modalRef = useRef<Modalize>();
@@ -62,7 +77,7 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
   };
 
   const renderFriendsComponent = () => {
-    if (friends && friends.length !== 0) {
+    if (friends.length !== 0) {
       return (
         <>
           <CustomButton
@@ -116,12 +131,33 @@ export const Friends = ({ navigation }: AccountNavProps<"Friends">) => {
       );
     }
   };
+
+  const renderLoadingComponent = () => {
+    return (
+      <View style={Styles.container}>
+        <CustomButton
+          text="Add Friend"
+          style={Styles.addFriendContainer}
+          onPressHandler={() => {
+            navigation.navigate("Add a Friend");
+          }}
+        />
+        <TextInput editable={false} style={Styles.customText}>
+          Friends
+        </TextInput>
+        <Loading size="large" />
+        {error !== "" && <ErrorPopup error={error} />}
+      </View>
+    );
+  };
+
   if (loading) {
-    return <ActivityIndicator style={{ flex: 1 }} />;
+    return renderLoadingComponent();
   } else {
     return (
       <View style={Styles.container}>
-        {friends && renderFriendsComponent()}
+        {renderFriendsComponent()}
+        {error !== "" && <ErrorPopup error={error} />}
       </View>
     );
   }
