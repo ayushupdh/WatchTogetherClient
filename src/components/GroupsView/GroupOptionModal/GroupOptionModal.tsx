@@ -3,6 +3,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { joinSessionPopulate } from "../../../redux/actions/sessionAction";
+import { UPDATE_SESSION_START_TIME } from "../../../redux/types/SessionTypes";
 import {
   getSessionInfo,
   removeUserFromGroup,
@@ -48,6 +49,8 @@ export const GroupOptionModal = ({
           groupID: response.groupID,
           sessionID: response._id,
           swipingActive: response.swiping_active,
+          time: response.current_session_time,
+          started_time: response.started_time,
         },
         dispatch
       );
