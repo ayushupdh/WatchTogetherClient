@@ -1,12 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  Pressable,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { Pressable, Text, View, ScrollView } from "react-native";
 import { FormField } from "../FormField";
 import { styles } from "../styles";
 import { CustomButton } from "../../UtilComponents/CustomButton";
@@ -16,7 +10,6 @@ import {
   addUserToGroup,
   getActiveSessionUsers,
   getGroupUsers,
-  removeUserFromGroup,
   searchFriends,
 } from "../../../utils/userdbUtils";
 import { showAlert } from "../../UtilComponents/Alert";
@@ -25,10 +18,13 @@ import { Modalize } from "react-native-modalize";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
 import { socketClient } from "../../io/io";
-import { END_SESSION } from "../../../redux/types/SessionTypes";
+import {
+  END_SESSION,
+  UPDATE_SESSION_START_TIME,
+  UPDATE_TIME,
+} from "../../../redux/types/SessionTypes";
 import { emitter } from "../../io/io.emit";
 import { Loading } from "../../UtilComponents/Loading";
-
 type UserType = { name: string; _id: string; avatar: string };
 type DisplayUser = { online?: boolean } & UserType;
 
@@ -71,6 +67,8 @@ export const AddFriend = ({
 
   useEffect(() => {
     socketClient.off("session-ended");
+    socketClient.off("session-started");
+    socketClient.off("time-updated");
     socketClient.on("user-joined", (joinedID) => {
       changeUserList("joined", joinedID);
     });
@@ -80,7 +78,11 @@ export const AddFriend = ({
     socketClient.on("user-left", (joinedID) => {
       changeUserList("left", joinedID);
     });
-    socketClient.on("session-started", (joinedID) => {
+    socketClient.on("session-started", (time) => {
+      dispatch({
+        type: UPDATE_SESSION_START_TIME,
+        payload: { started_time: time },
+      });
       navigation.navigate("SwipingView", { groupName: route.params.groupName });
     });
     socketClient.on("session-ended", () => {
@@ -89,12 +91,20 @@ export const AddFriend = ({
       });
       navigation.popToTop();
     });
+    socketClient.on("time-updated", (time) => {
+      dispatch({
+        type: UPDATE_TIME,
+        payload: { time: time },
+      });
+    });
     return () => {
       socketClient.off("user-joined");
       socketClient.off("user-left");
       socketClient.off("session-started");
       socketClient.off("session-ended");
       socketClient.off("friend-added-to-group");
+      socketClient.off("time-updated");
+      socketClient.off("update-friendList");
     };
   }, [navigation, displayedFriends]);
   // For userModals
@@ -240,7 +250,6 @@ export const AddFriend = ({
             onSubmitEditing={(e) => showUsers()}
             error=""
             returnKeyType="search"
-            autoFocus={groupID ? false : true}
           />
 
           {modal && (
@@ -275,9 +284,13 @@ export const AddFriend = ({
                 { ...styles.unsubmittedButton, width: "100%" },
                 displayedFriends.length > 0 ? { opacity: 1 } : null,
               ]}
-              onPressHandler={() => {
+              onPressHandler={async () => {
                 if (displayedFriends.length > 0 && countOnlineUsers() !== 0) {
-                  emitter.startSession(sessionID);
+                  const time = await emitter.startSession(sessionID);
+                  dispatch({
+                    type: UPDATE_SESSION_START_TIME,
+                    payload: { started_time: time },
+                  });
                   navigation.navigate("SwipingView", {
                     groupName: route.params?.groupName,
                   });
