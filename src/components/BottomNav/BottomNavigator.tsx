@@ -52,17 +52,13 @@ const BottomNavTabs = () => {
               );
             } else if (route.name === "GroupsScreen") {
               return <Icon name="people" color="green" focused={focused} />;
-            } else if (route.name === "LikesScreen") {
-              return (
-                <Icon name="notifications" color="#FAA286" focused={focused} />
-              );
             }
 
             // You can return any component that you like here!
           },
         })}
       >
-        <Tab.Screen name="LikesScreen" component={NotificationMain} />
+        {/* <Tab.Screen name="LikesScreen" component={NotificationMain} /> */}
         <Tab.Screen
           name="GroupsScreen"
           component={GroupsNavigator}
