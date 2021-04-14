@@ -14,10 +14,12 @@ import {
   startGroupSession,
   updateParams,
 } from "../../../redux/actions/sessionAction";
-import { store } from "../../../redux/store";
-import { emitter } from "../../io/io.emit";
 import { socketClient } from "../../io/io";
-import { END_SESSION } from "../../../redux/types/SessionTypes";
+import {
+  END_SESSION,
+  UPDATE_SWIPING,
+  UPDATE_TIME,
+} from "../../../redux/types/SessionTypes";
 
 export const CreateGroupForm = ({
   navigation,
@@ -66,6 +68,7 @@ export const CreateGroupForm = ({
     sessionID,
     admin,
     groupID,
+    time_rx,
     swipingActive,
   } = useSelector(
     ({
@@ -77,6 +80,7 @@ export const CreateGroupForm = ({
         admin: string;
         groupID: string;
         swipingActive: string;
+        sessionParams: { time: number };
       };
     }) => {
       return {
@@ -85,6 +89,7 @@ export const CreateGroupForm = ({
         admin: session.admin,
         groupID: session.groupID,
         swipingActive: session.swipingActive,
+        time_rx: session.sessionParams.time,
       };
     }
   );
@@ -102,11 +107,21 @@ export const CreateGroupForm = ({
   const [lang, setLang] = useState<string[]>([]);
   const [provider, setProvider] = useState<string[]>([]);
   const [error, seterror] = useState<string>("");
+  // Set time
+  useEffect(() => {
+    if (time_rx) {
+      let sMin = Math.floor(time_rx / 60);
+      let sSec = time_rx - sMin * 60;
+      setTime({ min: ("0" + sMin).slice(-2), sec: ("0" + sSec).slice(-2) });
+    }
+  }, [time_rx]);
+
   useLayoutEffect(() => {
     if (route.params?.groupName) {
       setName(route.params?.groupName);
     }
   }, []);
+  // Socket Listeners
   useEffect(() => {
     socketClient.on("session-ended", () => {
       dispatch({
@@ -114,16 +129,30 @@ export const CreateGroupForm = ({
       });
       navigation.popToTop();
     });
-
+    socketClient.on("session-started", (time) => {
+      dispatch({
+        type: UPDATE_SWIPING,
+        payload: { started_time: time, swipingActive: true },
+      });
+    });
+    socketClient.on("time-updated", (time) => {
+      dispatch({
+        type: UPDATE_TIME,
+        payload: { time: time },
+      });
+    });
     return () => {
       socketClient.off("session-ended");
+      socketClient.off("session-started");
+      socketClient.off("time-updated");
     };
-  }, [socketClient]);
+  }, [socketClient, navigation]);
 
+  // Listeners for going back
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       if (sessionRunning) {
-        if (admin == userID) {
+        if (admin === userID) {
           e.preventDefault();
           showAlert({
             firstText: "This will end the session",
@@ -150,6 +179,13 @@ export const CreateGroupForm = ({
     return unsubscribe;
   }, [sessionRunning, navigation]);
 
+  const parseTime = () => {
+    let Nmin = parseInt(time.min, 10) | 0;
+    let NSec = parseInt(time.sec, 10) | 0;
+    return Nmin * 60 + NSec;
+  };
+
+  // State updates
   const handleGenre = (text: string, value: boolean) => {
     if (value) {
       setGenres((prev) => prev.concat(text));
@@ -172,6 +208,7 @@ export const CreateGroupForm = ({
     }
   };
 
+  //Main function to start session/ update params
   const handleNext = async () => {
     // If the groupname is set
     if (name !== "") {
@@ -181,15 +218,11 @@ export const CreateGroupForm = ({
         let groupId = route.params?.groupId;
         // If the component does not get groupID from GroupOptionModal i.e: Creating a Group
         // ->Create a Group
-
         if (!groupId) {
-          const { response, error } = await createGroup(
-            name,
-            `${time.min} ${time.sec}`
-          );
+          const { response, error } = await createGroup(name, parseTime());
           groupId = response;
         }
-        // Call startGroupSession action creator that changes redux and emits with io
+        // !Call startGroupSession action creator that changes redux and emits with io
         startGroupSession(
           {
             groupID: groupId ? groupId : "",
@@ -197,6 +230,7 @@ export const CreateGroupForm = ({
             genres: genres,
             providers: provider,
             lang: lang,
+            time: parseTime(),
           },
           dispatch
         );
@@ -208,6 +242,7 @@ export const CreateGroupForm = ({
         updateParams(
           route.params?.sessionID ? route.params?.sessionID : sessionID,
           {
+            time: !admin || admin === userID ? parseTime() : time_rx,
             genres: genres,
             providers: provider,
             lang: lang,
@@ -234,7 +269,6 @@ export const CreateGroupForm = ({
       });
     }
   };
-
   return (
     <View style={styles.createGroupContainer}>
       {!route.params?.groupName && (
@@ -248,7 +282,7 @@ export const CreateGroupForm = ({
           autoFocus={true}
         />
       )}
-      <Timer time={time} setTime={setTime} />
+      {(!admin || admin === userID) && <Timer time={time} setTime={setTime} />}
       <View style={{ flexBasis: 100, width: "100%" }}>
         <Text style={styles.groupTitle}>Select Genres</Text>
         <FlatList
