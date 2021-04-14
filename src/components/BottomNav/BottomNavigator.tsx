@@ -96,7 +96,11 @@ const Icon = ({ focused, name, color }: IconProps) => {
         borderRadius: 20,
       }}
     >
-      <Ionicons name={name} size={focused ? 35 : 30} color={color} />
+      <Ionicons
+        name={`${name}${focused ? "" : "-outline"}`}
+        size={30}
+        color={color}
+      />
     </View>
   );
 };
