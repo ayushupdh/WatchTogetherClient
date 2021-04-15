@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { getSessionResults } from "../../../utils/userdbUtils";
 import { MovieInfoModal } from "../../SwipeCard/MovieInfoModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
+import { ErrorPopup } from "../../UtilComponents/ErrorPopup";
 import { GroupsNavProps } from "../Navigation/GroupsTypes";
 
 type UserType = {
@@ -41,6 +42,8 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
   const [movieLists, setMovies] = useState<MovieType[]>([]);
   const [movieIDSelected, setMovieID] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+
   const modalizeRef = useRef<Modalize>();
 
   const sessionRunning = useSelector(
@@ -49,7 +52,7 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
   );
 
   useLayoutEffect(() => {
-    !sessionRunning &&
+    if (!sessionRunning) {
       navigation.setOptions({
         gestureEnabled: false,
         headerLeft: () => null,
@@ -66,7 +69,21 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
           </Text>
         ),
       });
+    }
   }, [navigation, sessionRunning]);
+
+  useEffect(() => {
+    let k: number = 1239;
+    if (!route.params.sessionView) {
+      setMessage("Session Ended");
+      k = setTimeout(() => {
+        setMessage("");
+      }, 2000);
+    }
+    return () => {
+      clearTimeout(k);
+    };
+  }, [route]);
 
   useEffect(() => {
     setLoading(true);
@@ -167,9 +184,15 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
       </Pressable>
     );
   };
-  if (loading) {
-    return <ActivityIndicator style={{ flex: 1 }} size="large" />;
-  }
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <Text style={style.movieslikedText}>Movies Liked</Text>
+
+  //       {message !== "" && <ErrorPopup error={message} />}
+  //     </>
+  //   );
+  // }
 
   return (
     <View style={style.container}>
@@ -191,7 +214,13 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
       <Text style={style.movieslikedText}>
         {route.params.sessionView ? "Movies Liked" : "Top 5 movies liked"}
       </Text>
-      {movieLists.length !== 0 ? (
+      {loading ? (
+        <ActivityIndicator
+          style={{ flex: 1, backgroundColor: "#E2EAF4" }}
+          size="large"
+          color={"#313B68"}
+        />
+      ) : movieLists.length !== 0 ? (
         <VirtualizedList
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={renderMovies}
@@ -201,11 +230,14 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
           keyExtractor={(item: MovieType) => item._id}
         />
       ) : (
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", flex: 1 }}>
           <Text style={{ color: "red", fontSize: 20 }}>
             No movies were liked in this session
           </Text>
         </View>
+      )}
+      {message !== "" && !sessionRunning && (
+        <ErrorPopup error={message} color="#313B68" />
       )}
 
       <Modalize

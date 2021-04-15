@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
   friendsListContainer: {
     flex: 1,
     width: "100%",
-    marginVertical: 20,
+    marginVertical: 5,
   },
   createButton: {
     backgroundColor: "#37BEB0",
