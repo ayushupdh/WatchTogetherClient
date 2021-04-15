@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
@@ -8,6 +7,7 @@ import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
 import { socketClient } from "./components/io/io";
 import { emitter } from "./components/io/io.emit";
+import { SplashScreen } from "./components/UtilComponents/SplashScreen";
 
 import { LOAD_USER } from "./redux/types/Authtypes";
 export const AppEntry = () => {
@@ -85,7 +85,7 @@ export const AppEntry = () => {
   }, [user]);
 
   if (loading) {
-    return <ActivityIndicator style={{ flex: 1 }} />;
+    return <SplashScreen />;
   } else {
     return (user === null && token === "") || !token ? (
       <AuthNavigator />
