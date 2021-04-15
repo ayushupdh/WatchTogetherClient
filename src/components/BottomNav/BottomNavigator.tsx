@@ -86,18 +86,11 @@ type IconProps = {
 
 const Icon = ({ focused, name, color }: IconProps) => {
   return (
-    <View
-      style={{
-        backgroundColor: focused ? "#fff" : "transparent",
-        borderRadius: 20,
-      }}
-    >
-      <Ionicons
-        name={`${name}${focused ? "" : "-outline"}`}
-        size={30}
-        color={color}
-      />
-    </View>
+    <Ionicons
+      name={`${name}${focused ? "" : "-outline"}`}
+      size={30}
+      color={color}
+    />
   );
 };
 export default BottomNavTabs;
