@@ -13,13 +13,33 @@ export const SessionView = ({ nav, groupID }: SessionViewProps) => {
   const { sessionList, loading, error } = useGetGroupsSession(groupID);
 
   const renderSessions = ({ item }: { item: any }) => {
-    let dateObj = new Date(item.createdAt);
-    let timeObj = dateObj.toLocaleTimeString().split(" ");
-    let dateArr = dateObj.toDateString().split(" ");
-    let time = `${timeObj[0].split(":")[0]}:${timeObj[0].split(":")[1]} ${
-      timeObj[1]
+    let curr = new Date(item.createdAt);
+    let months: Record<number, string> = {
+      1: "Jan",
+      2: "Feb",
+      3: "Mar",
+      4: "Apr",
+      5: "May",
+      6: "Jun",
+      7: "Jul",
+      8: "Aug",
+      9: "Sep",
+      10: "Oct",
+      11: "Nov",
+      12: "Dec",
+    };
+    let currentDate = {
+      hr: curr.getHours(),
+      min: curr.getMinutes(),
+      month: curr.getMonth(),
+      date: curr.getDate(),
+    };
+    let time = `${
+      currentDate.hr > 12 ? currentDate.hr - 12 : currentDate.hr
+    }:${("0" + currentDate.min).slice(-2)} ${
+      currentDate.hr > 12 ? "PM" : "AM"
     }`;
-    let date = `${dateArr[1]} ${dateArr[2]}`;
+    let date = `${months[currentDate.month]} ${currentDate.date}`;
     return (
       <Pressable
         onPress={() =>

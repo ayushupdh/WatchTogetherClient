@@ -13,9 +13,7 @@ export const CustomButton = (props: CustomButtonProps) => {
   return (
     <Pressable
       onPress={() => {
-        if (props.onPressHandler) {
-          props.onPressHandler();
-        }
+        props.onPressHandler && props.onPressHandler();
       }}
       style={({ pressed }) => [
         props.style,
