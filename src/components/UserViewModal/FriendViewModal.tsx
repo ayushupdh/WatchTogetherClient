@@ -45,7 +45,7 @@ export const UserViewModal = (props: UserViewModalProps) => {
   return (
     <Modalize ref={props.modalRef} adjustToContentHeight>
       {!user || loading ? (
-        <ActivityIndicator style={styles.fullFlex} />
+        <ActivityIndicator style={styles.fullFlex} color={"#313B68"} />
       ) : (
         <UserView
           self={props.userID === self._id}

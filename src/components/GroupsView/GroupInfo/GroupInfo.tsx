@@ -73,30 +73,6 @@ export const GroupInfo = ({
               : "Loading.."}
           </Text>
         </View>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            marginVertical: 10,
-            marginHorizontal: 30,
-          }}
-        >
-          <View
-            style={{
-              marginHorizontal: 20,
-            }}
-          >
-            <Feather name="arrow-right-circle" size={40} color="#313B68" />
-            <Text>Start</Text>
-          </View>
-          <View
-            style={{
-              marginHorizontal: 20,
-            }}
-          >
-            <MaterialCommunityIcons name="exit-to-app" size={40} color="red" />
-            <Text>Leave</Text>
-          </View>
-        </View> */}
 
         <View style={styles.groupsSelectorContainer}>
           <Pressable

@@ -23,9 +23,6 @@ export const AddFreind = (props: AddFreindProps) => {
   const [selectedUser, setUser] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const [serverError, setServerError] = useState("");
-
   const [first, setFirst] = useState(true);
   const [foundUsers, setUserList] = useState([]);
 
@@ -48,7 +45,7 @@ export const AddFreind = (props: AddFreindProps) => {
       if (!error) {
         setUserList(response);
       } else {
-        setServerError(error);
+        setUserList([]);
       }
       setLoading(false);
     }
@@ -85,7 +82,7 @@ export const AddFreind = (props: AddFreindProps) => {
             Users
           </TextInput>
           {loading ? (
-            <ActivityIndicator />
+            <ActivityIndicator color={"#313B68"} />
           ) : (
             <FlatList
               contentContainerStyle={{ paddingVertical: 20 }}
@@ -104,9 +101,11 @@ export const AddFreind = (props: AddFreindProps) => {
             Users
           </TextInput>
           {loading ? (
-            <ActivityIndicator />
+            <ActivityIndicator color={"#313B68"} />
           ) : (
-            <Text style={Styles.errorText}>{serverError}</Text>
+            <Text style={Styles.errorText}>
+              No user found with that username or email
+            </Text>
           )}
         </>
       );

@@ -16,6 +16,7 @@ import { GroupOptionModal } from "./GroupOptionModal/GroupOptionModal";
 import { getUserGroups, renameGroup } from "../../utils/userdbUtils";
 import { socketClient } from "../io/io";
 import { TextInput } from "react-native-gesture-handler";
+import { ErrorPopup } from "../UtilComponents/ErrorPopup";
 
 type GroupType = {
   name: string;
@@ -41,21 +42,31 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     id: string;
   }>({ id: "", name: "", open: false });
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
   const modalizeRef = useRef<Modalize>();
 
   // Refresh groups list on focus
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", async () => {
+    let unsubscribe1 = 1;
+    const unsubscribe2 = navigation.addListener("focus", async () => {
       setLoading(true);
       const { groups, error }: GetGroupsType = await getUserGroups();
       if (error) {
+        setError("Network Error");
+        unsubscribe1 = setTimeout(() => {
+          setError("");
+        }, 2000);
         return;
       }
       setGroups(groups);
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe2();
+      clearTimeout(unsubscribe1);
+    };
   }, [navigation]);
 
   useEffect(() => {
@@ -128,7 +139,11 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     return (
       <View style={styles.container}>
         <View style={styles.hundredpercenContainer}>
-          <ActivityIndicator style={{ padding: 20 }} size="large" />
+          <ActivityIndicator
+            style={{ padding: 20 }}
+            size="small"
+            color={"#313B68"}
+          />
           <View style={styles.item}>
             <View
               style={{ backgroundColor: "#eee", padding: 15, width: "80%" }}
@@ -140,6 +155,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
             ></View>
           </View>
         </View>
+        {error !== "" && <ErrorPopup error={error} />}
       </View>
     );
   }
@@ -292,7 +308,7 @@ const RenameModal = ({
         }}
       >
         {loading ? (
-          <ActivityIndicator />
+          <ActivityIndicator color={"#313B68"} />
         ) : (
           <Text style={{ fontSize: 20, color: "#fff" }}>Done</Text>
         )}

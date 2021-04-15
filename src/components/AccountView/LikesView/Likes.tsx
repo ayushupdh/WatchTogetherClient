@@ -1,11 +1,6 @@
 import { useHeaderHeight } from "@react-navigation/stack";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  useWindowDimensions,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { getLikedMovies } from "../../../utils/userdbUtils";
 import { MovieInfoModal } from "../../SwipeCard/MovieInfoModal";
@@ -54,7 +49,9 @@ export const Likes = () => {
       setGenreList(Array.from(s));
       setLoading(false);
     })();
-    return clearTimeout(s1);
+    return () => {
+      clearTimeout(s1);
+    };
   }, [setMovies]);
 
   const windowHeight = useWindowDimensions().height;

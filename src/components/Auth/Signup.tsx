@@ -193,7 +193,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
       {loading ? (
         <View style={{ ...Styles.button, padding: 25 }}>
-          <ActivityIndicator style={{ flex: 1 }} color="#fff" />
+          <ActivityIndicator style={{ flex: 1 }} color={"#313B68"} />
         </View>
       ) : (
         <CustomButton

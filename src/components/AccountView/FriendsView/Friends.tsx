@@ -1,13 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Image,
-  Text,
-  FlatList,
-  TextInput,
-  ActivityIndicator,
-  Pressable,
-} from "react-native";
+import { View, Text, FlatList, TextInput, Pressable } from "react-native";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { Styles } from "../styles";
 import { AccountNavProps } from "../Navigation/AccountTypes";

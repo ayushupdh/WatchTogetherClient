@@ -21,7 +21,7 @@ export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
   let hr = ~~(time / 60);
   let min = time % 60;
   if (!movieInfo) {
-    return <ActivityIndicator style={{ flex: 1 }} />;
+    return <ActivityIndicator style={{ flex: 1 }} color={"#313B68"} />;
   } else {
     return (
       <View style={{ flex: 1, paddingBottom: 50 }}>

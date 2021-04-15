@@ -279,7 +279,7 @@ export const SwipeCard = ({
     return (
       <View style={styles.loadingMovies}>
         <Text style={styles.gettingMovies}>Getting movies...</Text>
-        <ActivityIndicator />
+        <ActivityIndicator color={"#313B68"} />
       </View>
     );
   }

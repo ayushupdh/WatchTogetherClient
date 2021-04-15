@@ -131,7 +131,7 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
         >
           Getting users...
         </Text>
-        <ActivityIndicator style={{ flex: 1 }} />
+        <ActivityIndicator style={{ flex: 1 }} color={"#313B68"} />
       </View>
     );
   }

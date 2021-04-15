@@ -167,7 +167,11 @@ export const EditProfile = ({
       {/* <View style={Styles.container}> */}
       {loading && (
         <View style={Styles.spinnerConatiner}>
-          <ActivityIndicator size="large" color="#000" style={Styles.spinner} />
+          <ActivityIndicator
+            size="large"
+            color={"#313B68"}
+            style={Styles.spinner}
+          />
         </View>
       )}
       <Pressable style={Styles.imageContainer} onPress={pickImage}>

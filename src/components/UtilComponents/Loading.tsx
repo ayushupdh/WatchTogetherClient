@@ -10,6 +10,7 @@ export const Loading = (props: LoadingProps) => {
       <ActivityIndicator
         style={{ flex: 1 }}
         size={props.size ? props.size : "large"}
+        color={"#313B68"}
       />
       <Text style={{ flex: 1, color: "#313B68", fontSize: 20 }}>LOADING</Text>
     </View>
