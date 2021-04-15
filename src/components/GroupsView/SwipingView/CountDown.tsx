@@ -4,7 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { min } from "react-native-reanimated";
 
-type CountDownProps = {};
+type CountDownProps = {
+  onCountDownFinish: () => void;
+};
 export const CountDown = (props: CountDownProps) => {
   const [cTime, setTime] = useState<{ min: string; sec: string }>({
     min: "00",
@@ -36,11 +38,12 @@ export const CountDown = (props: CountDownProps) => {
     let diff = totalTime - currentTime;
     let min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     let sec = Math.floor((diff % (1000 * 60)) / 1000);
-
-    setTime({ min: ("0" + min).slice(-2), sec: ("0" + sec).slice(-2) });
-    if (min === 0 && sec === 0) {
+    if (min <= 0 && sec <= 0) {
       clearInterval(s);
+      props.onCountDownFinish();
+      return;
     }
+    setTime({ min: ("0" + min).slice(-2), sec: ("0" + sec).slice(-2) });
   };
 
   // && time !== " 00"

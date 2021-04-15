@@ -18,7 +18,7 @@ import { socketClient } from "../../io/io";
 import { Modalize } from "react-native-modalize";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { showAlert } from "../../UtilComponents/Alert";
-import { CountDown } from "../../UtilComponents/CountDown";
+import { CountDown } from "./CountDown";
 
 export const SwipingView = ({
   route,
@@ -51,6 +51,7 @@ export const SwipingView = ({
     if (route.params.groupName === "Single") {
       navigation.popToTop();
     } else {
+      console.log("yues");
       if (admin && userID && sessionID && groupID) {
         if (userID === admin) {
           showAlert({
@@ -196,9 +197,21 @@ export const SwipingView = ({
     });
     return unsubsribe;
   }, [navigation, movieFinish]);
+
+  const onCountDownFinish = () => {
+    if (groupID && sessionID) {
+      endGroupSession(groupID, sessionID, dispatch);
+    }
+    setTimeout(() => {
+      navigation.navigate("Results", { sessionID: sessionID });
+    }, 200);
+  };
+
   return (
     <View style={styles.container}>
-      {route.params.groupName === "Single" ? null : <CountDown />}
+      {route.params.groupName === "Single" ? null : (
+        <CountDown onCountDownFinish={onCountDownFinish} />
+      )}
 
       <SwipeCard
         onMovieFinish={handleMovieFinish}
