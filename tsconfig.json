@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true
-  },"include": ["__tests__","src/components", "./custom.d.ts", "src/AppEntry.tsx", "src/utils", "src/redux/reducers/index.ts"]
+  },"include": ["__tests__","src/components", "./custom.d.ts", "src/AppEntry.tsx", "src/utils", "src/redux/reducers/index.ts", "src/api/io"]
 }
