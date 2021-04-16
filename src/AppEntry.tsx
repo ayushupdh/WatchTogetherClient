@@ -5,8 +5,7 @@ import { server } from "./api/server";
 import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
-import { socketClient } from "./components/io/io";
-import { emitter } from "./components/io/io.emit";
+import { emitter } from "./api/io/io.emit";
 import { SplashScreen } from "./components/UtilComponents/SplashScreen";
 
 import { LOAD_USER } from "./redux/types/Authtypes";

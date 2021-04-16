@@ -14,7 +14,7 @@ import {
   startGroupSession,
   updateParams,
 } from "../../../redux/actions/sessionAction";
-import { socketClient } from "../../io/io";
+import { socketClient } from "../../../api/io/io";
 import {
   END_SESSION,
   UPDATE_SWIPING,

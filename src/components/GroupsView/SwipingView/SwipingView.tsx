@@ -14,7 +14,7 @@ import {
   endSingleSession,
   leaveGroupSession,
 } from "../../../redux/actions/sessionAction";
-import { socketClient } from "../../io/io";
+import { socketClient } from "../../../api/io/io";
 import { Modalize } from "react-native-modalize";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { showAlert } from "../../UtilComponents/Alert";
@@ -51,7 +51,6 @@ export const SwipingView = ({
     if (route.params.groupName === "Single") {
       navigation.popToTop();
     } else {
-      console.log("yues");
       if (admin && userID && sessionID && groupID) {
         if (userID === admin) {
           showAlert({
@@ -244,20 +243,6 @@ export const SwipingView = ({
               }}
             />
           )}
-          <CustomButton
-            text={"Add an user"}
-            textStyle={{ fontSize: 20, color: "#000" }}
-            style={{
-              marginVertical: 5,
-              padding: 10,
-              backgroundColor: "#FAFAFA",
-              borderRadius: 20,
-              shadowOffset: { width: 5, height: 4 },
-              shadowColor: "#000",
-              shadowOpacity: 0.4,
-              elevation: 5,
-            }}
-          />
 
           <CustomButton
             text={admin === userID ? "End Session" : "Leave Group"}

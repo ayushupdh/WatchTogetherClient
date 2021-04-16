@@ -17,13 +17,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Modalize } from "react-native-modalize";
 import { UserViewModal } from "../../UserViewModal/FriendViewModal";
 import { UserAvatar } from "../../UserViewModal/UserAvatar";
-import { socketClient } from "../../io/io";
+import { socketClient } from "../../../api/io/io";
 import {
   END_SESSION,
   UPDATE_SESSION_START_TIME,
   UPDATE_TIME,
 } from "../../../redux/types/SessionTypes";
-import { emitter } from "../../io/io.emit";
+import { emitter } from "../../../api/io/io.emit";
 import { Loading } from "../../UtilComponents/Loading";
 type UserType = { name: string; _id: string; avatar: string };
 type DisplayUser = { online?: boolean } & UserType;

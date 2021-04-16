@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { emitter } from "../../components/io/io.emit";
+import { emitter } from "../../api/io/io.emit";
 import {
   END_SESSION,
   JOIN_SESSION,

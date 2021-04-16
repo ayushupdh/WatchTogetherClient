@@ -14,7 +14,7 @@ import { GroupsNavProps } from "./Navigation/GroupsTypes";
 import { Modalize } from "react-native-modalize";
 import { GroupOptionModal } from "./GroupOptionModal/GroupOptionModal";
 import { getUserGroups, renameGroup } from "../../utils/userdbUtils";
-import { socketClient } from "../io/io";
+import { socketClient } from "../../api/io/io";
 import { TextInput } from "react-native-gesture-handler";
 import { ErrorPopup } from "../UtilComponents/ErrorPopup";
 

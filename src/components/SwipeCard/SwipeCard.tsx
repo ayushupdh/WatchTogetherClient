@@ -22,8 +22,8 @@ import { server } from "../../api/server";
 import { useSelector } from "react-redux";
 import { SessionType } from "../../redux/reducers/sessionReducers";
 import { CustomButton } from "../UtilComponents/CustomButton";
-import { socketClient } from "../io/io";
-import { emitter } from "../io/io.emit";
+import { socketClient } from "../../api/io/io";
+import { emitter } from "../../api/io/io.emit";
 import { useHeaderHeight } from "@react-navigation/stack";
 
 type Movies = {

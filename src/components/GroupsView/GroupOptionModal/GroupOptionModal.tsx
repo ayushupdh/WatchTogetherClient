@@ -8,7 +8,7 @@ import {
   getSessionInfo,
   removeUserFromGroup,
 } from "../../../utils/userdbUtils";
-import { emitter } from "../../io/io.emit";
+import { emitter } from "../../../api/io/io.emit";
 import { CustomButton } from "../../UtilComponents/CustomButton";
 import { GroupsParamList } from "../Navigation/GroupsTypes";
 import { styles } from "../styles";

@@ -31,7 +31,6 @@ export const ModalDropDown = (props: ModalDropDownProps) => {
               return (
                 <Pressable
                   onPress={() => {
-                    console.log("presed");
                     props.onClick(datas);
                   }}
                   key={datas._id}
