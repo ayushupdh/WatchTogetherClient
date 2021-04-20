@@ -62,11 +62,10 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       });
     } catch (e) {
       console.log(e);
+      setLoading(false);
       if (e.response && e.response.data.error) {
-        setLoading(false);
         return setError(e.response.data.error);
       }
-      setLoading(false);
       return setError(e.message);
     }
   };
@@ -193,7 +192,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
       {loading ? (
         <View style={{ ...Styles.button, padding: 25 }}>
-          <ActivityIndicator style={{ flex: 1 }} color={"#313B68"} />
+          <ActivityIndicator style={{ flex: 1 }} color="white" />
         </View>
       ) : (
         <CustomButton

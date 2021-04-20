@@ -15,6 +15,8 @@ import { CustomButton } from "../UtilComponents/CustomButton";
 import { KeyboardDismiss } from "../UtilComponents/KeyboardDismiss";
 import { AuthStyles as Styles } from "../styles";
 import { AuthNavProps, LoginDataType } from "./AuthTypes";
+import { emitter } from "../../api/io/io.emit";
+import { socketClient } from "../../api/io/io";
 
 const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
   // States for users, errors and passwordView
@@ -119,7 +121,7 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
       {error === "" ? null : <Text style={Styles.mainErrorText}>{error}</Text>}
       {loading ? (
         <View style={{ ...Styles.button, padding: 25 }}>
-          <ActivityIndicator style={{ flex: 1 }} color={"#313B68"} />
+          <ActivityIndicator style={{ flex: 1 }} color={"white"} />
         </View>
       ) : (
         <CustomButton
