@@ -35,7 +35,6 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
         }}
       >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "500" }}>
-          {" "}
           {props.error}
         </Text>
       </View>

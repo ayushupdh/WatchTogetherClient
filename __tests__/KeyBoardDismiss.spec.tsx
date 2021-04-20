@@ -1,9 +1,9 @@
 import React from "react";
 import renderer from "react-test-renderer";
 
-import { Loading } from "../src/components/UtilComponents/Loading";
+import { KeyboardDismiss } from "../src/components/UtilComponents/KeyboardDismiss";
 
 test("Renders snapshot as expected", () => {
-  const tree = renderer.create(<Loading />).toJSON();
+  const tree = renderer.create(<KeyboardDismiss />).toJSON();
   expect(tree).toMatchSnapshot();
 });
