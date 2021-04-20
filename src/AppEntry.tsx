@@ -6,9 +6,10 @@ import AuthNavigator from "./components/Auth/AuthNavigator";
 import { UserType } from "./components/Auth/AuthTypes";
 import BottomNavTabs from "./components/BottomNav/BottomNavigator";
 import { emitter } from "./api/io/io.emit";
-import { SplashScreen } from "./components/UtilComponents/SplashScreen";
 
 import { LOAD_USER } from "./redux/types/Authtypes";
+import { socketClient } from "./api/io/io";
+import { ActivityIndicator } from "react-native";
 export const AppEntry = () => {
   const { user, token } = useSelector(
     ({ auth }: { auth: { user: UserType; userToken: string } }) => {
@@ -79,12 +80,13 @@ export const AppEntry = () => {
   }, []);
   useEffect(() => {
     if (user) {
+      socketClient.connect();
       emitter.setID(user._id);
     }
   }, [user]);
 
   if (loading) {
-    return <SplashScreen />;
+    return <ActivityIndicator style={{ flex: 1 }} color="grey" />;
   } else {
     return (user === null && token === "") || !token ? (
       <AuthNavigator />

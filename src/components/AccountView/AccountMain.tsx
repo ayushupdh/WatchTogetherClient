@@ -9,6 +9,7 @@ import { CustomButton } from "../UtilComponents/CustomButton";
 import { Styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AccountNavProps } from "./Navigation/AccountTypes";
+import { socketClient } from "../../api/io/io";
 
 export const AccountMain = ({
   navigation,
@@ -19,6 +20,7 @@ export const AccountMain = ({
 
   const dispatch = useDispatch();
   const onLogoutPress = async () => {
+    socketClient.disconnect();
     await AsyncStorage.removeItem("userToken");
     dispatch({
       type: SIGN_OUT,

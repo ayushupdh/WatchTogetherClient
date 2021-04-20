@@ -9,7 +9,7 @@ type TimerCompProps = {
 export const Timer = (props: TimerCompProps) => {
   return (
     <View>
-      <Text style={styles.groupTitle}>Select Time </Text>
+      <Text style={styles.groupTitle}>Set a Timer </Text>
       <View style={styles.timerContainer}>
         <TextInput
           placeholder="00"
