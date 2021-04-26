@@ -74,9 +74,13 @@ export const AppEntry = () => {
 
   useEffect(() => {
     setLoading(true);
-    loadUser().then(() => {
-      setLoading(false);
-    });
+    loadUser()
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((e) => {
+        setLoading(false);
+      });
   }, []);
   useEffect(() => {
     if (user) {
