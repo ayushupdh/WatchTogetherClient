@@ -10,6 +10,7 @@ type AuthNavigatorProps = {};
 
 const Stack = createStackNavigator<AuthParamList>();
 
+// Navigator to navigate in between Signin and Sign up Screen
 const AuthNavigator = (props: AuthNavigatorProps) => {
   return (
     <NavigationContainer>

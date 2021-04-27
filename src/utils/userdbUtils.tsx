@@ -1,3 +1,4 @@
+// This file handle all the database functions
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { server } from "../api/server";
@@ -17,7 +18,7 @@ declare global {
     set(name: string, value: FormDataValue, fileName?: string): void;
   }
 }
-// ---------------------User routes ------------------------
+// ---------------------User routes starts ------------------------
 export const loadUser = async () => {
   let user: any = null;
   let error = null;
@@ -38,7 +39,7 @@ export const loadUser = async () => {
   }
 };
 
-//----------------User Movie Routes----------------
+//       ------------User Movie Routes-----------
 export const getMoviesForUser = async (
   qty: number = 20,
   genres?: string[],
@@ -111,7 +112,7 @@ export const addDislikedMovie = async (movieId: string) => {
   }
 };
 
-//----------------User Movie Routes Ends----------------
+//       ----------User Movie Routes Ends---------
 
 export const searchUsers = async (username: string) => {
   let error = null;
@@ -299,7 +300,7 @@ export const getOtherUsersInfo = async (userId: string) => {
   }
 };
 
-// ---------------------User routes  end------------------------
+// ---------------------User routes ends------------------------
 
 // ---------------------Group routes------------------------
 export const createGroup = async (groupName: string, time: number) => {

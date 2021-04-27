@@ -1,13 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Image,
-  Switch,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ActivityIndicator, Image, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { server } from "../../api/server";
 import { SIGN_IN } from "../../redux/types/Authtypes";
@@ -20,12 +13,10 @@ import { socketClient } from "../../api/io/io";
 
 const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
   // States for users, errors and passwordView
-
   const [userData, setUserData] = useState<LoginDataType>({
     username: "",
     password: "",
   });
-
   const [error, setError] = useState("");
   const [hidePassword, setHidePassword] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +25,6 @@ const Signin = ({ navigation }: AuthNavProps<"Signin">) => {
   const dispatch = useDispatch();
 
   // Login Action
-  // !Maybe add more custom login error texts
   const login = async () => {
     try {
       setLoading(true);

@@ -22,8 +22,8 @@ export const AppEntry = () => {
 
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  //TODO:  Work on opening login only when the server says unauthorized
   const loadUser = async () => {
+    // Get auth token for user from cache
     let fetchedtoken: string | null = null;
     let response: any;
     try {
@@ -39,6 +39,7 @@ export const AppEntry = () => {
         return;
       }
       config.headers["Authorization"] = `Bearer ${fetchedtoken}`;
+      // get user information
       response = await server.get("/users/me", config);
     } catch (error) {
       console.log(error);
@@ -49,6 +50,7 @@ export const AppEntry = () => {
         return false;
       }
     }
+    // If response is fetched, update redux
     if (response) {
       dispatch({
         type: LOAD_USER,
@@ -57,10 +59,11 @@ export const AppEntry = () => {
           token: fetchedtoken,
         },
       });
+      // Save to cache for later user
       AsyncStorage.setItem("user", JSON.stringify(response.data));
     } else {
+      // If no response, get user information from cache
       let usr = await AsyncStorage.getItem("user");
-
       usr = JSON.parse(usr ? usr : "");
       dispatch({
         type: LOAD_USER,
@@ -72,6 +75,7 @@ export const AppEntry = () => {
     }
   };
 
+  // Load user on component load
   useEffect(() => {
     setLoading(true);
     loadUser()
@@ -82,6 +86,8 @@ export const AppEntry = () => {
         setLoading(false);
       });
   }, []);
+
+  // Connect to socket on load
   useEffect(() => {
     if (user) {
       socketClient.connect();
@@ -89,9 +95,11 @@ export const AppEntry = () => {
     }
   }, [user]);
 
+  // Show Loading Screen if user is loading
   if (loading) {
     return <ActivityIndicator style={{ flex: 1 }} color="grey" />;
   } else {
+    // Return either Auth pages or the main home page
     return (user === null && token === "") || !token ? (
       <AuthNavigator />
     ) : (

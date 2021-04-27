@@ -8,6 +8,7 @@ type AlertProp = {
   secondButtonHandleClose?: () => void;
 };
 
+// Show Native Alert with the given information
 export const showAlert = (props: AlertProp) => {
   Alert.alert(props.firstText, props.secondText ? props.secondText : "", [
     {

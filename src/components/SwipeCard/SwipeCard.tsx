@@ -32,6 +32,8 @@ type Movies = {
   poster_path: string;
   title: string;
 };
+
+// Main Swipe Card Component to handle movie swiping
 export const SwipeCard = ({
   onMovieFinish,
   navigateBack,
@@ -144,10 +146,13 @@ export const SwipeCard = ({
       console.log("");
     }
   };
+
+  // Update index on swipe
   const swiped = (index: number) => {
     setIndex((prev) => prev + 1);
   };
 
+  // When swiped all, reload the movies
   const onSwipedAll = () => {
     setLoading(true);
     reloadCards();

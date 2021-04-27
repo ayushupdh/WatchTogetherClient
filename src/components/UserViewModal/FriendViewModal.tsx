@@ -23,10 +23,15 @@ type UserViewModalProps = {
   userID: string;
   closeModal: () => void;
 };
+
+// Popup User View Modal
 export const UserViewModal = (props: UserViewModalProps) => {
+  // Get information about self
   const self = useSelector(({ auth }: { auth: { user: any } }) => auth.user);
+  // State vars
   const [user, setUser] = useState<UserType>();
   const [loading, setLoading] = useState(false);
+  // Get other user information
   useEffect(() => {
     if (props.userID) {
       setLoading(true);
@@ -42,6 +47,7 @@ export const UserViewModal = (props: UserViewModalProps) => {
       }
     }
   }, [props.userID]);
+
   return (
     <Modalize ref={props.modalRef} adjustToContentHeight>
       {!user || loading ? (

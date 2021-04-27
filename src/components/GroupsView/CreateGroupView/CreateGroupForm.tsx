@@ -25,6 +25,7 @@ export const CreateGroupForm = ({
   navigation,
   route,
 }: GroupsNavProps<"Create a Group">) => {
+  // set options to display
   const groupData: GroupsDataType = {
     genres: [
       "Action",
@@ -63,6 +64,7 @@ export const CreateGroupForm = ({
       "Disney Plus",
     ],
   };
+  // Get groups data from redux
   const {
     sessionRunning,
     sessionID,
@@ -93,11 +95,13 @@ export const CreateGroupForm = ({
       };
     }
   );
+  // Get user id from redux
   const userID = useSelector(
     ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
   );
-  // const [sessionRunning, setSession] = useState<boolean>();
   const dispatch = useDispatch();
+
+  // State vars
   const [name, setName] = useState<string>("");
   const [time, setTime] = useState<{ min: string; sec: string }>({
     min: "00",
@@ -107,6 +111,7 @@ export const CreateGroupForm = ({
   const [lang, setLang] = useState<string[]>([]);
   const [provider, setProvider] = useState<string[]>([]);
   const [error, seterror] = useState<string>("");
+
   // Set time
   useEffect(() => {
     if (time_rx) {
@@ -116,11 +121,13 @@ export const CreateGroupForm = ({
     }
   }, [time_rx]);
 
+  // Change display name
   useLayoutEffect(() => {
     if (route.params?.groupName) {
       setName(route.params?.groupName);
     }
   }, []);
+
   // Socket Listeners
   useEffect(() => {
     socketClient.on("session-ended", () => {
@@ -340,6 +347,7 @@ export const CreateGroupForm = ({
   );
 };
 
+// Custom Selection Button Component
 type SelectionButtonPropType = {
   text: string;
   onSelect: (text: string, value: boolean) => void;

@@ -1,6 +1,7 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+// Type Definition for Group Navigator
 export type GroupsParamList = {
   "Your Groups": undefined;
   "Create a Group":

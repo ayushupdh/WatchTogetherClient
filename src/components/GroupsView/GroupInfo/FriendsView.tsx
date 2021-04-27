@@ -14,6 +14,7 @@ export const FriendsView = ({
   groupsLoading,
   showModal,
 }: FriendsViewProps) => {
+  // Show each friends
   const renderMembers = ({ item }: any) => (
     <Pressable style={styles.friends} onPress={() => showModal(item._id)}>
       <UserAvatar avatar={item.avatar} size={40} borderRadius={20} />

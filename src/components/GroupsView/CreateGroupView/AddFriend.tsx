@@ -37,12 +37,12 @@ export const AddFriend = ({
   const [clickedUser, setUser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
+  // Get data from redux
   const { sessionID, groupID } = useSelector(
     ({ session }: { session: { sessionID: string; groupID: string } }) => {
       return { sessionID: session.sessionID, groupID: session.groupID };
     }
   );
-
   const { userID, admin } = useSelector(
     ({
       auth,
@@ -54,17 +54,20 @@ export const AddFriend = ({
       return { userID: auth.user._id, admin: session.admin };
     }
   );
-
+  // State vars
   const [fetchedFriendList, setFetchedFriendsList] = useState<
     UserType[] | null
   >(null);
   const [displayedFriends, setDisplayedFriends] = useState<DisplayUser[]>([]);
+
+  // Update friends list if from a prev group
   useLayoutEffect(() => {
     if (groupID) {
       updateUsers();
     }
   }, [groupID, sessionID]);
 
+  // Socket Listeners
   useEffect(() => {
     socketClient.off("session-ended");
     socketClient.off("session-started");
@@ -110,6 +113,7 @@ export const AddFriend = ({
   // For userModals
   const modalRef = useRef<Modalize>();
 
+  // Get group users list from the db
   const updateUsers = async () => {
     setLoading(true);
     let userList: DisplayUser[] = [];
@@ -122,6 +126,7 @@ export const AddFriend = ({
       if (sessionID) {
         const { users, error } = await getActiveSessionUsers(sessionID);
         if (users && response.length > 0) {
+          // Check if the user is online
           userList = userList.map((eachUser) => {
             if (users.includes(eachUser._id)) {
               eachUser.online = true;
@@ -135,6 +140,7 @@ export const AddFriend = ({
     }
   };
 
+  // Update user list
   const changeUserList = (
     action: "joined" | "left" | "update_list",
     joinedID?: string
@@ -166,6 +172,7 @@ export const AddFriend = ({
       updateUsers();
     }
   };
+  // Helper functions start
   const countOnlineUsers = () => {
     const k = displayedFriends.filter((friend) => friend.online);
     return k.length;
@@ -184,7 +191,17 @@ export const AddFriend = ({
     }
     modalRef.current?.close();
   };
+  const showUsers = async () => {
+    const { response, error } = await searchFriends(input);
+    setFetchedFriendsList(response);
 
+    if (input !== "") {
+      showModal(true);
+    }
+  };
+  // Helper functions end
+
+  // Add freind handler
   const addFriendsToGroup = async (selectedUser: UserType) => {
     showModal(false);
 
@@ -201,14 +218,6 @@ export const AddFriend = ({
     }
   };
 
-  const showUsers = async () => {
-    const { response, error } = await searchFriends(input);
-    setFetchedFriendsList(response);
-
-    if (input !== "") {
-      showModal(true);
-    }
-  };
   // const handleRemoveFriends = async (friendsID: string) => {
   //   setDisplayedFriends((oldList) =>
   //     oldList.filter((list) => list._id !== friendsID)

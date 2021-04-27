@@ -7,6 +7,7 @@ type OverlayProps = {
   color: string;
 };
 
+// Overlay Label for Movie Card
 export const OverlayLabel = ({ label, color }: OverlayProps) => (
   <View style={[styles.overlayLabel, { backgroundColor: color }]}>
     <Text style={styles.overlayLabelText}>{label}</Text>

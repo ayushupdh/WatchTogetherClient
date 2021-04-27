@@ -30,6 +30,7 @@ type GetGroupsType = {
 };
 
 export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
+  // State vars
   const [groups, setGroups] = useState<GetGroupsType["groups"]>();
   const [groupSelected, setGroupSelected] = useState<GroupType>({
     name: "",
@@ -69,6 +70,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
     };
   }, [navigation]);
 
+  // Socket handlers
   useEffect(() => {
     const groupslist = groups && groups.map((group: GroupType) => group._id);
     socketClient.on("group-status-changed", async (groupID) => {
@@ -81,6 +83,8 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
       socketClient.off("group-status-changed");
     };
   }, [groups]);
+
+  // Display Groups List
   const renderGroupList = ({ item }: { item: GroupType }) => {
     const randomColor: string =
       "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -222,6 +226,7 @@ export const GroupsMain = ({ navigation }: GroupsNavProps<"Your Groups">) => {
   );
 };
 
+// Custom Rename modal for changing groups name
 const RenameModal = ({
   groupName,
   groupID,
@@ -231,10 +236,13 @@ const RenameModal = ({
   groupID: string;
   close: (newName: string) => void;
 }) => {
+  // State vars
   const [state, setstate] = useState(groupName);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const height = useWindowDimensions().height;
+
+  // Handler function to change name
   const changeName = async () => {
     setLoading(true);
     if (state === "") {

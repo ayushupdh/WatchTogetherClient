@@ -14,12 +14,18 @@ import { genreBox } from "./Card";
 type MovieInfoModalProps = {
   info: string;
 };
+
+// Popup Component to display Movie Info
 export const MovieInfoModal = ({ info }: MovieInfoModalProps) => {
+  // Custom Hook to display movie info
   const { movieInfo, error } = useGetMovieInfo(info);
   const width = useWindowDimensions().width;
+
+  // Calculate time information
   let time = movieInfo ? parseInt(movieInfo.runtime, 10) : 0;
   let hr = ~~(time / 60);
   let min = time % 60;
+
   if (!movieInfo) {
     return <ActivityIndicator style={{ flex: 1 }} color={"#313B68"} />;
   } else {

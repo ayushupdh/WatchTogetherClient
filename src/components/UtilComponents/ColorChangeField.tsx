@@ -18,6 +18,7 @@ type ColorChangeFieldProps = {
   titleText: string;
   data: string[];
 };
+
 export const ColorChangeButton = (props: ColorChangeButtonProps) => {
   const [clicked, changedClicked] = useState(false);
 

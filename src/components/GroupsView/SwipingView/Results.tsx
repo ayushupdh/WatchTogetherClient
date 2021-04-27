@@ -37,6 +37,7 @@ type MovieType = {
   };
 };
 export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
+  // State vars
   const [loading, setLoading] = useState<boolean>(false);
   const [activeUsers, setUsers] = useState<UserType[] | undefined>([]);
   const [movieLists, setMovies] = useState<MovieType[]>([]);
@@ -45,12 +46,13 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
   const [message, setMessage] = useState<string>("");
 
   const modalizeRef = useRef<Modalize>();
-
+  // Use Redux to get vars
   const sessionRunning = useSelector(
     ({ session }: { session: { sessionRunning: boolean } }) =>
       session.sessionRunning
   );
 
+  // Show custom Done button based upon whether or not the session is running
   useLayoutEffect(() => {
     if (!sessionRunning) {
       navigation.setOptions({
@@ -72,6 +74,7 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
     }
   }, [navigation, sessionRunning]);
 
+  // if the session is ended
   useEffect(() => {
     let k: number = 1239;
     if (!route.params.sessionView) {
@@ -85,6 +88,7 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
     };
   }, [route]);
 
+  // load session result
   useEffect(() => {
     setLoading(true);
     if (route.params.sessionID) {
@@ -110,6 +114,7 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
   const height = useWindowDimensions().height;
   const headerHeight = useHeaderHeight();
 
+  // Show user component
   const renderUsers = ({ item }: { item: UserType }) => {
     return (
       <View style={{ marginHorizontal: 4 }}>
@@ -119,6 +124,7 @@ export const Results = ({ navigation, route }: GroupsNavProps<"Results">) => {
       </View>
     );
   };
+  // Show movies component
   const renderMovies = ({ item }: { item: MovieType }) => {
     return (
       <Pressable

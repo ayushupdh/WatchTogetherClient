@@ -17,14 +17,10 @@ import AccountNavigator from "../AccountView/Navigation/AccountNavigator";
 import { View } from "react-native";
 const Tab = createBottomTabNavigator<BottomNavParamList>();
 
-// ctrl + cmd + z
+// Check for routes to show the bottom nav
 const BottomNavTabs = () => {
   const getTabBarVisibility = (route: RouteProp<any, any>) => {
     const state = getFocusedRouteNameFromRoute(route);
-    // const routeName = route.state
-    //   ? route.state.routes[route.state.index].name
-    //   : "";
-
     if (
       state === "SwipingView" ||
       state === "Add a Friend" ||
@@ -36,6 +32,7 @@ const BottomNavTabs = () => {
 
     return true;
   };
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -53,8 +50,6 @@ const BottomNavTabs = () => {
             } else if (route.name === "GroupsScreen") {
               return <Icon name="people" color="green" focused={focused} />;
             }
-
-            // You can return any component that you like here!
           },
         })}
       >
@@ -83,7 +78,7 @@ type IconProps = {
   name: React.ComponentProps<typeof Ionicons>["name"];
   color: string;
 };
-
+// Custom Icon component
 const Icon = ({ focused, name, color }: IconProps) => {
   return (
     <Ionicons

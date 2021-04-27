@@ -1,6 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { GroupsParamList } from "../../GroupsView/Navigation/GroupsTypes";
 
+// Type Definition for Home Navigator
 export type HomeViewParamList = {
   "Watch Together": undefined;
   "Select options": undefined;

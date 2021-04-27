@@ -4,6 +4,7 @@ import { setAuthToken } from "../utils/authToken";
 
 import { server } from "../api/server";
 
+// Custom hook to get user's groups list
 export const useGetGroups = () => {
   const [groups, setGroups] = useState<any>([]);
   const [error, setError] = useState<string | null>(null);

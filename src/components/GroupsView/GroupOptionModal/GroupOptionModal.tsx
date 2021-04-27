@@ -30,10 +30,13 @@ export const GroupOptionModal = ({
   close,
   handleRename,
 }: GroupOptionModalProps) => {
+  // Get user information from redux
   const userID = useSelector(
     ({ auth }: { auth: { user: { _id: string } } }) => auth.user._id
   );
   const dispatch = useDispatch();
+
+  // Leave group helper
   const handleRemove = async () => {
     await removeUserFromGroup(group._id, userID);
     if (group.current_session) {
@@ -41,6 +44,7 @@ export const GroupOptionModal = ({
     }
     close();
   };
+  // Start group session helper
   const handleStart = async () => {
     if (group.current_session) {
       const { response, error } = await getSessionInfo(group.current_session);

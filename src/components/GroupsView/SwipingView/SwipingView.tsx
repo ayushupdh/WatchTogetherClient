@@ -25,6 +25,8 @@ export const SwipingView = ({
   navigation,
 }: GroupsNavProps<"SwipingView">) => {
   const dispatch = useDispatch();
+
+  // Get vars from redux
   const { userID, sessionID, groupID, admin } = useSelector(
     ({
       session,
@@ -41,12 +43,14 @@ export const SwipingView = ({
       };
     }
   );
+  // State vars
   const [movieMatched, setMovieMatched] = useState(false);
   const [movieFinish, setMovieFinish] = useState(false);
   const modalizeRef = useRef<Modalize>();
   const handleMovieFinish = () => {
     setMovieFinish(true);
   };
+  // Navigate back logic based upon whether it is Single or Group View
   const navigateBack = () => {
     if (route.params.groupName === "Single") {
       navigation.popToTop();
@@ -89,7 +93,7 @@ export const SwipingView = ({
   const showOptionModal = () => {
     modalizeRef.current?.open();
   };
-  // for top header button
+  // For top header button
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,

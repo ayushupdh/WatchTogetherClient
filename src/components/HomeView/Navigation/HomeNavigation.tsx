@@ -11,6 +11,7 @@ type HomeViewNavigatorProps = {};
 
 const Stack = createStackNavigator<HomeViewParamList>();
 
+// Navigator for Home View
 const HomeViewNavigator = (props: HomeViewNavigatorProps) => {
   return (
     <Stack.Navigator initialRouteName="Watch Together">

@@ -4,6 +4,7 @@ import { setAuthToken } from "../utils/authToken";
 
 import { server } from "../api/server";
 
+// Custom hook to get group's information
 export const useGroupsInfo = (groupId: string) => {
   const [groupInfo, setGroupInfo] = useState<any>();
   const [groupsLoading, setLoading] = useState<boolean>(false);

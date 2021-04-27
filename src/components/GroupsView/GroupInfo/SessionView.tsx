@@ -11,7 +11,7 @@ type SessionViewProps = {
 };
 export const SessionView = ({ nav, groupID }: SessionViewProps) => {
   const { sessionList, loading, error } = useGetGroupsSession(groupID);
-
+  // Show each session
   const renderSessions = ({ item }: { item: any }) => {
     let curr = new Date(item.createdAt);
     let months: Record<number, string> = {

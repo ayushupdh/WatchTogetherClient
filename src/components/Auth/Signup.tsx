@@ -16,7 +16,6 @@ type UserData = {
   username: string;
 };
 
-//! TO DO: Build a modal that pops up for error messages
 const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   // States for user, password hide/show, error
   const [userData, setUserData] = useState<UserData>({
@@ -39,6 +38,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
   // Reducers dispatch
   const dispatch = useDispatch();
 
+  // Signup action
   const signup = async () => {
     try {
       setLoading(true);
@@ -69,7 +69,7 @@ const Signup = ({ navigation }: AuthNavProps<"Signup">) => {
       return setError(e.message);
     }
   };
-
+  // Signup check
   const onSignUp = async () => {
     if (userData.username.length < 3) {
       return setError("Username must have atleast three letters");

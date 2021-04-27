@@ -13,10 +13,13 @@ type SelectOptionsProps = {};
 export const SelectOptions = ({
   navigation,
 }: HomeViewNavProps<"Select options">) => {
+  // State vars
   const [genres, setGenres] = useState<string[]>([]);
   const [lang, setLang] = useState<string[]>([]);
   const [providers, setProvider] = useState<string[]>([]);
   const dispatch = useDispatch();
+
+  // Options to display
   const genreList = [
     { text: "Action", _id: "123754" },
     { text: "Adventure", _id: "13asc4" },
@@ -52,6 +55,7 @@ export const SelectOptions = ({
     { text: "Disney Plus", _id: "8776" },
   ];
 
+  // State handlers start
   const handleGenre = (text: string, value: boolean) => {
     if (value) {
       setGenres((prev) => prev.concat(text));
@@ -73,6 +77,9 @@ export const SelectOptions = ({
       setProvider((prev) => prev.filter((el) => el !== text));
     }
   };
+  // State handlers end
+
+  // Single session start handler
   const handleStart = () => {
     startSingleSession({ genres, providers, lang }, dispatch);
     // dispatch({
@@ -189,6 +196,7 @@ export const SelectOptions = ({
   );
 };
 
+// Custom Selection Button Component
 type SelectButtonProps = {
   text: string;
   onSelect: (text: string, state: boolean) => void;

@@ -12,6 +12,8 @@ type CardProps = {
   card: Movies;
   onModalOpen: (cardID: string) => void;
 };
+
+// Card component to display poster, title and genre
 export const Card = ({ card, onModalOpen }: CardProps) => {
   return (
     <View

@@ -9,6 +9,7 @@ import {
   START_SESSION,
 } from "../types/SessionTypes";
 
+// Start session and emit to io
 export const startGroupSession = async (
   payload: {
     groupID: string;
@@ -45,11 +46,15 @@ export const startGroupSession = async (
     console.log(error);
   }
 };
+
+// On swiping started
 export const swipingStarted = (dispatch: Dispatch<any>) => {
   dispatch({
     type: START_SESSION,
   });
 };
+
+// On swiping started
 export const startSingleSession = (
   payload: { genres: string[]; providers: string[]; lang: string[] },
   dispatch: Dispatch<any>
@@ -62,7 +67,7 @@ export const startSingleSession = (
     },
   });
 };
-
+// Populate session on joining
 export const joinSessionPopulate = async (
   payload: {
     groupID: string;
@@ -88,7 +93,7 @@ export const joinSessionPopulate = async (
     console.log(error);
   }
 };
-
+// Update params and emit to io
 export const updateParams = async (
   sessionID: string,
   payload: {
@@ -111,6 +116,7 @@ export const updateParams = async (
     payload,
   });
 };
+// End session and emit to io
 export const endGroupSession = (
   groupId: string,
   sessionID: string,
@@ -121,6 +127,7 @@ export const endGroupSession = (
   });
   emitter.endSession(groupId, sessionID);
 };
+// Leave session and emit to io
 export const leaveGroupSession = (
   sessionID: string,
   dispatch: Dispatch<any>
@@ -130,6 +137,7 @@ export const leaveGroupSession = (
   });
   emitter.leaveSession(sessionID);
 };
+// End Single Session
 export const endSingleSession = (dispatch: Dispatch<any>) => {
   dispatch({
     type: END_SESSION,

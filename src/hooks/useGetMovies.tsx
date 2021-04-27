@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { server } from "../api/server";
 
+// Experimental --- Not to be used as is
 export const useGetMovies = () => {
   const [movies, setMovies] = useState<any>([]);
   const [error, setError] = useState<string | null>(null);

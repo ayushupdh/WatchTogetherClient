@@ -15,12 +15,15 @@ export const GroupInfo = ({
   navigation,
   route,
 }: GroupsNavProps<"GroupInfo">) => {
+  // State vars
   const [sessionsSelected, setsessionsSelected] = useState(false);
   const [selectedUser, setUser] = useState("");
-
   const groupId = route.params.groupId;
 
+  // Custom hook to get groups info
   const { groupInfo, groupsLoading, error } = useGroupsInfo(groupId);
+
+  //  Show group name on title if present
   useLayoutEffect(() => {
     if (groupInfo) {
       navigation.setOptions({ title: groupInfo.name });
@@ -29,6 +32,7 @@ export const GroupInfo = ({
 
   const modalRef = useRef<Modalize>();
 
+  // Helper functions
   const showModal = (id: string) => {
     setUser(id);
     modalRef.current?.open();
@@ -130,6 +134,7 @@ export const GroupInfo = ({
         />
       </View>
     );
+    // Custom Offline component
   } else {
     return (
       <View style={styles.container}>

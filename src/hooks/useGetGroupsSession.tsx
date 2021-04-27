@@ -4,6 +4,7 @@ import { setAuthToken } from "../utils/authToken";
 
 import { server } from "../api/server";
 
+// Custom hook to get groups's session information
 export const useGetGroupsSession = (groupId: string) => {
   const [sessionList, setSessionList] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);

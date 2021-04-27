@@ -13,9 +13,7 @@ import { styles } from "./styles";
 type FormFieldProps = {
   titleStyle?: StyleProp<TextStyle>;
   textInputStyle?: StyleProp<TextStyle>;
-
   children?: any;
-
   title: string;
   placeholder: string;
   value: string;
@@ -44,6 +42,8 @@ type FormFieldProps = {
     e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
   ) => void;
 };
+
+// Custom Form Field component used in the Groups View
 export const FormField = (props: FormFieldProps) => {
   return (
     <View style={props.containerStyle}>

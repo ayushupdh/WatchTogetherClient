@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { server } from "../api/server";
 
+// Custom hook to get movie's information
 export const useGetMovieInfo = (movieId: string) => {
   const [movieInfo, setMovieInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);

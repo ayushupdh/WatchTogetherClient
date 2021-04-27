@@ -11,6 +11,7 @@ import { SwipingView } from "../SwipingView/SwipingView";
 import { GroupInfo } from "../GroupInfo/GroupInfo";
 import { Results } from "../SwipingView/Results";
 
+// Custom Group Stack to be used in Home View and Groups View
 export const addGroupsStack = (
   Stack: TypedNavigator<
     HomeViewParamList | GroupsParamList,

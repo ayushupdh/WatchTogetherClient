@@ -4,6 +4,7 @@ import { setAuthToken } from "../utils/authToken";
 
 import { server } from "../api/server";
 
+// Custom hook to get user's friend list
 export const useGetFriends = () => {
   const [friends, setFriends] = useState<any>([]);
   const [error, setError] = useState<string | null>(null);

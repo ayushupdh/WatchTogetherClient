@@ -1,3 +1,4 @@
+// Type Definition for Redux Session Reducer
 export const CREATE_SESSION = "creatingsession";
 export const END_SESSION = "endingsession";
 export const JOIN_SESSION = "joiningsession";

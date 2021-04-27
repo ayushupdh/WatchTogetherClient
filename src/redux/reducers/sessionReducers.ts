@@ -41,6 +41,7 @@ const initialState: SessionType = {
   },
 };
 
+// Session Reducer Handler
 export default (
   state = initialState,
   {

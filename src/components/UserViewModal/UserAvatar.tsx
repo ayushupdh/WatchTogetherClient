@@ -8,6 +8,7 @@ type UserAvatarProps = {
   borderRadius?: number;
   style?: any;
 };
+// Custom Component to View user avatar
 export const UserAvatar = ({
   avatar,
   size = 150,

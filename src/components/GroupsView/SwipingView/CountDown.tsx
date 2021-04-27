@@ -7,13 +7,17 @@ import { min } from "react-native-reanimated";
 type CountDownProps = {
   onCountDownFinish: () => void;
 };
+
+// Custom Timer Component
 export const CountDown = (props: CountDownProps) => {
+  // Time variable
   const [cTime, setTime] = useState<{ min: string; sec: string }>({
     min: "00",
     sec: "00",
   });
   const [firstRun, setFirstRun] = useState<boolean>(false);
 
+  // Get time from redux
   const { time, startedTime } = useSelector(
     ({ session }: { session: { sessionParams: any } }) => ({
       time: session.sessionParams.time,
@@ -21,6 +25,7 @@ export const CountDown = (props: CountDownProps) => {
     })
   );
 
+  // Start timer on load
   useEffect(() => {
     if (time !== 0 && startedTime) {
       const s = setInterval(() => {
@@ -32,6 +37,7 @@ export const CountDown = (props: CountDownProps) => {
     }
   }, [time, startedTime]);
 
+  // Fancy math function to update countdown
   const updateCountDown = (s: number) => {
     let totalTime = time * 1000 + startedTime;
     let currentTime = Date.now();

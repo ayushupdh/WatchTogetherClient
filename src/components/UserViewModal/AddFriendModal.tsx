@@ -11,6 +11,7 @@ type AddFriendModalProps = {
   user: any;
   handleClose: any;
 };
+// Custom Modal for adding user to friendslist
 export const AddFriendModal = ({ user, handleClose }: AddFriendModalProps) => {
   const handlePress = async () => {
     await addFriend(user.username);
